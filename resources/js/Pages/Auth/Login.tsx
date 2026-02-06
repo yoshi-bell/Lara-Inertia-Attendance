@@ -80,7 +80,7 @@ export default function Login({
                             onChange={(e) =>
                                 setData(
                                     'remember',
-                                    (e.target.checked || false) as false,
+                                    (e.target.checked || false) as false
                                 )
                             }
                         />

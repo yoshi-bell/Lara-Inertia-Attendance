@@ -45,14 +45,15 @@
 
 ## 3. 想定される結論 (Hypothesis: 2026-02-06最終更新)
 
-現在のフェーズ: Phase 1: 基盤再構築 (Infrastructure)
+現在のフェーズ: Phase 2: データとモデルの移行 (Data & Auth)
 
 完了していること:
 ✅ 最新の Laravel 12 プロジェクトの初期生成。
 ✅ 開発ドキュメント（憲法・法律・マニュアル）の移植と基本カスタマイズ。
 ✅ Inertia.js (React + TypeScript) および Laravel Breeze 認証基盤の導入。
 ✅ データベースの初期マイグレーション。
+✅ 品質管理ツール（Pint, Prettier, ESLint）の導入と厳格な設定。
 
 未完了・次のタスク:
-🚀 TypeScript / Lint / Format 環境の厳格な設定。
 🚀 旧プロジェクトからのマイグレーション移植。
+🚀 Eloquent モデルの作成と型定義の整備。

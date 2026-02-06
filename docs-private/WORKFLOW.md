@@ -78,9 +78,9 @@ Playwrightテストの「高速化」と「安定性」を両立するため、�
 ## 【現在進行中のタスク】 (Active Context)
 > AIエージェントは作業中、常にここを更新すること。
 
-**現在のフェーズ:** Phase 1: 基盤再構築 (Infrastructure)
-**現在のアクティブタスク:** Lint/Format 設定と型定義の準備
-**ステータス:** Inertia/Breeze の導入成功。動作確認完了。ドキュメント同期中。
+**現在のフェーズ:** Phase 2: データとモデルの移行 (Data & Auth)
+**現在のアクティブタスク:** 旧プロジェクトからのマイグレーション移植
+**ステータス:** 基盤再構築(Phase 1)完了。データ構造の移行準備中。
 
 ---
 
@@ -103,7 +103,7 @@ Playwrightテストの「高速化」と「安定性」を両立するため、�
 * [x] **ドキュメント整備:** 開発ルールの策定とドキュメント移植。
 * [x] **Inertia導入:** React + TypeScript + Vite 環境のセットアップ。
 * [x] **認証基盤:** Laravel Breeze (React) のインストールと動作確認。
-* [ ] **Lint/Format:** ESLint, Prettier, PHP-CS-Fixer (Pint) の設定。
+* [x] **Lint/Format:** ESLint, Prettier, PHP-CS-Fixer (Pint) の設定。
 
 ### Phase 2: データとモデルの移行 (Data & Auth)
 * [ ] **マイグレーション移植:** 旧プロジェクトからスキーマ定義を移植・最適化。

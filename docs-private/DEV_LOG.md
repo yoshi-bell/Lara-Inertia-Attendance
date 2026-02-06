@@ -25,7 +25,11 @@
     *   `breeze:install react --typescript` を実行し、認証基盤と React 環境を構築。
     *   **技術的課題と解決:** `npm install` 時に Vite 7 と `@types/node` のバージョン不整合による `ERESOLVE` エラーに遭遇。`@types/node@latest` の明示的インストールと `--legacy-peer-deps` フラグの使用により、依存関係を正常に解消。
     *   **動作確認:** ユーザー登録からダッシュボード表示までの一連の SPA 動作を確認。
+*   **品質管理ツール (Lint/Format) の設定:**
+    *   **PHP:** Laravel Pint を導入し、Laravel 標準スタイルでの自動整形を確認。
+    *   **React/TypeScript:** Prettier (Tailwindプラグイン付) と ESLint (Flat Config) を導入。
+    *   **プロジェクト憲法の反映:** ESLint において `any` 型の使用を禁止し、Prettier でクラス名の自動並び替えを強制。
 
 ### 3. 次のステップ
-*   Phase 1 の残りタスク: Lint/Format 設定（ESLint, Prettier, Pint）の実施。
-*   Phase 2: 旧プロジェクトからのデータ構造（マイグレーション）の移植。
+*   Phase 2: 旧プロジェクトからのデータ構造（マイグレーション）の移植と最適化。
+*   Eloquent モデルの作成と型定義の整備。
