@@ -53,7 +53,8 @@
 ✅ Inertia.js (React + TypeScript) および Laravel Breeze 認証基盤の導入。
 ✅ 品質管理ツール（Pint, Prettier, ESLint）の導入と厳格な設定。
 ✅ 旧プロジェクトからのマイグレーション移植と DB 構築の完了。
+✅ Eloquent モデルの作成と型定義、リレーション設定の完了。
 
 未完了・次のタスク:
-🚀 Eloquent モデルの作成と型定義の整備。
-🚀 開発用シーダーの作成。
+🚀 開発用シーダーの作成とデータ投入。
+🚀 Phase 3: 一般ユーザー機能（打刻画面等）の React/Inertia 化。

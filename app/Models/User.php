@@ -21,7 +21,18 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_admin',
     ];
+
+    /**
+     * ユーザーに紐づく勤怠記録を取得
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\Attendance>
+     */
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -43,6 +54,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_admin' => 'boolean',
         ];
     }
 }
