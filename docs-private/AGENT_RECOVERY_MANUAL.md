@@ -53,6 +53,8 @@
 ✅ Inertia.js (React + TypeScript) および Laravel Breeze 認証基盤の導入。
 ✅ 品質管理ツール（Pint, Prettier, ESLint）の導入と厳格な設定。
 ✅ 旧プロジェクトからのマイグレーション・モデル・シーダーの完全移植。
+✅ フロントエンド基盤（Shadcn/ui）の構築とディレクトリ構造ルールの制定。
+✅ 認証画面（Login, Register）のリファクタリング完了。
 
 未完了・次のタスク:
 🚀 打刻画面（Attendance/Index）の React 化と Shadcn/ui の導入。

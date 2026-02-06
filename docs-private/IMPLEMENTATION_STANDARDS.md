@@ -82,11 +82,16 @@ public function getFilteredShops(array $filters): Collection
 ## 📂 ディレクトリ構造と責務 (Directory Structure)
 
 ### フロントエンド (`resources/js`)
-*   `Pages/`: Inertia ページコンポーネント（コントローラーから直接呼び出される）。
-*   `Components/`: 再利用可能な UI コンポーネント。
-*   `Layouts/`: 共通レイアウト（ヘッダー、サイドバー等）。
-*   `Types/`: TypeScript 型定義。
-*   `Lib/`: ユーティリティ、外部ライブラリ設定。
+「役割に応じて大文字・小文字を使い分ける」慣習に従う。
+
+*   **大文字開始 (PascalCase):** React コンポーネント（UI 部品）
+    *   `Pages/`: ページコンポーネント
+    *   `Components/`: 再利用可能なパーツ（および `ui/` 配下の Shadcn 部品）
+    *   `Layouts/`: 共通レイアウト
+*   **小文字開始 (camelCase):** ロジック、型定義、ユーティリティ
+    *   `lib/`: 便利関数 (`utils.ts`)、外部ライブラリ設定
+    *   `types/`: TypeScript 型定義
+    *   `hooks/`: React カスタムフック
 
 ### バックエンド (`app`)
 *   `Http/Controllers/`: リクエスト受付と `Inertia::render` によるビュー返却。
