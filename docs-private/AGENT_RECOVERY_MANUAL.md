@@ -50,8 +50,9 @@
 完了していること:
 ✅ 最新の Laravel 12 プロジェクトの初期生成。
 ✅ 開発ドキュメント（憲法・法律・マニュアル）の移植と基本カスタマイズ。
+✅ Inertia.js (React + TypeScript) および Laravel Breeze 認証基盤の導入。
+✅ データベースの初期マイグレーション。
 
 未完了・次のタスク:
-🚀 Inertia.js (React + Vite) の導入と Breeze 認証基盤のセットアップ。
 🚀 TypeScript / Lint / Format 環境の厳格な設定。
 🚀 旧プロジェクトからのマイグレーション移植。

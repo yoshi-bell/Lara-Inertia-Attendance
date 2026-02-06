@@ -21,6 +21,11 @@
     *   `IMPLEMENTATION_STANDARDS.md` (実装標準): 旧コーディング規約をリネーム。型自動生成や Hybrid バリデーションの方針を明文化。論理式の括弧使用ルールを追加。
     *   `WORKFLOW.md` (ロードマップ): リファクタリング用の 5 Phase ロードマップを策定。
     *   `AGENT_RECOVERY_MANUAL.md` (復旧手順): 新環境の検証項目へ更新。
+*   **Laravel Breeze (Inertia/React) の導入:**
+    *   `breeze:install react --typescript` を実行し、認証基盤と React 環境を構築。
+    *   **技術的課題と解決:** `npm install` 時に Vite 7 と `@types/node` のバージョン不整合による `ERESOLVE` エラーに遭遇。`@types/node@latest` の明示的インストールと `--legacy-peer-deps` フラグの使用により、依存関係を正常に解消。
+    *   **動作確認:** ユーザー登録からダッシュボード表示までの一連の SPA 動作を確認。
 
 ### 3. 次のステップ
-*   Phase 1: 基盤再構築を開始。Inertia.js および Laravel Breeze の導入。
+*   Phase 1 の残りタスク: Lint/Format 設定（ESLint, Prettier, Pint）の実施。
+*   Phase 2: 旧プロジェクトからのデータ構造（マイグレーション）の移植。

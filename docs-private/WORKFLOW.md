@@ -79,8 +79,8 @@ Playwrightテストの「高速化」と「安定性」を両立するため、�
 > AIエージェントは作業中、常にここを更新すること。
 
 **現在のフェーズ:** Phase 1: 基盤再構築 (Infrastructure)
-**現在のアクティブタスク:** 環境セットアップとドキュメント整備
-**ステータス:** プロジェクト作成完了。ドキュメント移植・カスタマイズ中。
+**現在のアクティブタスク:** Lint/Format 設定と型定義の準備
+**ステータス:** Inertia/Breeze の導入成功。動作確認完了。ドキュメント同期中。
 
 ---
 
@@ -100,9 +100,9 @@ Playwrightテストの「高速化」と「安定性」を両立するため、�
 
 ### Phase 1: 基盤再構築 (Infrastructure)
 * [x] **プロジェクト作成:** Laravel 12 + Sail + MySQL 環境の構築。
-* [ ] **ドキュメント整備:** 開発ルールの策定とドキュメント移植。
-* [ ] **Inertia導入:** React + TypeScript + Vite 環境のセットアップ。
-* [ ] **認証基盤:** Laravel Breeze (React) のインストールと動作確認。
+* [x] **ドキュメント整備:** 開発ルールの策定とドキュメント移植。
+* [x] **Inertia導入:** React + TypeScript + Vite 環境のセットアップ。
+* [x] **認証基盤:** Laravel Breeze (React) のインストールと動作確認。
 * [ ] **Lint/Format:** ESLint, Prettier, PHP-CS-Fixer (Pint) の設定。
 
 ### Phase 2: データとモデルの移行 (Data & Auth)
@@ -126,32 +126,3 @@ Playwrightテストの「高速化」と「安定性」を両立するため、�
 * [ ] **E2Eテスト:** Playwright による主要フローの自動化。
 * [ ] **パフォーマンス:** N+1問題のチェックとクエリ最適化。
 * [ ] **README整備:** プロジェクト概要とセットアップ手順の記述。
-
-#### Step 1: 基盤整理 (Quick Win)
-- [x] **URLクエリパラメータ構築の共通化:** `buildQueryParams` 作成とHooksへの適用。
-- [x] **SWRデータフェッチ処理の汎用化:** `useData<T>` フック作成と `ApiResponse<T>` 定義。
-
-#### Step 2: 開発者体験 (DX) の革新
-- [x] **OpenAPIによる型定義の自動同期システム:**
-    - [x] Backend: Scribe導入と `openapi.yaml` 自動生成。
-    - [x] Frontend: openapi-typescript導入と型生成スクリプト作成。
-
-#### Step 3: 品質強化 (Quality Assurance)
-- [x] **Zodによるバリデーションと型定義の強化:**
-    - [x] `src/lib/schemas.ts` 作成（リレーションのOptional化含む）。
-    - [x] Hooksへのランタイムバリデーション適用。
-- [x] **テストコードの any 型撲滅:** モック定義の厳格化と `vitest` 設定修正。
-
-#### Step 3.5: 型安全性の深化 (Advanced TypeScript)
-- [x] **カスタム型ガード (User-Defined Type Guards) の導入:** `isApiError` 作成と適用。
-- [x] **Utility Types (Pick, Omit, Partial) の積極利用:** コンポーネントProps定義の効率化。
-- [x] **Discriminated Unions による状態管理:** `useData` 戻り値の厳格化。
-
-#### Step 4: さらなる高みへ (Expert TypeScript)
-- [x] **Branded Types (Nominal Typing) の導入:** `UserId`, `ShopId` 等の定義と適用。
-- [x] **Single Source of Truth (Zod Schema Inference):** `z.infer` による型定義の自動生成と手動定義の廃止。
-- [ ] **Polymorphic Components (as props pattern):** 汎用コンポーネントの実装（必要に応じて）。
-
-#### Step 5: 継続的改善 (Maintenance)
-- [ ] **フォーム実装の刷新 (React Hook Form):** `useState` からの移行。
-- [ ] **TypeScript設定のさらなる厳格化:** `noUnusedLocals` 等の有効化。
