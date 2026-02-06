@@ -20,7 +20,13 @@ Route::get('/', function () {
 Route::middleware(['auth'])->group(function () {
     // 勤怠打刻ページ
     Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance');
-    
+
+    // 勤怠一覧ページ
+    Route::get('/attendance/list', [AttendanceController::class, 'list'])->name('attendance.list');
+
+    // 勤怠詳細ページ
+    Route::get('/attendance/{attendance}', [AttendanceController::class, 'show'])->name('attendance.detail');
+
     // 打刻アクション
     Route::post('/attendance/start', [AttendanceController::class, 'startWork'])->name('attendance.start');
     Route::post('/attendance/end', [AttendanceController::class, 'endWork'])->name('attendance.end');
@@ -35,4 +41,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
