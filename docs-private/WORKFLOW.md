@@ -79,8 +79,8 @@ Playwrightテストの「高速化」と「安定性」を両立するため、�
 > AIエージェントは作業中、常にここを更新すること。
 
 **現在のフェーズ:** Phase 3: 一般ユーザー機能の実装 (User Features)
-**現在のアクティブタスク:** 打刻画面(Attendance/Index)の実装とロジック移植
-**ステータス:** 認証画面(Login/Register)リファクタリング完了。Shadcn/ui 基盤構築済み。
+**現在のアクティブタスク:** 勤怠一覧ページ(Attendance/List)の Inertia 化
+**ステータス:** 打刻機能の実装・連動に成功。勤怠データの表示機能に着手。
 
 ---
 
@@ -111,8 +111,10 @@ Playwrightテストの「高速化」と「安定性」を両立するため、�
 * [x] **シーディング:** 開発用ダミーデータの生成。
 
 ### Phase 3: 一般ユーザー機能の実装 (User Features)
-* [ ] **打刻画面:** `Attendance/Index` ページの React 化（Shadcn/ui 使用）。
-* [ ] **打刻ロジック:** `AttendanceController` の移植とテスト実装。
+* [x] **打刻画面:** `Attendance/Index` ページの React 化（Shadcn/ui 使用）。
+* [x] **打刻ロジック:** `AttendanceController` の移植とテスト実装。
+* [ ] **勤怠一覧・詳細:** `Attendance/List`, `Detail` の Inertia 化。
+* [ ] **修正申請:** 申請フローの実装。
 * [ ] **勤怠一覧・詳細:** `Attendance/List`, `Detail` の Inertia 化。
 * [ ] **修正申請:** 申請フローの実装。
 
