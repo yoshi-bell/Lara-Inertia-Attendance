@@ -78,7 +78,7 @@ export default function Detail({
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(route('attendance.correction.store', attendance.id));
+        post(route('attendances.correction.store', attendance.id));
     };
 
     const [year, month, day] = attendance.work_date.split('-');

@@ -137,4 +137,23 @@ class AttendanceController extends Controller
         return redirect()->route('attendance.list')
             ->with('success', '修正申請を送信しました。承認をお待ちください。');
     }
+
+    /**
+     * 修正申請一覧を表示する
+     */
+    public function correctionList(Request $request): Response
+    {
+        $status = $request->query('status', 'pending');
+        
+        $corrections = \App\Models\AttendanceCorrection::with('attendance')
+            ->where('requester_id', Auth::id())
+            ->where('status', $status)
+            ->latest()
+            ->get();
+
+        return Inertia::render('Attendance/CorrectionList', [
+            'corrections' => $corrections,
+            'status' => $status,
+        ]);
+    }
 }

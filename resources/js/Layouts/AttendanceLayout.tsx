@@ -43,7 +43,7 @@ export default function AttendanceLayout({
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="#" className="hover:opacity-80">
+                                    <Link href={route('corrections.index')} className="hover:opacity-80">
                                         申請一覧
                                     </Link>
                                 </li>

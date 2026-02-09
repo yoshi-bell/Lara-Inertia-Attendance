@@ -21,13 +21,45 @@ Route::middleware(['auth'])->group(function () {
     // 勤怠打刻ページ
     Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance');
 
-    // 勤怠一覧ページ
-    Route::get('/attendance/list', [AttendanceController::class, 'list'])->name('attendance.list');
+        // 勤怠一覧ページ
 
-    // 勤怠詳細ページ
-    Route::get('/attendance/{attendance}', [AttendanceController::class, 'show'])->name('attendance.detail');
-    // 修正申請の保存
-    Route::post('/attendance/{attendance}/correction', [AttendanceController::class, 'storeCorrection'])->name('attendance.correction.store');
+        Route::get('/attendance/list', [AttendanceController::class, 'list'])->name('attendance.list');
+
+    
+
+            // 勤怠詳細ページ (設計書通り /attendance/detail/{id})
+
+    
+
+            Route::get('/attendance/detail/{attendance}', [AttendanceController::class, 'show'])->name('attendance.detail');
+
+    
+
+        
+
+    
+
+            // 修正申請の保存 (旧プロジェクト通り /attendances/correction/{id})
+
+    
+
+            Route::post('/attendances/correction/{attendance}', [AttendanceController::class, 'storeCorrection'])->name('attendances.correction.store');
+
+    
+
+        
+
+    
+
+            // 修正申請一覧ページ (設計書通り /stamp_correction_request/list)
+
+    
+
+        
+
+        Route::get('/stamp_correction_request/list', [AttendanceController::class, 'correctionList'])->name('corrections.index');
+
+    
 
     // 打刻アクション
     Route::post('/attendance/start', [AttendanceController::class, 'startWork'])->name('attendance.start');
