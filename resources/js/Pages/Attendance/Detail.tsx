@@ -95,7 +95,7 @@ export default function Detail({
     const contentStyle = 'flex-1 text-xl font-bold text-black';
     // 入力欄のスタイル (標準inputタグ用)
     const inputTimeStyle =
-        'h-[29px] w-[107px] rounded-[4px] border border-[#ccc] p-0 text-center text-base font-bold tracking-[2px] focus:outline-none focus:border-black';
+        'h-[29px] w-[107px] rounded-[4px] border border-[#ccc] p-0 text-center text-base font-bold tracking-[2px] focus:outline-none focus:border-black cursor-pointer';
 
     // ラベル幅の固定スタイル (JIT回避のため style 属性で指定)
     const labelColumnStyle = { width: '256px' };
@@ -181,39 +181,53 @@ export default function Detail({
                                                 </>
                                             ) : (
                                                 <>
-                                                    <input
-                                                        type="time"
-                                                        value={
-                                                            data.requested_start_time
-                                                        }
-                                                        onChange={(e) =>
-                                                            setData(
-                                                                'requested_start_time',
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                        className={
-                                                            inputTimeStyle
-                                                        }
-                                                    />
+                                                    <div className="flex flex-col">
+                                                        <input
+                                                            type="time"
+                                                            value={
+                                                                data.requested_start_time
+                                                            }
+                                                            onChange={(e) =>
+                                                                setData(
+                                                                    'requested_start_time',
+                                                                    e.target.value
+                                                                )
+                                                            }
+                                                            onKeyDown={(e) => e.preventDefault()}
+                                                            onClick={(e) => e.currentTarget.showPicker?.()}
+                                                            className={
+                                                                inputTimeStyle
+                                                            }
+                                                        />
+                                                        {errors.requested_start_time && (
+                                                            <p className="mt-1 text-xs font-bold text-[#FF0000]">{errors.requested_start_time}</p>
+                                                        )}
+                                                    </div>
                                                     <span className="mx-4 font-normal text-black">
                                                         〜
                                                     </span>
-                                                    <input
-                                                        type="time"
-                                                        value={
-                                                            data.requested_end_time
-                                                        }
-                                                        onChange={(e) =>
-                                                            setData(
-                                                                'requested_end_time',
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                        className={
-                                                            inputTimeStyle
-                                                        }
-                                                    />
+                                                    <div className="flex flex-col">
+                                                        <input
+                                                            type="time"
+                                                            value={
+                                                                data.requested_end_time
+                                                            }
+                                                            onChange={(e) =>
+                                                                setData(
+                                                                    'requested_end_time',
+                                                                    e.target.value
+                                                                )
+                                                            }
+                                                            onKeyDown={(e) => e.preventDefault()}
+                                                            onClick={(e) => e.currentTarget.showPicker?.()}
+                                                            className={
+                                                                inputTimeStyle
+                                                            }
+                                                        />
+                                                        {errors.requested_end_time && (
+                                                            <p className="mt-1 text-xs font-bold text-[#FF0000]">{errors.requested_end_time}</p>
+                                                        )}
+                                                    </div>
                                                 </>
                                             )}
                                         </div>
@@ -261,71 +275,85 @@ export default function Detail({
                                                     </>
                                                 ) : (
                                                     <>
-                                                        <input
-                                                            type="time"
-                                                            value={
-                                                                data.rests[
-                                                                    rest.id
-                                                                ].start_time
-                                                            }
-                                                            onChange={(e) =>
-                                                                setData(
-                                                                    'rests',
-                                                                    {
-                                                                        ...data.rests,
-                                                                        [rest.id]:
-                                                                            {
-                                                                                ...data
-                                                                                    .rests[
+                                                        <div className="flex flex-col">
+                                                            <input
+                                                                type="time"
+                                                                value={
+                                                                    data.rests[
+                                                                        rest.id
+                                                                    ].start_time
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setData(
+                                                                        'rests',
+                                                                        {
+                                                                            ...data.rests,
+                                                                            [rest.id]:
+                                                                                {
+                                                                                    ...data
+                                                                                        .rests[
                                                                                     rest
                                                                                         .id
                                                                                 ],
-                                                                                start_time:
-                                                                                    e
-                                                                                        .target
-                                                                                        .value,
-                                                                            },
-                                                                    }
-                                                                )
-                                                            }
-                                                            className={
-                                                                inputTimeStyle
-                                                            }
-                                                        />
+                                                                                    start_time:
+                                                                                        e
+                                                                                            .target
+                                                                                            .value,
+                                                                                },
+                                                                        }
+                                                                    )
+                                                                }
+                                                                onKeyDown={(e) => e.preventDefault()}
+                                                                onClick={(e) => e.currentTarget.showPicker?.()}
+                                                                className={
+                                                                    inputTimeStyle
+                                                                }
+                                                            />
+                                                            {errors[`rests.${rest.id}.start_time` as keyof typeof errors] && (
+                                                                <p className="mt-1 text-xs font-bold text-[#FF0000]">{errors[`rests.${rest.id}.start_time` as keyof typeof errors]}</p>
+                                                            )}
+                                                        </div>
                                                         <span className="mx-4 font-normal text-black">
                                                             〜
                                                         </span>
-                                                        <input
-                                                            type="time"
-                                                            value={
-                                                                data.rests[
-                                                                    rest.id
-                                                                ].end_time
-                                                            }
-                                                            onChange={(e) =>
-                                                                setData(
-                                                                    'rests',
-                                                                    {
-                                                                        ...data.rests,
-                                                                        [rest.id]:
-                                                                            {
-                                                                                ...data
-                                                                                    .rests[
+                                                        <div className="flex flex-col">
+                                                            <input
+                                                                type="time"
+                                                                value={
+                                                                    data.rests[
+                                                                        rest.id
+                                                                    ].end_time
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setData(
+                                                                        'rests',
+                                                                        {
+                                                                            ...data.rests,
+                                                                            [rest.id]:
+                                                                                {
+                                                                                    ...data
+                                                                                        .rests[
                                                                                     rest
                                                                                         .id
                                                                                 ],
-                                                                                end_time:
-                                                                                    e
-                                                                                        .target
-                                                                                        .value,
-                                                                            },
-                                                                    }
-                                                                )
-                                                            }
-                                                            className={
-                                                                inputTimeStyle
-                                                            }
-                                                        />
+                                                                                    end_time:
+                                                                                        e
+                                                                                            .target
+                                                                                            .value,
+                                                                                },
+                                                                        }
+                                                                    )
+                                                                }
+                                                                onKeyDown={(e) => e.preventDefault()}
+                                                                onClick={(e) => e.currentTarget.showPicker?.()}
+                                                                className={
+                                                                    inputTimeStyle
+                                                                }
+                                                            />
+                                                            {errors[`rests.${rest.id}.end_time` as keyof typeof errors] && (
+                                                                <p className="mt-1 text-xs font-bold text-[#FF0000]">{errors[`rests.${rest.id}.end_time` as keyof typeof errors]}</p>
+                                                            )}
+                                                        </div>
                                                     </>
                                                 )}
                                             </div>
@@ -346,48 +374,62 @@ export default function Detail({
                                         </div>
                                         <div className={contentStyle}>
                                             <div className="flex flex-wrap items-center gap-4 md:gap-10">
-                                                <input
-                                                    type="time"
-                                                    value={
-                                                        data.rests.new
-                                                            .start_time
-                                                    }
-                                                    onChange={(e) =>
-                                                        setData('rests', {
-                                                            ...data.rests,
-                                                            new: {
-                                                                ...data.rests
-                                                                    .new,
-                                                                start_time:
-                                                                    e.target
-                                                                        .value,
-                                                            },
-                                                        })
-                                                    }
-                                                    className={inputTimeStyle}
-                                                />
+                                                <div className="flex flex-col">
+                                                    <input
+                                                        type="time"
+                                                        value={
+                                                            data.rests.new
+                                                                .start_time
+                                                        }
+                                                        onChange={(e) =>
+                                                            setData('rests', {
+                                                                ...data.rests,
+                                                                new: {
+                                                                    ...data.rests
+                                                                        .new,
+                                                                    start_time:
+                                                                        e.target
+                                                                            .value,
+                                                                },
+                                                            })
+                                                        }
+                                                        onKeyDown={(e) => e.preventDefault()}
+                                                        onClick={(e) => e.currentTarget.showPicker?.()}
+                                                        className={inputTimeStyle}
+                                                    />
+                                                    {errors['rests.new.start_time'] && (
+                                                        <p className="mt-1 text-xs font-bold text-[#FF0000]">{errors['rests.new.start_time']}</p>
+                                                    )}
+                                                </div>
                                                 <span className="mx-4 font-normal text-black">
                                                     〜
                                                 </span>
-                                                <input
-                                                    type="time"
-                                                    value={
-                                                        data.rests.new.end_time
-                                                    }
-                                                    onChange={(e) =>
-                                                        setData('rests', {
-                                                            ...data.rests,
-                                                            new: {
-                                                                ...data.rests
-                                                                    .new,
-                                                                end_time:
-                                                                    e.target
-                                                                        .value,
-                                                            },
-                                                        })
-                                                    }
-                                                    className={inputTimeStyle}
-                                                />
+                                                <div className="flex flex-col">
+                                                    <input
+                                                        type="time"
+                                                        value={
+                                                            data.rests.new.end_time
+                                                        }
+                                                        onChange={(e) =>
+                                                            setData('rests', {
+                                                                ...data.rests,
+                                                                new: {
+                                                                    ...data.rests
+                                                                        .new,
+                                                                    end_time:
+                                                                        e.target
+                                                                            .value,
+                                                                },
+                                                            })
+                                                        }
+                                                        onKeyDown={(e) => e.preventDefault()}
+                                                        onClick={(e) => e.currentTarget.showPicker?.()}
+                                                        className={inputTimeStyle}
+                                                    />
+                                                    {errors['rests.new.end_time'] && (
+                                                        <p className="mt-1 text-xs font-bold text-[#FF0000]">{errors['rests.new.end_time']}</p>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -462,7 +504,7 @@ export default function Detail({
                 dangerouslySetInnerHTML={{
                     __html: `
                 input[type="time"]::-webkit-calendar-picker-indicator {
-                    display: none;
+                    cursor: pointer;
                 }
             `,
                 }}
