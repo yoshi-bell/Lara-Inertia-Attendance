@@ -26,6 +26,8 @@ Route::middleware(['auth'])->group(function () {
 
     // 勤怠詳細ページ
     Route::get('/attendance/{attendance}', [AttendanceController::class, 'show'])->name('attendance.detail');
+    // 修正申請の保存
+    Route::post('/attendance/{attendance}/correction', [AttendanceController::class, 'storeCorrection'])->name('attendance.correction.store');
 
     // 打刻アクション
     Route::post('/attendance/start', [AttendanceController::class, 'startWork'])->name('attendance.start');

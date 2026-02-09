@@ -15,13 +15,16 @@ class AttendanceController extends Controller
 {
     private AttendanceService $attendanceService;
     private CalendarService $calendarService;
+    private \App\Services\CorrectionService $correctionService;
 
     public function __construct(
         AttendanceService $attendanceService,
-        CalendarService $calendarService
+        CalendarService $calendarService,
+        \App\Services\CorrectionService $correctionService
     ) {
         $this->attendanceService = $attendanceService;
         $this->calendarService = $calendarService;
+        $this->correctionService = $correctionService;
     }
 
     /**
@@ -31,7 +34,7 @@ class AttendanceController extends Controller
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
-        
+
         return Inertia::render('Attendance/Index', [
             'attendanceStatus' => $this->attendanceService->getCurrentStatus($user),
         ]);
@@ -120,5 +123,18 @@ class AttendanceController extends Controller
         $user = Auth::user();
         $this->attendanceService->endRest($user);
         return redirect()->route('attendance');
+    }
+
+    /**
+     * 修正申請を保存する
+     */
+    public function storeCorrection(
+        \App\Http\Requests\AttendanceCorrectionRequest $request,
+        \App\Models\Attendance $attendance
+    ): RedirectResponse {
+        $this->correctionService->storeRequest($request->validated(), $attendance);
+
+        return redirect()->route('attendance.list')
+            ->with('success', '修正申請を送信しました。承認をお待ちください。');
     }
 }

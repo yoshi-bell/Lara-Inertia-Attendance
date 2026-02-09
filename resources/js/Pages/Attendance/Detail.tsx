@@ -78,7 +78,7 @@ export default function Detail({
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // post(route('attendances.correction.store', attendance.id));
+        post(route('attendance.correction.store', attendance.id));
     };
 
     const [year, month, day] = attendance.work_date.split('-');
@@ -110,6 +110,7 @@ export default function Detail({
                         <form
                             onSubmit={handleSubmit}
                             className="overflow-hidden rounded-[8px] bg-white"
+                            noValidate
                         >
                             <div className="px-4 md:px-[60px]">
                                 {/* 氏名 */}
