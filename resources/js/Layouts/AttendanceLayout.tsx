@@ -1,5 +1,6 @@
 import { Link, usePage } from '@inertiajs/react';
 import { PropsWithChildren, ReactNode } from 'react';
+import { PageProps } from '@/types';
 
 interface Props {
     title?: string;
@@ -11,7 +12,9 @@ export default function AttendanceLayout({
     headerContent,
     children,
 }: PropsWithChildren<Props>) {
-    const user = usePage().props.auth.user;
+    // usePage に PageProps 型を明示することで、auth.user が厳格に定義される
+    const { auth } = usePage<PageProps>().props;
+    const user = auth.user;
 
     return (
         <div className="min-h-screen bg-[#F0EFF2] font-['Inter']">

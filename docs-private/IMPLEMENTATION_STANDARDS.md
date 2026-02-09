@@ -34,6 +34,44 @@
 
 ---
 
+## 🛡️ TypeScript 型定義ポリシー (Type Safety Policy)
+TypeScript の偏差値を高め、堅牢なシステムを維持するための厳格なルール。
+
+### 1. 🚫 any 型の完全禁止と unknown の活用 (Strictness)
+* **any 禁止:** `any` 型の使用を原則禁止する。どうしても型が不明な場合のみ `// eslint-disable-next-line` で理由を添えて許容する。
+* **unknown の活用:** 外部APIやライブラリ等で型が不確定な場合は `unknown` を使用する。
+* **User-Defined Type Guards:** `unknown` 型のデータを扱う際は、`isAttendance(data): data is Attendance` のような型ガード関数を作成し、ロジック内で安全に型を特定する。これにより、実行時の安全性をコンパイル段階で保証する。
+
+### 2. 🤖 SSOT (Single Source of Truth) と自動化の指針
+* **モデル定義の集約:** `resources/js/types/models.d.ts` を唯一の正解とし、各コンポーネント内でのモデル再定義を禁止する。
+* **二重管理の排除:** 型を中央集権化することで、バックエンドの変更による修正漏れを防ぎ、保守コストを最小化する。
+* **自動同期の推奨:** `spatie/laravel-typescript-transformer` 等を活用し、バックエンドのモデル変更が自動的に TS 型定義に反映される仕組みを「標準アーキテクチャ」とする（手動更新による不整合を排除）。
+
+### 3. 🛡️ ランタイムバリデーションとの統合 (Zod Integration)
+* **Schema First:** フォーム送信や API からの重要なデータ受信においては、Zod スキーマを定義する。
+* **型の一元化:** `z.infer<typeof Schema>` を用いて、バリデーションロジックと TypeScript の型定義を完全に一致させる。
+
+### 4. 💎 定数管理における as const (Const Assertions)
+* **一元管理:** ステータス等の定数はオブジェクト + `as const` で管理し、そこから Union Types を自動生成する。
+    ```typescript
+    export const STATUS = { PENDING: 'pending', APPROVED: 'approved' } as const;
+    export type Status = (typeof STATUS)[keyof typeof STATUS];
+    ```
+
+### 5. 🧩 コンポーネント設計の型 (Component Props)
+* **命名規則:** Props 型は `[Component Name]Props` と命名し（例: `UserCardProps`）、エクスポートする。これにより、親コンポーネントやテストコードでの再利用性を高める。
+* **PageProps の継承:** 全てのページコンポーネントの Props は `PageProps` を継承する。
+
+### 6. 🛠️ Utility Types の活用
+* **Pick / Omit:** モデルの一部のみを使用する場合、手動で再定義せず `Pick<Attendance, 'id' | 'start_time'>` のように既存の型から抽出する。
+* **Partial / Required:** フォーム入力など、一部のプロパティが任意または必須になる状況を型レベルで表現する。
+
+### 7. Inertia × TypeScript の統合
+* `usePage<PageProps>()` を使用し、コントローラーから渡されるデータ（Props）に確実に型を当てる。
+* **ジェネリクスの明示:** Inertia の `useForm<T>` などのフックを使用する際は、必ずジェネリクス `<T>` を指定し、送信データとエラーメッセージの型を厳格に管理する。
+
+---
+
 ## 📝 コメント規則 (Commenting Rules)
 コードの可読性と保守性を高めるため、以下のルールを遵守する。
 

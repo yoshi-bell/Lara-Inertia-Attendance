@@ -1,6 +1,7 @@
 # Lara-Inertia-Attendance 開発ログ (Development Log)
 
 ## 概要
+
 このドキュメントは、旧勤怠アプリ（Laravel 8 / Blade）を、最新の技術スタック（Laravel 12 / Inertia / React / TypeScript）へリファクタリングするプロセス、技術的決定事項、および学習の軌跡を記録するものです。
 
 ---
@@ -8,76 +9,105 @@
 ## 2026-02-06: プロジェクト始動とドキュメント基盤の確立
 
 ### 1. プロジェクトの目的と方針
-*   **目的:** 既存の勤怠アプリを現代的なアーキテクチャで再構築し、保守性とユーザー体験を向上させる。
-*   **基本方針:**
-    *   **Inertia.js によるモダンモノリス:** API分離の手間を省きつつ、SPAのような高速な操作感を実現。
-    *   **TypeScript の徹底:** フロントエンド・バックエンド共に型安全性を追求。
-    *   **ドキュメント駆動開発:** `lara-next-reserve` で確立した「憲法・法律・マニュアル」の仕組みを継承し、AIとの高度な協働を維持する。
+
+- **目的:** 既存の勤怠アプリを現代的なアーキテクチャで再構築し、保守性とユーザー体験を向上させる。
+- **基本方針:**
+    - **Inertia.js によるモダンモノリス:** API分離の手間を省きつつ、SPAのような高速な操作感を実現。
+    - **TypeScript の徹底:** フロントエンド・バックエンド共に型安全性を追求。
+    - **ドキュメント駆動開発:** `lara-next-reserve` で確立した「憲法・法律・マニュアル」の仕組みを継承し、AIとの高度な協働を維持する。
 
 ### 2. 環境構築とドキュメント整備
-*   **Laravel 12 初期化:** `curl` コマンドを使用して最新の Laravel Sail 環境を構築。
-*   **ドキュメント移植と最適化:** 
-    *   `RULES_AND_ARCHITECTURE.md` (憲法): Inertia モノリス構成に合わせて刷新。
-    *   `IMPLEMENTATION_STANDARDS.md` (実装標準): 旧コーディング規約をリネーム。型自動生成や Hybrid バリデーションの方針を明文化。論理式の括弧使用ルールを追加。
-    *   `WORKFLOW.md` (ロードマップ): リファクタリング用の 5 Phase ロードマップを策定。
-    *   `AGENT_RECOVERY_MANUAL.md` (復旧手順): 新環境の検証項目へ更新。
-*   **Laravel Breeze (Inertia/React) の導入:**
-    *   `breeze:install react --typescript` を実行し、認証基盤と React 環境を構築。
-    *   **技術的課題と解決:** `npm install` 時に Vite 7 と `@types/node` のバージョン不整合による `ERESOLVE` エラーに遭遇。`@types/node@latest` の明示的インストールと `--legacy-peer-deps` フラグの使用により、依存関係を正常に解消。
-    *   **動作確認:** ユーザー登録からダッシュボード表示までの一連の SPA 動作を確認。
-*   **品質管理ツール (Lint/Format) の設定:**
-    *   **PHP:** Laravel Pint を導入し、Laravel 標準スタイルでの自動整形を確認。
-    *   **React/TypeScript:** Prettier (Tailwindプラグイン付) と ESLint (Flat Config) を導入。
-    *   **プロジェクト憲法の反映:** ESLint において `any` 型の使用を禁止し、Prettier でクラス名の自動並び替えを強制。
+
+- **Laravel 12 初期化:** `curl` コマンドを使用して最新の Laravel Sail 環境を構築。
+- **ドキュメント移植と最適化:**
+    - `RULES_AND_ARCHITECTURE.md` (憲法): Inertia モノリス構成に合わせて刷新。
+    - `IMPLEMENTATION_STANDARDS.md` (実装標準): 旧コーディング規約をリネーム。型自動生成や Hybrid バリデーションの方針を明文化。論理式の括弧使用ルールを追加。
+    - `WORKFLOW.md` (ロードマップ): リファクタリング用の 5 Phase ロードマップを策定。
+    - `AGENT_RECOVERY_MANUAL.md` (復旧手順): 新環境の検証項目へ更新。
+- **Laravel Breeze (Inertia/React) の導入:**
+    - `breeze:install react --typescript` を実行し、認証基盤と React 環境を構築。
+    - **技術的課題と解決:** `npm install` 時に Vite 7 と `@types/node` のバージョン不整合による `ERESOLVE` エラーに遭遇。`@types/node@latest` の明示的インストールと `--legacy-peer-deps` フラグの使用により、依存関係を正常に解消。
+    - **動作確認:** ユーザー登録からダッシュボード表示までの一連の SPA 動作を確認。
+- **品質管理ツール (Lint/Format) の設定:**
+    - **PHP:** Laravel Pint を導入し、Laravel 標準スタイルでの自動整形を確認。
+    - **React/TypeScript:** Prettier (Tailwindプラグイン付) と ESLint (Flat Config) を導入。
+    - **プロジェクト憲法の反映:** ESLint において `any` 型の使用を禁止し、Prettier でクラス名の自動並び替えを強制。
 
 ### 3. データとモデルの移行 (Phase 2)
-*   **マイグレーションの移植:** 
-    *   旧プロジェクトから `attendances`, `rests`, `attendance_corrections`, `rest_corrections` のテーブル定義を移植。
-    *   最新の無名クラスマイグレーション形式へリファクタリングして適用。
-*   **`users` テーブルの拡張:** 管理者機能を見据え、`is_admin` カラムを初期マイグレーションに追加。
-*   **データベース構築:** `migrate:fresh` により、全7テーブル（認証系含む）の構築が正常に完了したことを確認。
-*   **Eloquent モデルの移植:**
-    *   `Attendance`, `Rest`, `AttendanceCorrection`, `RestCorrection` の各モデルを新規作成。
-    *   旧プロジェクトからリレーションおよびビジネスロジック（計算アクセサ）を忠実に移植。
-*   **シーディング基盤の構築:**
-    *   旧プロジェクトの `UserSeeder`, `AttendancesTableSeeder`, `AttendanceCorrectionSeeder` を移植。
-    *   **安定性の確保:** 工夫によるデグレードを避けるため、旧プロジェクトのランダムデータ生成ロジック（昨日を起点に過去60日分）をそのまま再現。
-    *   **データ投入成功:** 約1300件の勤怠・休憩データ、および約80件の修正申請データを生成し、開発環境を整えた。
+
+- **マイグレーションの移植:**
+    - 旧プロジェクトから `attendances`, `rests`, `attendance_corrections`, `rest_corrections` のテーブル定義を移植。
+    - 最新の無名クラスマイグレーション形式へリファクタリングして適用。
+- **`users` テーブルの拡張:** 管理者機能を見据え、`is_admin` カラムを初期マイグレーションに追加。
+- **データベース構築:** `migrate:fresh` により、全7テーブル（認証系含む）の構築が正常に完了したことを確認。
+- **Eloquent モデルの移植:**
+    - `Attendance`, `Rest`, `AttendanceCorrection`, `RestCorrection` の各モデルを新規作成。
+    - 旧プロジェクトからリレーションおよびビジネスロジック（計算アクセサ）を忠実に移植。
+- **シーディング基盤の構築:**
+    - 旧プロジェクトの `UserSeeder`, `AttendancesTableSeeder`, `AttendanceCorrectionSeeder` を移植。
+    - **安定性の確保:** 工夫によるデグレードを避けるため、旧プロジェクトのランダムデータ生成ロジック（昨日を起点に過去60日分）をそのまま再現。
+    - **データ投入成功:** 約1300件の勤怠・休憩データ、および約80件の修正申請データを生成し、開発環境を整えた。
 
 ### 4. 一般ユーザー機能の実装 (Phase 3)
-*   **フロントエンド基盤の強化 (Shadcn/ui):**
-    *   Shadcn/ui を導入し、モダンな UI コンポーネント（Button, Input, Card 等）を利用可能にした。
-    *   **設計判断:** ディレクトリ構造を整理。React コンポーネントは大文字開始（`Components`, `Pages`）、ロジック・ユーティリティは小文字開始（`lib`, `types`）という慣習を確立し、`IMPLEMENTATION_STANDARDS.md` を更新。
-*   **認証画面のリファクタリング:**
-    *   `Login.tsx`, `Register.tsx` を Shadcn/ui を使用して再構築。
-    *   旧プロジェクトのデザイン（タイトル、ラベル、リンク構成）を忠実に再現しつつ、UI 品質を向上させた。
-*   **打刻機能（Attendance/Index）の実装:**
-    *   **フロントエンド:** React の `useEffect` を用いたリアルタイムクロックを実装。Shadcn/ui の `Card` や `Button` を活用し、旧プロジェクトのデザインをモダンに再現。
-    *   **バックエンド:** `AttendanceService` を新設し、打刻ロジック（二重出勤防止、休憩中退勤不可など）を集約。コントローラーの肥大化を防ぎつつ、旧プロジェクトの仕様を完全移植。
-    *   **Inertia 連携:** `router.post` を活用し、SPA 特有の高速な状態遷移（打刻後のボタン切り替わり）を実現。
+
+- **フロントエンド基盤の強化 (Shadcn/ui):**
+    - Shadcn/ui を導入し、モダンな UI コンポーネント（Button, Input, Card 等）を利用可能にした。
+    - **設計判断:** ディレクトリ構造を整理。React コンポーネントは大文字開始（`Components`, `Pages`）、ロジック・ユーティリティは小文字開始（`lib`, `types`）という慣習を確立し、`IMPLEMENTATION_STANDARDS.md` を更新。
+- **認証画面のリファクタリング:**
+    - `Login.tsx`, `Register.tsx` を Shadcn/ui を使用して再構築。
+    - 旧プロジェクトのデザイン（タイトル、ラベル、リンク構成）を忠実に再現しつつ、UI 品質を向上させた。
+- **打刻機能（Attendance/Index）の実装:**
+    - **フロントエンド:** React の `useEffect` を用いたリアルタイムクロックを実装。Shadcn/ui の `Card` や `Button` を活用し、旧プロジェクトのデザインをモダンに再現。
+    - **バックエンド:** `AttendanceService` を新設し、打刻ロジック（二重出勤防止、休憩中退勤不可など）を集約。コントローラーの肥大化を防ぎつつ、旧プロジェクトの仕様を完全移植。
+    - **Inertia 連携:** `router.post` を活用し、SPA 特有の高速な状態遷移（打刻後のボタン切り替わり）を実現。
 
 ### 2026-02-06 (続き): 勤怠一覧機能の構築とレイアウトの刷新
 
 #### 1. デザイン再現のためのレイアウト刷新
-*   **設計判断:** Laravel Breeze 標準の `AuthenticatedLayout` は白系統のデザインであり、旧プロジェクトの「黒ヘッダー」「背景色 #F0EFF2」を再現するには構造的な乖離が大きかったため、学習も兼ねて `AttendanceLayout.tsx` を新規作成。
-*   **実装内容:** 
-    *   旧プロジェクトの `common.css` および `app.blade.php` の構造を React (Tailwind CSS) で忠実に再現。
-    *   黒いヘッダー、ロゴ画像、シンプルなテキストリンクによるナビゲーションを実装。
-    *   `title` と `headerContent` を Props として受け取る設計にすることで、各ページ固有のヘッダー要素（月次ナビゲーションなど）を柔軟に差し込めるようにした。
-*   **ロゴの移植:** 旧プロジェクトから `logo.svg` を `public/images/` に移植。
+
+- **設計判断:** Laravel Breeze 標準の `AuthenticatedLayout` は白系統のデザインであり、旧プロジェクトの「黒ヘッダー」「背景色 #F0EFF2」を再現するには構造的な乖離が大きかったため、学習も兼ねて `AttendanceLayout.tsx` を新規作成。
+- **実装内容:**
+    - 旧プロジェクトの `common.css` および `app.blade.php` の構造を React (Tailwind CSS) で忠実に再現。
+    - 黒いヘッダー、ロゴ画像、シンプルなテキストリンクによるナビゲーションを実装。
+    - `title` と `headerContent` を Props として受け取る設計にすることで、各ページ固有のヘッダー要素（月次ナビゲーションなど）を柔軟に差し込めるようにした。
+- **ロゴの移植:** 旧プロジェクトから `logo.svg` を `public/images/` に移植。
 
 #### 2. 勤怠一覧ページ（Attendance/List）の実装
-*   **Shadcn/ui の活用:** `Table` コンポーネント群を使用し、アクセシビリティと保守性を確保。
-*   **デザインの再現:** 旧プロジェクトの `attendance-list.css` のトンマナを Tailwind クラスで再現。
-    *   `tracking-[3px]` による文字間隔の調整。
-    *   `border-b-[3px]` や `#E1E1E1` を用いたボーダーの再現。
-    *   `rounded-[10px]` による角丸の適用。
-*   **月次ナビゲーション:** `AttendanceLayout` の `headerContent` を利用し、前月・翌月への切り替えリンクを実装。`router.get` による月指定の遷移を実現。
+
+- **Shadcn/ui の活用:** `Table` コンポーネント群を使用し、アクセシビリティと保守性を確保。
+- **デザインの再現:** 旧プロジェクトの `attendance-list.css` のトンマナを Tailwind クラスで再現。
+    - `tracking-[3px]` による文字間隔の調整。
+    - `border-b-[3px]` や `#E1E1E1` を用いたボーダーの再現。
+    - `rounded-[10px]` による角丸の適用。
+- **月次ナビゲーション:** `AttendanceLayout` の `headerContent` を利用し、前月・翌月への切り替えリンクを実装。`router.get` による月指定の遷移を実現。
 
 #### 3. ルーティングとコントローラーの拡張
-*   **詳細画面の準備:** `routes/web.php` に詳細表示用ルートを追加。
-*   **コントローラー:** `AttendanceController` に `show` メソッドを追加し、詳細ページ（`Attendance/Detail`）へのレンダリングを定義。
 
-### 5. 次のステップ
-*   勤怠詳細ページ（Attendance/Detail）の Inertia 化と修正申請フォームの作成。
-*   月次ナビゲーションにおける「月選択（カレンダー）」機能の強化。
+- **詳細画面の準備:** `routes/web.php` に詳細表示用ルートを追加。
+- **コントローラー:** `AttendanceController` に `show` メソッドを追加し、詳細ページ（`Attendance/Detail`）へのレンダリングを定義。
+
+### 2026-02-09: TypeScript 型定義ポリシーの厳格化と勤怠詳細ページの実装
+
+#### 1. TypeScript 偏差値向上を目指した「最強の法律」の策定
+
+- **背景:** スコアの向上とプロジェクトの堅牢性確保のため、型定義ポリシーを大幅に強化。
+- **実装内容:**
+    - `IMPLEMENTATION_STANDARDS.md` を更新し、`any` 禁止、`unknown` + 型ガードの義務化、`as const` による定数一元管理、Zod との統合、命名規則 (`[Component]Props`) を明文化。
+    - `resources/js/types/models.d.ts` を新設し、SSOT (Single Source of Truth) の原則に基づく中央集権的な型管理を開始。
+- **効果:** AI エージェントへの指示が「型システム」レベルで厳格化され、開発品質の底上げを実現。
+
+#### 2. 勤怠詳細ページ（Attendance/Detail）のモダンリファクタリング
+
+- **型設計:** 新ポリシーに基づき、`useForm<CorrectionForm>` のジェネリクス明示や、モデル型の継承・交差型を駆使した厳密な Props 定義を実施。
+- **レイアウト課題と解決:**
+    - Shadcn UI のデフォルトスタイル（`w-full`, `display: flex`）が旧デザインの再現（固定幅ラベル等）と衝突する問題に直面。
+    - **技術的判断:** フレームワークの干渉を排除するため、標準の `input`, `textarea` タグへ原点回帰。
+    - **決定打:** Tailwind の JIT ビルドや Flexbox の自動計算に依存せず、`style` 属性（インラインスタイル）でピクセル単位の幅 (`256px`) を強制適用。これにより、最も堅牢な方法でレイアウトを固定。
+- **機能実装:**
+    - 既存の休憩データから動的にフォーム値を生成するロジックを実装。
+    - 「承認待ち申請」の有無による動的な UI 切り替え（編集不可状態の視覚的表現）を実現。
+
+#### 3. 次のステップ
+
+- 修正申請の保存ロジック（バックエンド）の実装。
+- 管理者用機能（承認フロー）の構築。

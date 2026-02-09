@@ -64,8 +64,17 @@ class AttendanceController extends Controller
      */
     public function show(\App\Models\Attendance $attendance): Response
     {
+        $attendance->load([
+            'user:id,name',
+            'rests',
+            'corrections' => function ($query) {
+                $query->where('status', 'pending')->with('restCorrections')->latest();
+            }
+        ]);
+
         return Inertia::render('Attendance/Detail', [
-            'attendance' => $attendance->load('rests'),
+            'attendance' => $attendance,
+            'pendingCorrection' => $attendance->corrections->first(),
         ]);
     }
 

@@ -1,0 +1,51 @@
+import { User } from './index';
+
+/**
+ * 勤怠記録 (attendances table)
+ */
+export interface Attendance {
+    id: number;
+    user_id: number;
+    work_date: string; // YYYY-MM-DD
+    start_time: string | null;
+    end_time: string | null;
+    created_at: string;
+    updated_at: string;
+
+    // 計算済みのプロパティ (App\Models\Attendance のアクセサに対応)
+    total_rest_time?: string; // H:i
+    work_time?: string | null; // H:i
+
+    // リレーション
+    user?: User;
+    rests?: Rest[];
+}
+
+/**
+ * 休憩記録 (rests table)
+ */
+export interface Rest {
+    id: number;
+    attendance_id: number;
+    start_time: string;
+    end_time: string | null;
+    created_at: string;
+    updated_at: string;
+}
+
+/**
+ * 勤怠修正申請 (attendance_corrections table)
+ */
+export interface AttendanceCorrection {
+    id: number;
+    attendance_id: number;
+    user_id: number;
+    requested_start_time: string; // 追加
+    requested_end_time: string;   // 追加
+    reason: string;
+    status: 'pending' | 'approved' | 'rejected';
+    reviewed_at: string | null;
+    reviewer_id: number | null;
+    created_at: string;
+    updated_at: string;
+}
