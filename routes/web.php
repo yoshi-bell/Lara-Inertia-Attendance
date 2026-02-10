@@ -86,8 +86,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // 管理者専用機能 (認証および管理者権限必須)
     Route::middleware(['auth', 'is_admin'])->group(function () {
         // 日次勤怠一覧ページ (US010)
-        Route::get('/attendance/list', function () {
-            return "管理者日次勤怠一覧ページ (実装中)";
-        })->name('attendance.index');
+        Route::get('/attendance/list', [\App\Http\Controllers\Admin\AttendanceController::class, 'index'])->name('attendance.index');
+        // 勤怠詳細ページ (US011)
+        Route::get('/attendance/{attendance}', [\App\Http\Controllers\Admin\AttendanceController::class, 'show'])->name('attendance.show');
+        // 勤怠情報更新 (管理者直接修正 FN040)
+        Route::put('/attendance/{attendance}', [\App\Http\Controllers\Admin\AttendanceController::class, 'update'])->name('attendance.update');
     });
 });

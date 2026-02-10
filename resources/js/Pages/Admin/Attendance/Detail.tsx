@@ -15,7 +15,7 @@ interface RestCorrection {
     requested_end_time: string | null;
 }
 
-export interface AttendanceDetailProps extends PageProps {
+export interface AdminAttendanceDetailProps extends PageProps {
     attendance: Attendance & {
         user: { name: string };
         rests: Rest[];
@@ -41,12 +41,12 @@ interface CorrectionFormType {
 }
 
 /**
- * 勤怠詳細ページ (一般ユーザー用)
+ * 勤怠詳細ページ (管理者用)
  */
 export default function Detail({
     attendance,
     pendingCorrection,
-}: AttendanceDetailProps) {
+}: AdminAttendanceDetailProps) {
     const formatTimeForInput = (dateTimeStr: string | null | undefined) => {
         if (!dateTimeStr) return '';
         if (dateTimeStr.includes('T')) {
@@ -55,7 +55,7 @@ export default function Detail({
         return dateTimeStr.substring(0, 5);
     };
 
-    const { data, setData, post, processing, errors } = useForm<CorrectionFormType>(
+    const { data, setData, put, processing, errors } = useForm<CorrectionFormType>(
         {
             requested_start_time: formatTimeForInput(attendance.start_time),
             requested_end_time: formatTimeForInput(attendance.end_time),
@@ -77,7 +77,8 @@ export default function Detail({
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(route('attendances.correction.store', attendance.id));
+        // 管理者の場合は直接更新 (PUT)
+        put(route('admin.attendance.update', attendance.id));
     };
 
     return (
@@ -102,7 +103,7 @@ export default function Detail({
                                 formatTimeForInput={formatTimeForInput}
                             />
 
-                            {/* ボタンエリア (一般ユーザー用) */}
+                            {/* ボタンエリア (管理者用) */}
                             <div
                                 className="mt-10 flex justify-end gap-4 px-4 pb-10 md:px-[60px]"
                                 style={{ paddingBottom: '20px' }}
