@@ -76,3 +76,18 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__ . '/auth.php';
+
+// 管理者用認証ルート
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/login', [\App\Http\Controllers\Admin\LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [\App\Http\Controllers\Admin\LoginController::class, 'login']);
+    Route::post('/logout', [\App\Http\Controllers\Admin\LoginController::class, 'logout'])->name('logout');
+
+    // 管理者専用機能 (認証および管理者権限必須)
+    Route::middleware(['auth', 'is_admin'])->group(function () {
+        // 日次勤怠一覧ページ (US010)
+        Route::get('/attendance/list', function () {
+            return "管理者日次勤怠一覧ページ (実装中)";
+        })->name('attendance.index');
+    });
+});
