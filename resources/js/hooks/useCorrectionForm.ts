@@ -28,7 +28,7 @@ interface UseCorrectionFormProps {
  */
 export function useCorrectionForm({ attendance, isAdmin }: UseCorrectionFormProps) {
     
-    // 時間フォーマットヘルパー (2026-02-09T08:00... -> 08:00)
+    // 時間フォーマットヘルパー
     const formatTimeForInput = (dateTimeStr: string | null | undefined) => {
         if (!dateTimeStr) return '';
         return dateTimeStr.includes('T') 
@@ -36,7 +36,7 @@ export function useCorrectionForm({ attendance, isAdmin }: UseCorrectionFormProp
             : dateTimeStr.substring(0, 5);
     };
 
-    // 初期値を生成するロジック
+    // 最新の attendance データから初期値を生成する関数
     const getInitialValues = (att: typeof attendance): CorrectionFormType => ({
         requested_start_time: formatTimeForInput(att.start_time),
         requested_end_time: formatTimeForInput(att.end_time),
@@ -56,11 +56,13 @@ export function useCorrectionForm({ attendance, isAdmin }: UseCorrectionFormProp
     const form = useForm<CorrectionFormType>(getInitialValues(attendance));
 
     /**
-     * サーバー側のデータ更新を検知してステートを自動同期
+     * 【修正】ステート同期ロジックの適正化
+     * reset() を呼ぶと古い初期値に戻ってしまうリスクがあるため、
+     * setData() だけを使って現在のフォーム値を強制的に最新化する。
      */
     useEffect(() => {
-        form.setData(getInitialValues(attendance));
-        form.reset();
+        const freshValues = getInitialValues(attendance);
+        form.setData(freshValues);
     }, [attendance.updated_at]);
 
     /**

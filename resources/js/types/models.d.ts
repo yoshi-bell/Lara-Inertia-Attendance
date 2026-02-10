@@ -49,3 +49,16 @@ export interface AttendanceCorrection {
     created_at: string;
     updated_at: string;
 }
+
+/**
+ * 休憩時間の修正申請 (rest_corrections table)
+ */
+export interface RestCorrection {
+    id: number;
+    attendance_correction_id: number;
+    rest_id: number | null;
+    requested_start_time: string;
+    requested_end_time: string | null;
+    created_at: string;
+    updated_at: string;
+}

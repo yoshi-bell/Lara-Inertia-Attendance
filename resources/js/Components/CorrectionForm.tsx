@@ -1,18 +1,6 @@
-import { Input } from '@/Components/ui/input';
-import { Label } from '@/Components/ui/label';
-import { Attendance, AttendanceCorrection, Rest } from '@/types/models';
+import { Attendance, AttendanceCorrection, Rest, RestCorrection } from '@/types/models';
+import { CorrectionFormType } from '@/hooks/useCorrectionForm';
 import React from 'react';
-
-/**
- * 休憩修正の型定義
- */
-interface RestCorrection {
-    id: number;
-    attendance_correction_id: number;
-    rest_id: number | null;
-    requested_start_time: string;
-    requested_end_time: string | null;
-}
 
 /**
  * 共通フォームコンポーネントの Props
@@ -25,9 +13,14 @@ interface CorrectionFormProps {
     pendingCorrection: (AttendanceCorrection & {
         rest_corrections: RestCorrection[];
     }) | null;
-    data: any; // useForm の data
-    setData: (key: string, value: any) => void;
-    errors: any; // useForm の errors
+    data: CorrectionFormType;
+    // setData の型を直接定義 (UseFormSetData インポートエラーの回避)
+    setData: {
+        (data: CorrectionFormType): void;
+        (key: keyof CorrectionFormType, value: CorrectionFormType[keyof CorrectionFormType]): void;
+        (callback: (data: CorrectionFormType) => CorrectionFormType): void;
+    };
+    errors: Partial<Record<string, string>>;
     formatTimeForInput: (dateTimeStr: string | null | undefined) => string;
 }
 
@@ -48,7 +41,7 @@ export default function CorrectionForm({
     const rowStyle = 'flex items-center border-b-2 border-[#E1E1E1] last:border-0 min-h-[90px] py-4 w-full';
     const labelWrapperStyle = 'w-[256px] min-w-[256px] shrink-0 px-8 md:pl-0';
     const labelTextStyle = 'text-xl font-bold text-[#737373]';
-    const contentStyle = 'flex-1 text-xl font-bold text-black';
+    const contentStyle = 'flex-1 text-xl font-bold text-black pl-8';
     const inputTimeStyle = 'h-[29px] w-[107px] rounded-[4px] border border-[#ccc] p-0 text-center text-base font-bold tracking-[2px] focus:outline-none focus:border-black cursor-pointer';
     const labelColumnWidth = { width: '256px' };
 

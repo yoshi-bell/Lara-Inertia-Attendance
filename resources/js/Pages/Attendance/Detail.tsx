@@ -1,31 +1,25 @@
 import AttendanceLayout from '@/Layouts/AttendanceLayout';
 import { Head } from '@inertiajs/react';
 import { PageProps } from '@/types';
-import { Attendance, AttendanceCorrection, Rest } from '@/types/models';
+import { Attendance, AttendanceCorrection, Rest, RestCorrection } from '@/types/models';
 import { Button } from '@/Components/ui/button';
 import { Card, CardContent } from '@/Components/ui/card';
 import CorrectionForm from '@/Components/CorrectionForm';
-import { useCorrectionForm } from '@/hooks/useCorrectionForm';
+import { useCorrectionForm, CorrectionFormType } from '@/hooks/useCorrectionForm';
 import React from 'react';
 
-interface RestCorrection {
-    id: number;
-    attendance_correction_id: number;
-    rest_id: number | null;
-    requested_start_time: string;
-    requested_end_time: string | null;
-}
-
+/**
+ * 勤怠詳細ページ Props (一般ユーザー用)
+ * 全てのモデル定義を @/types/models からインポートし、一本化
+ */
 export interface AttendanceDetailProps extends PageProps {
     attendance: Attendance & {
         user: { name: string };
         rests: Rest[];
     };
-    pendingCorrection:
-        | (AttendanceCorrection & {
-              rest_corrections: RestCorrection[];
-          })
-        | null;
+    pendingCorrection: (AttendanceCorrection & {
+        rest_corrections: RestCorrection[];
+    }) | null;
 }
 
 /**
