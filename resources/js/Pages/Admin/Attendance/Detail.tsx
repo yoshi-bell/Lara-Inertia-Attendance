@@ -5,7 +5,7 @@ import { Attendance, AttendanceCorrection, Rest } from '@/types/models';
 import { Button } from '@/Components/ui/button';
 import { Card, CardContent } from '@/Components/ui/card';
 import CorrectionForm from '@/Components/CorrectionForm';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 interface RestCorrection {
     id: number;
@@ -46,6 +46,7 @@ interface CorrectionFormType {
 export default function Detail({
     attendance,
     pendingCorrection,
+    flash,
 }: AdminAttendanceDetailProps) {
     const formatTimeForInput = (dateTimeStr: string | null | undefined) => {
         if (!dateTimeStr) return '';
@@ -55,30 +56,47 @@ export default function Detail({
         return dateTimeStr.substring(0, 5);
     };
 
-    const { data, setData, put, processing, errors } = useForm<CorrectionFormType>(
-        {
-            requested_start_time: formatTimeForInput(attendance.start_time),
-            requested_end_time: formatTimeForInput(attendance.end_time),
-            rests: attendance.rests.reduce(
-                (acc, rest) => ({
-                    ...acc,
-                    [rest.id]: {
-                        start_time: formatTimeForInput(rest.start_time),
-                        end_time: formatTimeForInput(rest.end_time),
-                    },
-                }),
-                {
-                    new: { start_time: '', end_time: '' },
-                }
-            ),
-            reason: '',
-        }
+    // 初期値を生成する関数
+    const getInitialValues = (att: typeof attendance) => ({
+        requested_start_time: formatTimeForInput(att.start_time),
+        requested_end_time: formatTimeForInput(att.end_time),
+        rests: att.rests.reduce(
+            (acc, rest) => ({
+                ...acc,
+                [rest.id]: {
+                    start_time: formatTimeForInput(rest.start_time),
+                    end_time: formatTimeForInput(rest.end_time),
+                },
+            }),
+            {
+                new: { start_time: '', end_time: '' },
+            }
+        ),
+        reason: '',
+    });
+
+    const { data, setData, put, processing, errors, reset } = useForm<CorrectionFormType>(
+        getInitialValues(attendance)
     );
+
+    /**
+     * 【重要】モダンなデータ同期ロジック
+     * サーバー側のデータ（attendance）が更新されたら、フォームのステートを最新化する
+     */
+    useEffect(() => {
+        // updated_at が変わった＝サーバーで更新されたと判断
+        reset();
+        // フォーム内のデータも最新の attendance に基づいて再セット
+        const freshValues = getInitialValues(attendance);
+        setData(freshValues);
+    }, [attendance.updated_at]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // 管理者の場合は直接更新 (PUT)
-        put(route('admin.attendance.update', attendance.id));
+        // ページ遷移せず、その場で更新を反映させるために preserveScroll を指定
+        put(route('admin.attendance.update', attendance.id), {
+            preserveScroll: true,
+        });
     };
 
     return (
@@ -86,6 +104,13 @@ export default function Detail({
             <Head title="勤怠詳細" />
 
             <div className="mx-auto max-w-[900px]">
+                {/* 完了通知メッセージ */}
+                {flash?.success && (
+                    <div className="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded font-bold text-center animate-in fade-in duration-500">
+                        {flash.success}
+                    </div>
+                )}
+
                 <Card className="border-none bg-transparent shadow-none">
                     <CardContent className="p-0">
                         <form
@@ -93,7 +118,6 @@ export default function Detail({
                             className="overflow-hidden rounded-[8px] bg-white"
                             noValidate
                         >
-                            {/* 共通フォームUI */}
                             <CorrectionForm
                                 attendance={attendance}
                                 pendingCorrection={pendingCorrection}
@@ -103,7 +127,6 @@ export default function Detail({
                                 formatTimeForInput={formatTimeForInput}
                             />
 
-                            {/* ボタンエリア (管理者用) */}
                             <div
                                 className="mt-10 flex justify-end gap-4 px-4 pb-10 md:px-[60px]"
                                 style={{ paddingBottom: '20px' }}

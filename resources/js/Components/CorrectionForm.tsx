@@ -144,7 +144,7 @@ export default function CorrectionForm({
                                     <div className="flex flex-col">
                                         <input
                                             type="time"
-                                            value={data.rests[rest.id].start_time}
+                                            value={data.rests[rest.id]?.start_time || ''}
                                             onChange={(e) => setData('rests', {
                                                 ...data.rests,
                                                 [rest.id]: { ...data.rests[rest.id], start_time: e.target.value }
@@ -161,7 +161,7 @@ export default function CorrectionForm({
                                     <div className="flex flex-col">
                                         <input
                                             type="time"
-                                            value={data.rests[rest.id].end_time}
+                                            value={data.rests[rest.id]?.end_time || ''}
                                             onChange={(e) => setData('rests', {
                                                 ...data.rests,
                                                 [rest.id]: { ...data.rests[rest.id], end_time: e.target.value }

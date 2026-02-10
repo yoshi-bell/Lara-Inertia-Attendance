@@ -57,10 +57,9 @@ class AttendanceController extends Controller
             }
         ]);
 
-        return Inertia::render('Attendance/Detail', [
+        return Inertia::render('Admin/Attendance/Detail', [
             'attendance' => $attendance,
             'pendingCorrection' => $attendance->corrections->first(),
-            'isAdmin' => true, // 管理者による直接修正モード
         ]);
     }
 
@@ -72,26 +71,27 @@ class AttendanceController extends Controller
         $data = $request->validated();
         $workDate = $attendance->work_date->format('Y-m-d');
 
-        // 勤怠本体の更新
-        $attendance->update([
-            'start_time' => $workDate . ' ' . $data['requested_start_time'],
-            'end_time' => $workDate . ' ' . $data['requested_end_time'],
-        ]);
+        \Illuminate\Support\Facades\DB::transaction(function () use ($attendance, $data, $workDate) {
+            // 勤怠本体の更新
+            $attendance->update([
+                'start_time' => $workDate . ' ' . $data['requested_start_time'],
+                'end_time' => $workDate . ' ' . $data['requested_end_time'],
+            ]);
 
-        // 休憩データの再構築
-        $attendance->rests()->delete();
-        if (!empty($data['rests'])) {
-            foreach ($data['rests'] as $restData) {
-                if (!empty($restData['start_time']) && !empty($restData['end_time'])) {
-                    $attendance->rests()->create([
-                        'start_time' => $workDate . ' ' . $restData['start_time'],
-                        'end_time' => $workDate . ' ' . $restData['end_time'],
-                    ]);
+            // 休憩データの再構築 (一度全て削除してから新規作成)
+            $attendance->rests()->delete();
+            if (!empty($data['rests'])) {
+                foreach ($data['rests'] as $restData) {
+                    if (!empty($restData['start_time']) && !empty($restData['end_time'])) {
+                        $attendance->rests()->create([
+                            'start_time' => $workDate . ' ' . $restData['start_time'],
+                            'end_time' => $workDate . ' ' . $restData['end_time'],
+                        ]);
+                    }
                 }
             }
-        }
+        });
 
-        return redirect()->route('admin.attendance.show', $attendance->id)
-            ->with('success', '勤怠情報を更新しました。');
+        return back()->with('success', '勤怠情報を更新しました。');
     }
 }
