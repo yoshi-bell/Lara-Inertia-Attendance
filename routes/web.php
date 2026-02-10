@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\Admin\LoginController as AdminLoginController;
 use App\Http\Controllers\Admin\AttendanceController as AdminAttendanceController;
+use App\Http\Controllers\Admin\CorrectionRequestController as AdminCorrectionRequestController;
 use Illuminate\Support\Facades\Route;
 
 // ルートURL: 認証状態でリダイレクト先を振り分け
@@ -67,5 +68,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/attendance/{attendance}', [AdminAttendanceController::class, 'show'])->name('attendance.show');
         // 勤怠情報更新 (管理者直接修正 FN040)
         Route::put('/attendance/{attendance}', [AdminAttendanceController::class, 'update'])->name('attendance.update');
+
+        // 申請一覧ページ (US014)
+        Route::get('/stamp_correction_request/list', [AdminCorrectionRequestController::class, 'index'])->name('corrections.index');
+        // 修正申請承認ページ (US015)
+        Route::get('/stamp_correction_request/approve/{attendanceCorrection}', [AdminCorrectionRequestController::class, 'show'])->name('corrections.approve.show');
+        // 修正申請承認処理 (US015)
+        Route::post('/stamp_correction_request/approve/{attendanceCorrection}', [AdminCorrectionRequestController::class, 'approve'])->name('corrections.approve');
     });
 });

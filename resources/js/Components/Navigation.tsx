@@ -29,7 +29,7 @@ export default function Navigation({ user }: Props) {
                             </Link>
                         </li>
                         <li>
-                            <Link href="#" className={linkStyle}>
+                            <Link href={route('admin.corrections.index')} className={linkStyle}>
                                 申請一覧
                             </Link>
                         </li>

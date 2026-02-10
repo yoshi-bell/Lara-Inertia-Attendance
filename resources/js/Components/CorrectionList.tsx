@@ -99,7 +99,7 @@ export default function CorrectionList({
                                         <Link
                                             href={
                                                 isAdmin
-                                                    ? route('admin.attendance.show', correction.id) // TODO: 管理者用ルート
+                                                    ? route('admin.corrections.approve.show', correction.id)
                                                     : route('attendance.detail', correction.attendance_id)
                                             }
                                             className="hover:underline"
