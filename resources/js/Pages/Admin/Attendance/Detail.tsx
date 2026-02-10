@@ -1,11 +1,12 @@
 import AttendanceLayout from '@/Layouts/AttendanceLayout';
-import { Head, useForm } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import { PageProps } from '@/types';
 import { Attendance, AttendanceCorrection, Rest } from '@/types/models';
 import { Button } from '@/Components/ui/button';
 import { Card, CardContent } from '@/Components/ui/card';
 import CorrectionForm from '@/Components/CorrectionForm';
-import React, { useEffect } from 'react';
+import { useCorrectionForm } from '@/hooks/useCorrectionForm';
+import React from 'react';
 
 interface RestCorrection {
     id: number;
@@ -27,19 +28,6 @@ export interface AdminAttendanceDetailProps extends PageProps {
         | null;
 }
 
-interface CorrectionFormType {
-    requested_start_time: string;
-    requested_end_time: string;
-    rests: Record<
-        string | number,
-        {
-            start_time: string;
-            end_time: string;
-        }
-    >;
-    reason: string;
-}
-
 /**
  * 勤怠詳細ページ (管理者用)
  */
@@ -48,64 +36,20 @@ export default function Detail({
     pendingCorrection,
     flash,
 }: AdminAttendanceDetailProps) {
-    const formatTimeForInput = (dateTimeStr: string | null | undefined) => {
-        if (!dateTimeStr) return '';
-        if (dateTimeStr.includes('T')) {
-            return dateTimeStr.split('T')[1].substring(0, 5);
-        }
-        return dateTimeStr.substring(0, 5);
-    };
-
-    // 初期値を生成する関数
-    const getInitialValues = (att: typeof attendance) => ({
-        requested_start_time: formatTimeForInput(att.start_time),
-        requested_end_time: formatTimeForInput(att.end_time),
-        rests: att.rests.reduce(
-            (acc, rest) => ({
-                ...acc,
-                [rest.id]: {
-                    start_time: formatTimeForInput(rest.start_time),
-                    end_time: formatTimeForInput(rest.end_time),
-                },
-            }),
-            {
-                new: { start_time: '', end_time: '' },
-            }
-        ),
-        reason: '',
+    
+    // カスタムフックの導入 (isAdmin: true を指定)
+    const { data, setData, handleSubmit, processing, errors, formatTimeForInput } = useCorrectionForm({
+        attendance,
+        isAdmin: true
     });
-
-    const { data, setData, put, processing, errors, reset } = useForm<CorrectionFormType>(
-        getInitialValues(attendance)
-    );
-
-    /**
-     * 【重要】モダンなデータ同期ロジック
-     * サーバー側のデータ（attendance）が更新されたら、フォームのステートを最新化する
-     */
-    useEffect(() => {
-        // updated_at が変わった＝サーバーで更新されたと判断
-        reset();
-        // フォーム内のデータも最新の attendance に基づいて再セット
-        const freshValues = getInitialValues(attendance);
-        setData(freshValues);
-    }, [attendance.updated_at]);
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        // ページ遷移せず、その場で更新を反映させるために preserveScroll を指定
-        put(route('admin.attendance.update', attendance.id), {
-            preserveScroll: true,
-        });
-    };
 
     return (
         <AttendanceLayout title="勤怠詳細">
             <Head title="勤怠詳細" />
 
             <div className="mx-auto max-w-[900px]">
-                {/* 完了通知メッセージ */}
-                {flash?.success && (
+                {/* 完了通知メッセージ (管理者用のみ表示) */}
+                {flash.success && (
                     <div className="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded font-bold text-center animate-in fade-in duration-500">
                         {flash.success}
                     </div>
