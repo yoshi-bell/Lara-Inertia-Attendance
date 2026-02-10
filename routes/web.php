@@ -16,8 +16,8 @@ Route::get('/', function () {
     ]);
 });
 
-// 打刻関連 (認証必須)
-Route::middleware(['auth'])->group(function () {
+// 打刻関連 (認証必須・一般ユーザーのみ)
+Route::middleware(['auth', 'verified', 'general_user'])->group(function () {
     // 勤怠打刻ページ
     Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance');
 
