@@ -5,7 +5,7 @@ import { Attendance, AttendanceCorrection, Rest } from '@/types/models';
 import { Button } from '@/Components/ui/button';
 import { Card, CardContent } from '@/Components/ui/card';
 import CorrectionForm from '@/Components/CorrectionForm';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 interface RestCorrection {
     id: number;
@@ -55,29 +55,45 @@ export default function Detail({
         return dateTimeStr.substring(0, 5);
     };
 
-    const { data, setData, post, processing, errors } = useForm<CorrectionFormType>(
-        {
-            requested_start_time: formatTimeForInput(attendance.start_time),
-            requested_end_time: formatTimeForInput(attendance.end_time),
-            rests: attendance.rests.reduce(
-                (acc, rest) => ({
-                    ...acc,
-                    [rest.id]: {
-                        start_time: formatTimeForInput(rest.start_time),
-                        end_time: formatTimeForInput(rest.end_time),
-                    },
-                }),
-                {
-                    new: { start_time: '', end_time: '' },
-                }
-            ),
-            reason: '',
-        }
+    const getInitialValues = (att: typeof attendance) => ({
+        requested_start_time: formatTimeForInput(att.start_time),
+        requested_end_time: formatTimeForInput(att.end_time),
+        rests: att.rests.reduce(
+            (acc, rest) => ({
+                ...acc,
+                [rest.id]: {
+                    start_time: formatTimeForInput(rest.start_time),
+                    end_time: formatTimeForInput(rest.end_time),
+                },
+            }),
+            {
+                new: { start_time: '', end_time: '' },
+            }
+        ),
+        reason: '',
+    });
+
+    const { data, setData, post, processing, errors, reset } = useForm<CorrectionFormType>(
+        getInitialValues(attendance)
     );
+
+    /**
+     * データの自動同期ロジック
+     * 修正申請が送信され、サーバー側の attendance が更新されたら
+     * フォームのステートを最新化（リセット）する
+     */
+    useEffect(() => {
+        const freshValues = getInitialValues(attendance);
+        setData(freshValues);
+        reset();
+    }, [attendance.updated_at]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(route('attendances.correction.store', attendance.id));
+        // preserveScroll により画面のガタつきを抑える
+        post(route('attendances.correction.store', attendance.id), {
+            preserveScroll: true,
+        });
     };
 
     return (

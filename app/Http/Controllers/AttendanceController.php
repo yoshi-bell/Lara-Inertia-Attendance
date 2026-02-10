@@ -134,8 +134,7 @@ class AttendanceController extends Controller
     ): RedirectResponse {
         $this->correctionService->storeRequest($request->validated(), $attendance);
 
-        return redirect()->route('attendance.list')
-            ->with('success', '修正申請を送信しました。承認をお待ちください。');
+        return back();
     }
 
     /**
