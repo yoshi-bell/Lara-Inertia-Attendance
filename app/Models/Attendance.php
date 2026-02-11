@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Carbon\Carbon;
 
 /**
@@ -81,44 +82,72 @@ class Attendance extends Model
     }
 
     /**
-     * 合計休憩時間を H:i 形式で取得するアクセサ (動的プロパティ: total_rest_time)
-     *
-     * @return string
+     * 合計休憩時間を取得 (動的プロパティ: total_rest_time)
      */
-    public function getTotalRestTimeAttribute(): string
+    protected function totalRestTime(): Attribute
     {
-        $totalSeconds = 0;
-        foreach ($this->rests as $rest) {
-            if ($rest->start_time && $rest->end_time) {
-                $totalSeconds += $rest->end_time->diffInSeconds($rest->start_time);
+        return Attribute::get(function () {
+            $totalSeconds = 0;
+            foreach ($this->rests as $rest) {
+                if ($rest->start_time && $rest->end_time) {
+                    // 時刻文字列から再生成することで、日付のズレを排除して計算
+                    $start = Carbon::parse($rest->start_time->toTimeString());
+                    $end = Carbon::parse($rest->end_time->toTimeString());
+
+                    // 深夜跨ぎ対応: 終了が開始より前なら翌日とみなす
+                    if ($end->lt($start)) {
+                        $end->addDay();
+                    }
+
+                    // Carbon 3系では diffInSeconds は符号付きのため順序に注意
+                    $totalSeconds += $start->diffInSeconds($end);
+                }
             }
-        }
-        return $this->formatSecondsToHi($totalSeconds);
+            return $this->formatSecondsToHi($totalSeconds);
+        });
     }
 
     /**
-     * 実働時間を H:i 形式で取得するアクセサ (動的プロパティ: work_time)
-     *
-     * @return string|null
+     * 実働時間を取得 (動的プロパティ: work_time)
      */
-    public function getWorkTimeAttribute(): ?string
+    protected function workTime(): Attribute
     {
-        if (!$this->start_time || !$this->end_time) {
-            return null;
-        }
-
-        $totalWorkSeconds = $this->end_time->diffInSeconds($this->start_time);
-
-        $totalRestSeconds = 0;
-        foreach ($this->rests as $rest) {
-            if ($rest->start_time && $rest->end_time) {
-                $totalRestSeconds += $rest->end_time->diffInSeconds($rest->start_time);
+        return Attribute::get(function () {
+            if (!$this->start_time || !$this->end_time) {
+                return null;
             }
-        }
 
-        $netWorkSeconds = max(0, $totalWorkSeconds - $totalRestSeconds);
+            // 出退勤時間の差分（秒）
+            $start = Carbon::parse($this->start_time->toTimeString());
+            $end = Carbon::parse($this->end_time->toTimeString());
 
-        return $this->formatSecondsToHi($netWorkSeconds);
+            // 深夜跨ぎ対応: 終了が開始より前なら翌日とみなす
+            if ($end->lt($start)) {
+                $end->addDay();
+            }
+
+            $totalWorkSeconds = $start->diffInSeconds($end);
+
+            // 休憩時間の合計（秒）
+            $totalRestSeconds = 0;
+            foreach ($this->rests as $rest) {
+                if ($rest->start_time && $rest->end_time) {
+                    $restStart = Carbon::parse($rest->start_time->toTimeString());
+                    $restEnd = Carbon::parse($rest->end_time->toTimeString());
+
+                    // 休憩中の深夜跨ぎ対応
+                    if ($restEnd->lt($restStart)) {
+                        $restEnd->addDay();
+                    }
+
+                    $totalRestSeconds += $restStart->diffInSeconds($restEnd);
+                }
+            }
+
+            $netWorkSeconds = max(0, $totalWorkSeconds - $totalRestSeconds);
+
+            return $this->formatSecondsToHi($netWorkSeconds);
+        });
     }
 
     /**
