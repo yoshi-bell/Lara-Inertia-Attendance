@@ -241,6 +241,14 @@
 - `Components/Navigation.tsx` を更新し、管理者のヘッダーに「スタッフ一覧」への導線を追加。
 - ページ間遷移の整合性を確保。
 
+### 4. コンポーネントの再利用化（リファクタリング完遂）
+- **MonthNavigation の抽出:**
+    - 月次ナビゲーション（前月・現在月・翌月）を `Components/MonthNavigation.tsx` として共通化。
+    - 一般・管理者の両画面での DRY 原則を達成。
+- **TypeScript 型定義の厳格化:**
+    - `models.d.ts` で `User` 型を再エクスポートするように修正し、SSOT 型管理の不備を解消。
+    - ESLint の `any` 禁止ルールを徹底し、`MonthNavigation` の Props 型定義を型安全に修正。
+
 ---
 
 ## 2026-02-11: 緊急バグ修正（タイムゾーン・時間計算ロジック）の完遂
