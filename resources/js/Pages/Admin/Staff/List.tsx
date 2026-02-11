@@ -11,11 +11,11 @@ import {
     TableRow,
 } from '@/Components/ui/table';
 
-interface AdminStaffIndexProps extends PageProps {
+interface AdminStaffListProps extends PageProps {
     staffs: User[];
 }
 
-export default function Index({ staffs }: AdminStaffIndexProps) {
+export default function List({ staffs }: AdminStaffListProps) {
     return (
         <AttendanceLayout title="スタッフ一覧">
             <Head title="スタッフ一覧" />

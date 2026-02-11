@@ -248,6 +248,10 @@
 - **TypeScript 型定義の厳格化:**
     - `models.d.ts` で `User` 型を再エクスポートするように修正し、SSOT 型管理の不備を解消。
     - ESLint の `any` 禁止ルールを徹底し、`MonthNavigation` の Props 型定義を型安全に修正。
+- **セマンティックな命名へのリファクタリング（旧プロジェクト同期）:**
+    - ページファイル名を `Index.tsx`, `Detail.tsx` といった汎用名から、旧プロジェクトの Blade ファイル名（`List.tsx`, `AttendanceList.tsx` 等）に完全に同期。
+    - React コンポーネントの関数名もファイル名に合わせて変更し、React Developer Tools 上での識別性とセマンティックな意味合いを強化。
+    - コントローラーの `Inertia::render` パスを一斉更新。
 
 ---
 

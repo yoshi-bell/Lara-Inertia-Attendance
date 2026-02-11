@@ -15,7 +15,7 @@ interface AdminStaffDetailProps extends PageProps {
     };
 }
 
-export default function Detail({
+export default function AttendanceList({
     staff,
     calendarData,
     navigation,

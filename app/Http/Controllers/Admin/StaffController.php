@@ -31,7 +31,7 @@ class StaffController extends Controller
         // 憲法に従い、現時点ではページネーションは行わず全スタッフを取得
         $staffs = User::where('is_admin', false)->orderBy('id', 'asc')->get();
 
-        return Inertia::render('Admin/Staff/Index', [
+        return Inertia::render('Admin/Staff/List', [
             'staffs' => $staffs,
         ]);
     }
@@ -44,7 +44,7 @@ class StaffController extends Controller
         $monthStr = $request->input('month', Carbon::now()->format('Y-m'));
         $currentDate = Carbon::parse($monthStr)->startOfMonth();
 
-        return Inertia::render('Admin/Staff/Detail', [
+        return Inertia::render('Admin/Staff/AttendanceList', [
             'staff' => $user,
             'calendarData' => $this->calendarService->generate($user, $currentDate),
             'navigation' => [

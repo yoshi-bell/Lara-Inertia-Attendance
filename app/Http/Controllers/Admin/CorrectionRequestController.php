@@ -36,7 +36,7 @@ class CorrectionRequestController extends Controller
             ->orderBy('created_at', 'asc')
             ->get();
 
-        return Inertia::render('Admin/CorrectionRequest/Index', [
+        return Inertia::render('Admin/CorrectionRequest/List', [
             'corrections' => $corrections,
             'status' => $status,
         ]);
