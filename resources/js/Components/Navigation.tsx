@@ -24,7 +24,7 @@ export default function Navigation({ user }: Props) {
                             </Link>
                         </li>
                         <li>
-                            <Link href="#" className={linkStyle}>
+                            <Link href={route('admin.staff.list')} className={linkStyle}>
                                 スタッフ一覧
                             </Link>
                         </li>

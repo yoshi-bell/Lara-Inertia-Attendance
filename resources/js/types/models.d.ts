@@ -1,4 +1,6 @@
-import { User } from './index';
+import { User as BaseUser } from './index';
+
+export type User = BaseUser;
 
 /**
  * 勤怠記録 (attendances table)

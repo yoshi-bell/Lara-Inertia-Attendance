@@ -5,6 +5,7 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\Admin\LoginController as AdminLoginController;
 use App\Http\Controllers\Admin\AttendanceController as AdminAttendanceController;
 use App\Http\Controllers\Admin\CorrectionRequestController as AdminCorrectionRequestController;
+use App\Http\Controllers\Admin\StaffController as AdminStaffController;
 use Illuminate\Support\Facades\Route;
 
 // ルートURL: 認証状態でリダイレクト先を振り分け
@@ -68,6 +69,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/attendance/{attendance}', [AdminAttendanceController::class, 'show'])->name('attendance.show');
         // 勤怠情報更新 (管理者直接修正 FN040)
         Route::put('/attendance/{attendance}', [AdminAttendanceController::class, 'update'])->name('attendance.update');
+
+        // スタッフ一覧ページ (US012)
+        Route::get('/staff/list', [AdminStaffController::class, 'index'])->name('staff.list');
+        // スタッフ別月次勤怠一覧ページ (US013)
+        Route::get('/attendance/staff/{user}', [AdminStaffController::class, 'showAttendance'])->name('staff.attendance.show');
+        // スタッフの月次勤怠CSV出力 (FN045)
+        Route::get('/attendance/staff/{user}/export-csv', [AdminStaffController::class, 'exportCsv'])->name('staff.attendance.csv');
 
         // 申請一覧ページ (US014)
         Route::get('/stamp_correction_request/list', [AdminCorrectionRequestController::class, 'index'])->name('corrections.index');
