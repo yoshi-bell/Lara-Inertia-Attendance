@@ -1,6 +1,6 @@
 import AttendanceLayout from '@/Layouts/AttendanceLayout';
 import { Head, Link, router } from '@inertiajs/react';
-import { ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { PageProps } from '@/types';
 import { Attendance } from '@/types/models';
 import {
@@ -11,6 +11,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/Components/ui/table';
+import DatePicker from '@/Components/DatePicker';
 
 /**
  * 管理者用勤怠一覧テーブルの1行分のデータ型
@@ -44,17 +45,10 @@ export default function Index({ attendances, navigation }: AdminAttendanceIndexP
                 <ChevronLeft className="h-5 w-5" /> 前日
             </Link>
 
-            <div className="flex items-center gap-2 text-black cursor-pointer relative group">
-                <Calendar className="h-6 w-6 text-black" />
-                <span className="text-xl font-bold">{navigation.date.replace(/-/g, '/')}</span>
-                {/* 非表示のネイティブ日付入力 (カレンダーアイコンクリックで起動させる用) */}
-                <input 
-                    type="date" 
-                    className="absolute inset-0 opacity-0 cursor-pointer"
-                    value={navigation.date}
-                    onChange={(e) => handleDateChange(e.target.value)}
-                />
-            </div>
+            <DatePicker 
+                date={navigation.date} 
+                onChange={handleDateChange} 
+            />
 
             <Link
                 href={route('admin.attendance.index', { date: navigation.nextDate })}

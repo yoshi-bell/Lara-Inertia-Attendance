@@ -86,7 +86,8 @@
 ✅ メール認証機能 (FN011, FN012) の実装および旧プロジェクトデザインの再現。
 ✅ リダイレクト先の一元管理設定 (`config/project.php`) の導入によるメンテナンス性向上。
 ✅ 開発用テストデータの完全日本語化。
+✅ Shadcn UI (Calendar/Popover) を用いた日付選択 UI のモダン化完遂。
 
 未完了・次のタスク:
-🚀 UIアップグレード: 日付選択 UI の Shadcn UI (Calendar/Popover) への置き換え。
 🚀 E2Eテスト: Playwright による主要フローの自動化。
+🚀 README整備: プロジェクト概要とセットアップ手順の記述。
