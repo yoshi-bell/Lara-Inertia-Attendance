@@ -1,5 +1,6 @@
-import { Link } from '@inertiajs/react';
-import { ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
+import { Link, router } from '@inertiajs/react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import MonthPicker from './MonthPicker';
 
 interface MonthNavigationProps {
     month: string;
@@ -19,8 +20,9 @@ export default function MonthNavigation({
     routeName,
     routeParams = {},
 }: MonthNavigationProps) {
-    // 表示用の月フォーマット変換 (2026年02月 -> 2026/02)
-    const displayMonth = month.replace('年', '/').replace('月', '');
+    const handleMonthChange = (newMonth: string) => {
+        router.get(route(routeName, { ...routeParams, month: newMonth }));
+    };
 
     return (
         <div className="flex h-[60px] items-center justify-between rounded-[10px] bg-white px-3 text-xl font-bold shadow-sm">
@@ -31,10 +33,7 @@ export default function MonthNavigation({
                 <ChevronLeft className="h-5 w-5" /> 前月
             </Link>
 
-            <div className="flex items-center gap-2 text-black">
-                <Calendar className="h-6 w-6 text-black" />
-                <span className="text-xl font-bold">{displayMonth}</span>
-            </div>
+            <MonthPicker month={month} onChange={handleMonthChange} />
 
             <Link
                 href={route(routeName, { ...routeParams, month: nextMonth })}

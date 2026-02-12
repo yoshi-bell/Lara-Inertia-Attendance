@@ -87,7 +87,8 @@
 ✅ リダイレクト先の一元管理設定 (`config/project.php`) の導入によるメンテナンス性向上。
 ✅ 開発用テストデータの完全日本語化。
 ✅ Shadcn UI (Calendar/Popover) を用いた日付選択 UI のモダン化完遂。
+✅ 月次ナビゲーションへの MonthPicker 導入による操作性向上。
 
 未完了・次のタスク:
-🚀 E2Eテスト: Playwright による主要フローの自動化。
 🚀 README整備: プロジェクト概要とセットアップ手順の記述。
+🚀 E2Eテスト: Playwright による主要フローの自動化。
