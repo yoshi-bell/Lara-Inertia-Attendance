@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AttendanceCorrectionRequest;
+use App\Models\Attendance;
+use App\Models\AttendanceCorrection;
+use App\Models\User;
 use App\Services\AttendanceService;
 use App\Services\CalendarService;
+use App\Services\CorrectionService;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,12 +20,12 @@ class AttendanceController extends Controller
 {
     private AttendanceService $attendanceService;
     private CalendarService $calendarService;
-    private \App\Services\CorrectionService $correctionService;
+    private CorrectionService $correctionService;
 
     public function __construct(
         AttendanceService $attendanceService,
         CalendarService $calendarService,
-        \App\Services\CorrectionService $correctionService
+        CorrectionService $correctionService
     ) {
         $this->attendanceService = $attendanceService;
         $this->calendarService = $calendarService;
@@ -32,7 +37,7 @@ class AttendanceController extends Controller
      */
     public function index(): Response
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = Auth::user();
 
         return Inertia::render('Attendance/Index', [
@@ -45,7 +50,7 @@ class AttendanceController extends Controller
      */
     public function list(Request $request): Response
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = Auth::user();
 
         // 表示対象の月を取得 (デフォルトは今月)
@@ -65,7 +70,7 @@ class AttendanceController extends Controller
     /**
      * 勤怠詳細ページを表示する
      */
-    public function show(\App\Models\Attendance $attendance): Response
+    public function show(Attendance $attendance): Response
     {
         // 認可チェック: 自分のデータでない場合は 403 を返す
         if ($attendance->user_id !== Auth::id()) {
@@ -91,7 +96,7 @@ class AttendanceController extends Controller
      */
     public function startWork(): RedirectResponse
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = Auth::user();
         $this->attendanceService->startWork($user);
         return redirect()->route('attendance');
@@ -102,7 +107,7 @@ class AttendanceController extends Controller
      */
     public function endWork(): RedirectResponse
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = Auth::user();
         $this->attendanceService->endWork($user);
         return redirect()->route('attendance');
@@ -113,7 +118,7 @@ class AttendanceController extends Controller
      */
     public function startRest(): RedirectResponse
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = Auth::user();
         $this->attendanceService->startRest($user);
         return redirect()->route('attendance');
@@ -124,7 +129,7 @@ class AttendanceController extends Controller
      */
     public function endRest(): RedirectResponse
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = Auth::user();
         $this->attendanceService->endRest($user);
         return redirect()->route('attendance');
@@ -134,8 +139,8 @@ class AttendanceController extends Controller
      * 修正申請を保存する
      */
     public function storeCorrection(
-        \App\Http\Requests\AttendanceCorrectionRequest $request,
-        \App\Models\Attendance $attendance
+        AttendanceCorrectionRequest $request,
+        Attendance $attendance
     ): RedirectResponse {
         $this->correctionService->storeRequest($request->validated(), $attendance);
 
@@ -149,7 +154,7 @@ class AttendanceController extends Controller
     {
         $status = $request->query('status', 'pending');
 
-        $corrections = \App\Models\AttendanceCorrection::with('attendance')
+        $corrections = AttendanceCorrection::with('attendance')
             ->where('requester_id', Auth::id())
             ->where('status', $status)
             ->latest()

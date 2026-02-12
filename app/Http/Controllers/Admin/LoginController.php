@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\LoginRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -34,7 +35,7 @@ class LoginController extends Controller
 
         // 認証試行
         if (Auth::attempt($credentials)) {
-            /** @var \App\Models\User $user */
+            /** @var User $user */
             $user = Auth::user();
 
             // 管理者フラグのチェック

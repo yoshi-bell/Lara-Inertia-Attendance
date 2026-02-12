@@ -10,6 +10,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\AttendanceCorrectionRequest;
+use Illuminate\Support\Facades\DB;
 
 /**
  * 管理者用勤怠管理コントローラー (US010, US011)
@@ -71,7 +72,7 @@ class AttendanceController extends Controller
         $data = $request->validated();
         $workDate = $attendance->work_date->format('Y-m-d');
 
-        \Illuminate\Support\Facades\DB::transaction(function () use ($attendance, $data, $workDate) {
+        DB::transaction(function () use ($attendance, $data, $workDate) {
             // 勤怠本体の更新
             $attendance->update([
                 'start_time' => $workDate . ' ' . $data['requested_start_time'],

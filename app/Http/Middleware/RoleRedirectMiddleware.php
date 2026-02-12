@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -19,7 +20,7 @@ class RoleRedirectMiddleware
     {
         // ログインしている場合
         if (Auth::check()) {
-            /** @var \App\Models\User $user */
+            /** @var User $user */
             $user = Auth::user();
 
             if ($user->is_admin) {

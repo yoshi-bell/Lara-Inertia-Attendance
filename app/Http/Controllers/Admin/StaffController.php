@@ -73,7 +73,7 @@ class StaffController extends Controller
 
         $callback = function () use ($calendarData) {
             $stream = fopen('php://output', 'w');
-            
+
             // Excelでの文字化け防止のため CP932 (Shift-JIS) に変換するフィルタを適用
             stream_filter_prepend($stream, 'convert.iconv.utf-8/cp932//TRANSLIT');
 

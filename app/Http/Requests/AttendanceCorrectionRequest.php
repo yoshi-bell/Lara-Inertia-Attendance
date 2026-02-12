@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Attendance;
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Validator;
@@ -21,7 +22,7 @@ class AttendanceCorrectionRequest extends FormRequest
         /** @var Attendance $attendance */
         $attendance = $this->route('attendance');
 
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = Auth::user();
 
         // 管理者、または自分の勤怠データであれば許可

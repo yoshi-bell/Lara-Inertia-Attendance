@@ -59,7 +59,7 @@ class AuthenticationTest extends TestCase
     /** @test */
     public function 正しい情報が入力された場合_ログイン処理が実行される()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create([
             'password' => bcrypt('password'),
         ]);
@@ -70,7 +70,7 @@ class AuthenticationTest extends TestCase
         ]);
 
         $this->assertAuthenticatedAs($user);
-        
+
         // リダイレクト先は一元管理設定に従う
         $response->assertRedirect(route(config('project.home_route'), absolute: false));
     }
@@ -78,7 +78,7 @@ class AuthenticationTest extends TestCase
     /** @test */
     public function ログアウト処理が正常に実行される(): void
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)->post('/logout');
