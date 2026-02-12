@@ -46,6 +46,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('attendance', absolute: false));
+        return redirect(route(config('project.home_route'), absolute: false));
     }
 }
