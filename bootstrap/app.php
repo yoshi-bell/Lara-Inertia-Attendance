@@ -1,8 +1,13 @@
 <?php
 
+use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\GeneralUserMiddleware;
+use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\RoleRedirectMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -12,14 +17,14 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web(append: [
-            \App\Http\Middleware\HandleInertiaRequests::class,
-            \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
+            HandleInertiaRequests::class,
+            AddLinkHeadersForPreloadedAssets::class,
         ]);
 
         $middleware->alias([
-            'is_admin' => \App\Http\Middleware\AdminMiddleware::class,
-            'guest' => \App\Http\Middleware\RoleRedirectMiddleware::class,
-            'general_user' => \App\Http\Middleware\GeneralUserMiddleware::class,
+            'is_admin' => AdminMiddleware::class,
+            'guest' => RoleRedirectMiddleware::class,
+            'general_user' => GeneralUserMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
