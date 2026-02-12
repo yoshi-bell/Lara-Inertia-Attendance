@@ -67,6 +67,11 @@ class AttendanceController extends Controller
      */
     public function show(\App\Models\Attendance $attendance): Response
     {
+        // 認可チェック: 自分のデータでない場合は 403 を返す
+        if ($attendance->user_id !== Auth::id()) {
+            abort(403);
+        }
+
         $attendance->load([
             'user:id,name',
             'rests',
@@ -143,7 +148,7 @@ class AttendanceController extends Controller
     public function correctionList(Request $request): Response
     {
         $status = $request->query('status', 'pending');
-        
+
         $corrections = \App\Models\AttendanceCorrection::with('attendance')
             ->where('requester_id', Auth::id())
             ->where('status', $status)

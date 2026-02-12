@@ -10,40 +10,75 @@ class AuthenticationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_login_screen_can_be_rendered(): void
+    /** @test */
+    public function ログイン画面が表示される(): void
     {
         $response = $this->get('/login');
 
         $response->assertStatus(200);
     }
 
-    public function test_users_can_authenticate_using_the_login_screen(): void
+    /** @test */
+    public function メールアドレスが未入力の場合_バリデーションメッセージが表示される()
     {
-        $user = User::factory()->create();
+        $response = $this->post('/login', [
+            'email' => '',
+            'password' => 'password',
+        ]);
+
+        $response->assertSessionHasErrors(['email' => 'メールアドレスを入力してください']);
+    }
+
+    /** @test */
+    public function パスワードが未入力の場合_バリデーションメッセージが表示される()
+    {
+        $response = $this->post('/login', [
+            'email' => 'test@example.com',
+            'password' => '',
+        ]);
+
+        $response->assertSessionHasErrors(['password' => 'パスワードを入力してください']);
+    }
+
+    /** @test */
+    public function 登録内容と一致しない場合_バリデーションメッセージが表示される()
+    {
+        User::factory()->create([
+            'email' => 'test@example.com',
+            'password' => bcrypt('password'),
+        ]);
+
+        $response = $this->post('/login', [
+            'email' => 'test@example.com',
+            'password' => 'wrong-password',
+        ]);
+
+        $response->assertSessionHasErrors(['email' => 'ログイン情報が登録されていません']);
+    }
+
+    /** @test */
+    public function 正しい情報が入力された場合_ログイン処理が実行される()
+    {
+        /** @var \App\Models\User $user */
+        $user = User::factory()->create([
+            'password' => bcrypt('password'),
+        ]);
 
         $response = $this->post('/login', [
             'email' => $user->email,
             'password' => 'password',
         ]);
 
-        $this->assertAuthenticated();
+        $this->assertAuthenticatedAs($user);
+        
+        // リダイレクト先は一元管理設定に従う
         $response->assertRedirect(route(config('project.home_route'), absolute: false));
     }
 
-    public function test_users_can_not_authenticate_with_invalid_password(): void
+    /** @test */
+    public function ログアウト処理が正常に実行される(): void
     {
-        $user = User::factory()->create();
-
-        $this->post('/login', [
-            'email' => $user->email,
-            'password' => 'wrong-password',
-        ]);
-
-        $this->assertGuest();
-    }
-
-    public function test_users_can_logout(): void
-    {
+        /** @var \App\Models\User $user */
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)->post('/logout');

@@ -45,8 +45,9 @@ class CalendarService
                 'date' => Attendance::getFormattedDateWithDay($date, 'm/d'),
                 'attendance' => $attendance ? [
                     'id' => $attendance->id,
-                    'start_time' => $attendance->start_time?->format('H:i'),
-                    'end_time' => $attendance->end_time?->format('H:i'),
+                    'user_id' => $attendance->user_id,
+                    'start_time' => $attendance->start_time_hi,
+                    'end_time' => $attendance->end_time_hi,
                     'total_rest_time' => $attendance->total_rest_time,
                     'work_time' => $attendance->work_time,
                 ] : null,

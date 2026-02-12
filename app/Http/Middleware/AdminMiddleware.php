@@ -19,10 +19,14 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // 未ログイン、または管理者フラグが false の場合はアクセス拒否
-        if (!Auth::check() || !Auth::user()->is_admin) {
-            // 管理者ログイン画面へリダイレクト
+        // 1. 未ログインの場合は管理者ログイン画面へリダイレクト
+        if (!Auth::check()) {
             return redirect()->route('admin.login');
+        }
+
+        // 2. ログイン済みだが管理者でない場合は 403 Forbidden
+        if (!Auth::user()->is_admin) {
+            abort(403);
         }
 
         return $next($request);
