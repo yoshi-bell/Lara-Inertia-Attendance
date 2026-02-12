@@ -17,6 +17,8 @@ export interface Attendance {
     // 計算済みのプロパティ (App\Models\Attendance のアクセサに対応)
     total_rest_time?: string; // H:i
     work_time?: string | null; // H:i
+    start_time_hi?: string; // H:i
+    end_time_hi?: string;   // H:i
 
     // リレーション
     user?: User;
@@ -31,6 +33,8 @@ export interface Rest {
     attendance_id: number;
     start_time: string;
     end_time: string | null;
+    start_time_hi?: string;
+    end_time_hi?: string;
     created_at: string;
     updated_at: string;
 }
@@ -44,6 +48,8 @@ export interface AttendanceCorrection {
     user_id: number;
     requested_start_time: string; // 追加
     requested_end_time: string;   // 追加
+    requested_start_time_hi?: string;
+    requested_end_time_hi?: string;
     reason: string;
     status: 'pending' | 'approved' | 'rejected';
     reviewed_at: string | null;
@@ -61,6 +67,8 @@ export interface RestCorrection {
     rest_id: number | null;
     requested_start_time: string;
     requested_end_time: string | null;
+    requested_start_time_hi?: string;
+    requested_end_time_hi?: string;
     created_at: string;
     updated_at: string;
 }

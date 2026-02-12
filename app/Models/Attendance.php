@@ -27,15 +27,43 @@ class Attendance extends Model
     ];
 
     /**
+     * JSONに含める追加属性
+     *
+     * @var list<string>
+     */
+    protected $appends = [
+        'total_rest_time',
+        'work_time',
+        'start_time_hi',
+        'end_time_hi',
+    ];
+
+    /**
      * @return array<string, string>
      */
     protected function casts(): array
     {
         return [
-            'work_date' => 'date',
+            'work_date' => 'date:Y-m-d',
             'start_time' => 'datetime',
             'end_time' => 'datetime',
         ];
+    }
+
+    /**
+     * 出勤時間の H:i 形式 (表示・入力用)
+     */
+    protected function startTimeHi(): Attribute
+    {
+        return Attribute::get(fn () => $this->start_time?->format('H:i'));
+    }
+
+    /**
+     * 退勤時間の H:i 形式 (表示・入力用)
+     */
+    protected function endTimeHi(): Attribute
+    {
+        return Attribute::get(fn () => $this->end_time?->format('H:i'));
     }
 
     /**

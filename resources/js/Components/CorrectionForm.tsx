@@ -21,7 +21,6 @@ interface CorrectionFormProps {
         (callback: (data: CorrectionFormType) => CorrectionFormType): void;
     };
     errors?: Partial<Record<string, string>>;
-    formatTimeForInput: (dateTimeStr: string | null | undefined) => string;
 }
 
 /**
@@ -33,7 +32,6 @@ export default function CorrectionForm({
     data,
     setData,
     errors = {},
-    formatTimeForInput,
 }: CorrectionFormProps) {
     const [year, month, day] = attendance.work_date.split('-');
 
@@ -83,11 +81,11 @@ export default function CorrectionForm({
                         {!isEditable ? (
                             <>
                                 <span className="w-28 text-center">
-                                    {formatTimeForInput(pendingCorrection?.requested_start_time || attendance.start_time)}
+                                    {pendingCorrection?.requested_start_time_hi || attendance.start_time_hi}
                                 </span>
                                 <span className="mx-4 font-normal text-gray-400">〜</span>
                                 <span className="w-28 text-center">
-                                    {formatTimeForInput(pendingCorrection?.requested_end_time || attendance.end_time)}
+                                    {pendingCorrection?.requested_end_time_hi || attendance.end_time_hi}
                                 </span>
                             </>
                         ) : (
@@ -136,15 +134,11 @@ export default function CorrectionForm({
                             {!isEditable ? (
                                 <>
                                     <span className="w-28 text-center">
-                                        {formatTimeForInput(
-                                            pendingCorrection?.rest_corrections?.find(rc => rc.rest_id === rest.id)?.requested_start_time || rest.start_time
-                                        )}
+                                        {pendingCorrection?.rest_corrections?.find(rc => rc.rest_id === rest.id)?.requested_start_time_hi || rest.start_time_hi}
                                     </span>
                                     <span className="mx-4 font-normal text-gray-400">〜</span>
                                     <span className="w-28 text-center">
-                                        {formatTimeForInput(
-                                            pendingCorrection?.rest_corrections?.find(rc => rc.rest_id === rest.id)?.requested_end_time || rest.end_time
-                                        )}
+                                        {pendingCorrection?.rest_corrections?.find(rc => rc.rest_id === rest.id)?.requested_end_time_hi || rest.end_time_hi}
                                     </span>
                                 </>
                             ) : (

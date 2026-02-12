@@ -31,7 +31,7 @@ export default function Detail({
 }: AttendanceDetailProps) {
     
     // カスタムフックの導入によりロジックを集約
-    const { data, setData, handleSubmit, processing, errors, formatTimeForInput } = useCorrectionForm({
+    const { data, setData, handleSubmit, processing, errors } = useCorrectionForm({
         attendance,
         isAdmin: false
     });
@@ -54,7 +54,6 @@ export default function Detail({
                                 data={data}
                                 setData={setData}
                                 errors={errors}
-                                formatTimeForInput={formatTimeForInput}
                             />
 
                             <div

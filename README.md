@@ -1,59 +1,111 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Lara-Inertia-Attendance
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+旧勤怠管理アプリ（Blade版）を、最新の技術スタック（Laravel 12 / Inertia.js / React / TypeScript）でフルリファクタリングしたモダンモノリス・アプリケーションです。
 
-## About Laravel
+## 🚀 リファクタリングによる進化ポイント
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+本プロジェクトは、単なる機能の移植にとどまらず、保守性とユーザー体験を極限まで高めるためのリファクタリングを実施しています。
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **モダンモノリス構成:** Inertia.js を採用し、API 分離の手間を省きつつ SPA (Single Page Application) のような高速な操作感を実現。
+- **型安全性の追求:** フロントエンド・バックエンド共に TypeScript と厳格な型定義を導入し、ランタイムエラーを未然に防ぐ堅牢なコードベースを構築。
+- **UI/UX のアップグレード:** Shadcn UI を導入。ネイティブ入力を排除し、直感的な日付・月選択ピッカー（DatePicker / MonthPicker）を自作。
+- **高度なビジネスロジック:** 
+    - 24時間を超える勤務や、深夜0時を跨ぐ休憩時間も正確に算出する「深夜勤務対応ロジック」を搭載。
+    - リダイレクト先などの重要設定を `config/project.php` に集約し、高いメンテナンス性を確保。
+- **コンポーネント指向:** 勤怠テーブルやナビゲーションを共通パーツ化し、DRY（Don't Repeat Yourself）原則を徹底。
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🛠 使用技術 (Tech Stack)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### Backend
+- **Framework:** Laravel 12 (PHP 8.4)
+- **Authentication:** Laravel Breeze (Inertia版)
+- **Database:** MySQL 8.0
+- **Dev Tool:** Laravel Sail (Docker), Laravel Pint
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Frontend
+- **Library:** React 19
+- **Language:** TypeScript (Strict Mode)
+- **Bridge:** Inertia.js v2
+- **Styling:** Tailwind CSS, Shadcn/ui
+- **Icons:** Lucide React
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 📖 機能一覧
 
-### Premium Partners
+### 1. 一般ユーザー機能
+- **打刻機能:** 出勤、退勤、休憩入、休憩戻のリアルタイム打刻。
+- **勤怠一覧:** 月次カレンダー表示。月選択ピッカーによる直感的な月移動。
+- **修正申請:** 過去の勤怠に対する詳細確認と、管理者への修正申請フロー。
+- **メール認証:** 会員登録時の本人確認プロセス。
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 2. 管理者機能
+- **日次勤怠管理:** 全ユーザーの当日データを一覧表示。日付選択ピッカーによる日別確認。
+- **スタッフ管理:** 全一般ユーザーの一覧表示と、スタッフ別の月次詳細閲覧。
+- **CSVエクスポート:** 各スタッフの月次勤怠データを Excel 対応形式 (CP932) で出力。
+- **申請承認フロー:** ユーザーからの修正申請を一括管理し、ワンクリックで承認・データ反映。
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 📦 環境構築
 
-## Code of Conduct
+### 前提条件
+- Docker / Docker Desktop
+- Git
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 1. セットアップ
 
-## Security Vulnerabilities
+```bash
+# リポジトリをクローン
+git clone git@github.com:yoshi-bell/Lara-Inertia-Attendance.git
+cd Lara-Inertia-Attendance
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# ライブラリのインストール
+docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v "$(pwd):/var/www/html" \
+    -w /var/www/html \
+    laravelsail/php84-composer:latest \
+    composer install --ignore-platform-reqs
 
-## License
+# .env の作成
+cp .env.example .env
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# Sail の起動
+./vendor/bin/sail up -d
+
+# アプリケーションキーの生成
+./vendor/bin/sail php artisan key:generate
+
+# データベースの構築と日本語テストデータの生成
+./vendor/bin/sail php artisan migrate:fresh --seed
+
+# フロントエンドのビルド
+./vendor/bin/sail npm install
+./vendor/bin/sail npm run dev
+```
+
+### 2. 各ツールへのアクセス
+- **アプリケーション:** [http://localhost](http://localhost)
+- **Mailpit (メール確認):** [http://localhost:8025](http://localhost:8025)
+- **phpMyAdmin:** [http://localhost:8080](http://localhost:8080)
+
+---
+
+## 👤 テストユーザー
+
+シーディングにより、以下の日本語テストデータが作成されます。
+
+- **管理者**
+  - メール: `admin@example.com`
+  - パスワード: `adminpass`
+- **一般ユーザー (30名)**
+  - メール: `test1@example.com` 〜 `test30@example.com`
+  - パスワード: `usertest`
+
+---
+
+## 🛡 ライセンス
+[MIT license](https://opensource.org/licenses/MIT).

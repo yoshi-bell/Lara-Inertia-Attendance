@@ -33,6 +33,17 @@ class LoginRequest extends FormRequest
     }
 
     /**
+     * エラーメッセージ
+     */
+    public function messages(): array
+    {
+        return [
+            'email.required' => 'メールアドレスを入力してください',
+            'password.required' => 'パスワードを入力してください',
+        ];
+    }
+
+    /**
      * Attempt to authenticate the request's credentials.
      *
      * @throws \Illuminate\Validation\ValidationException

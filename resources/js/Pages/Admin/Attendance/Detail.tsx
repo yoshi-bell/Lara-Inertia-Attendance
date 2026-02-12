@@ -32,7 +32,7 @@ export default function Detail({
 }: AdminAttendanceDetailProps) {
     
     // カスタムフックの導入 (isAdmin: true を指定)
-    const { data, setData, handleSubmit, processing, errors, formatTimeForInput } = useCorrectionForm({
+    const { data, setData, handleSubmit, processing, errors } = useCorrectionForm({
         attendance,
         isAdmin: true
     });
@@ -63,7 +63,6 @@ export default function Detail({
                                 data={data}
                                 setData={setData}
                                 errors={errors}
-                                formatTimeForInput={formatTimeForInput}
                             />
 
                             <div

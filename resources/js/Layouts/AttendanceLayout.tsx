@@ -4,6 +4,7 @@ import Header from '@/Components/Header';
 interface Props {
     title?: string;
     headerContent?: ReactNode;
+    backgroundColor?: string;
 }
 
 /**
@@ -12,10 +13,14 @@ interface Props {
 export default function AttendanceLayout({
     title,
     headerContent,
+    backgroundColor = '#F0EFF2',
     children,
 }: PropsWithChildren<Props>) {
     return (
-        <div className="min-h-screen bg-[#F0EFF2] font-['Inter']">
+        <div 
+            className="min-h-screen font-['Inter']" 
+            style={{ backgroundColor }}
+        >
             {/* コンポーネント化したヘッダーを配置 */}
             <Header />
 

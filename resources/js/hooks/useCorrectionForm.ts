@@ -28,24 +28,16 @@ interface UseCorrectionFormProps {
  */
 export function useCorrectionForm({ attendance, isAdmin }: UseCorrectionFormProps) {
     
-    // 時間フォーマットヘルパー
-    const formatTimeForInput = (dateTimeStr: string | null | undefined) => {
-        if (!dateTimeStr) return '';
-        return dateTimeStr.includes('T') 
-            ? dateTimeStr.split('T')[1].substring(0, 5) 
-            : dateTimeStr.substring(0, 5);
-    };
-
     // 最新の attendance データから初期値を生成する関数
     const getInitialValues = (att: typeof attendance): CorrectionFormType => ({
-        requested_start_time: formatTimeForInput(att.start_time),
-        requested_end_time: formatTimeForInput(att.end_time),
+        requested_start_time: att.start_time_hi || '',
+        requested_end_time: att.end_time_hi || '',
         rests: att.rests.reduce(
             (acc, rest) => ({
                 ...acc,
                 [rest.id]: {
-                    start_time: formatTimeForInput(rest.start_time),
-                    end_time: formatTimeForInput(rest.end_time),
+                    start_time: rest.start_time_hi || '',
+                    end_time: rest.end_time_hi || '',
                 },
             }),
             { new: { start_time: '', end_time: '' } }
@@ -83,6 +75,5 @@ export function useCorrectionForm({ attendance, isAdmin }: UseCorrectionFormProp
     return {
         ...form,
         handleSubmit,
-        formatTimeForInput,
     };
 }
