@@ -94,7 +94,8 @@
 ✅ 勤怠一覧のナビゲーション（前後月・月選択ピッカー）の E2E テスト合格。
 ✅ マルチユーザー連携による修正・承認ワークフローの E2E テスト合格。
 ✅ E2E テストを通じて DatePicker コンポーネントの潜在的なバグ（表示不整合）を検知。
+✅ Vitest + Testing Library による単体テスト環境の構築完了。
 
 未完了・次のタスク:
-🚀 Vitest の導入と DatePicker / MonthPicker の精密な単体テスト実施。
+🚀 DatePicker / MonthPicker の単体テスト実施と不具合の根本修正。
 🚀 管理者による日次一覧・DatePicker 検証（不具合修正後に再開）。

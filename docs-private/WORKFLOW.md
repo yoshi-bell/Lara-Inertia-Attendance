@@ -148,7 +148,7 @@ Playwrightテストの「高速化」と「安定性」を両立するため、�
     * [ ] 管理者による日次一覧・DatePicker を用いた日付切り替え検証 (保留中)
     * [x] 管理者による修正申請の承認アクションと、勤怠データへの反映検証
 * [ ] **[Unit] Vitest 導入:** 
-    * [ ] Vitest & Testing Library のセットアップと環境構築。
+    * [x] Vitest & Testing Library のセットアップと環境構築。
     * [ ] DatePicker / MonthPicker の単体テストによる不具合再現と修正。
     * [ ] 複雑なビジネスロジックや共通コンポーネントの網羅テスト。
 * [ ] **[Automation] GitHub Actions:** Lint, Featureテスト, E2Eテストの自動実行パイプライン構築。

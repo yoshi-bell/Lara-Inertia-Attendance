@@ -1,0 +1,31 @@
+
+Running 1 test using 1 worker
+
+[1A[2K[1/1] [chromium] › tests/e2e/admin_attendance_index.spec.ts:9:5 › 管理者：日次勤怠一覧 › DatePickerで過去に移動してから、前日・翌日遷移を検証する
+[1A[2K  1) [chromium] › tests/e2e/admin_attendance_index.spec.ts:9:5 › 管理者：日次勤怠一覧 › DatePickerで過去に移動してから、前日・翌日遷移を検証する 
+
+    [31mTest timeout of 30000ms exceeded.[39m
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+    [2m  - waiting for getByRole('gridcell', { name: '15', exact: true })[22m
+
+
+      73 |
+      74 |         // 「15日」をクリック
+    > 75 |         await page.getByRole('gridcell', { name: '15', exact: true }).click();
+         |                                                                       ^
+      76 |
+      77 |         // 【検証】URLと表示が「計算上の15日」になっていること
+      78 |         const targetDateStr = format(prevMonthDateObj, 'yyyy-MM-'); // "2024-11-"
+        at /var/www/html/tests/e2e/admin_attendance_index.spec.ts:75:71
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/admin_attendance_index-管理者-9fbed-ckerで過去に移動してから、前日・翌日遷移を検証する-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/admin_attendance_index-管理者-9fbed-ckerで過去に移動してから、前日・翌日遷移を検証する-chromium/error-context.md
+
+
+[1A[2K  1 failed
+    [chromium] › tests/e2e/admin_attendance_index.spec.ts:9:5 › 管理者：日次勤怠一覧 › DatePickerで過去に移動してから、前日・翌日遷移を検証する 
