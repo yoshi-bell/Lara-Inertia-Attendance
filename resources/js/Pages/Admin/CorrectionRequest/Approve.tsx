@@ -32,14 +32,6 @@ export default function Approve({ correction, flash }: Props) {
         });
     };
 
-    // 時間フォーマットヘルパー
-    const formatTimeForInput = (dateTimeStr: string | null | undefined) => {
-        if (!dateTimeStr) return '';
-        return dateTimeStr.includes('T') 
-            ? dateTimeStr.split('T')[1].substring(0, 5) 
-            : dateTimeStr.substring(0, 5);
-    };
-
     return (
         <AttendanceLayout title="勤怠詳細">
             <Head title="修正申請承認" />
@@ -62,7 +54,6 @@ export default function Approve({ correction, flash }: Props) {
                             <CorrectionForm
                                 attendance={correction.attendance}
                                 pendingCorrection={correction}
-                                formatTimeForInput={formatTimeForInput}
                             />
 
                             {/* ボタンエリア */}

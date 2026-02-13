@@ -1,12 +1,9 @@
+import AttendanceLayout from '@/Layouts/AttendanceLayout';
 import { Head, useForm } from '@inertiajs/react';
-import { Button } from '@/Components/ui/button';
-import { Input } from '@/Components/ui/input';
-import { Label } from '@/Components/ui/label';
-import Header from '@/Components/Header'; // 追加
 import React from 'react';
 
 /**
- * 管理者ログイン画面
+ * 管理者ログイン画面 (US004 対応)
  */
 export default function Login() {
     const { data, setData, post, processing, errors } = useForm({
@@ -20,68 +17,80 @@ export default function Login() {
     };
 
     return (
-        <div className="min-h-screen bg-white font-['Inter']">
+        <AttendanceLayout backgroundColor="#FFFFFF">
             <Head title="管理者ログイン" />
 
-            {/* ヘッダーを追加 */}
-            <Header />
+            <div className="mx-auto mt-[60px] max-w-[680px] px-4 sm:px-0">
+                {/* 管理者ログインタイトル */}
+                <div className="mb-[60px] text-center">
+                    <h1 className="text-[36px] font-bold text-black">
+                        管理者ログイン
+                    </h1>
+                </div>
 
-            <div className="flex flex-col items-center pt-24 px-4">
-                <div className="w-full max-w-[680px]">
-                    <div className="mb-16 text-center">
-                        <h1 className="text-[36px] font-bold text-black">管理者ログイン</h1>
+                <form onSubmit={handleSubmit} noValidate className="space-y-[14px]">
+                    {/* メールアドレス入力 */}
+                    <div className="form__group flex flex-col">
+                        <label
+                            htmlFor="email"
+                            className="mb-1 text-[24px] font-bold text-black"
+                        >
+                            メールアドレス
+                        </label>
+                        <div className="h-[116px]">
+                            <input
+                                id="email"
+                                type="email"
+                                name="email" // 必須: E2E テスト用および標準的なフォーム挙動用
+                                value={data.email}
+                                onChange={(e) => setData('email', e.target.value)}
+                                className="h-[60px] w-full rounded-[4px] border border-black p-[10px] text-[20px] font-bold outline-none focus:ring-1 focus:ring-black"
+                            />
+                            {errors.email && (
+                                <p className="mt-1 text-[16px] font-bold text-red-600">
+                                    {errors.email}
+                                </p>
+                            )}
+                        </div>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-10" noValidate>
-                        {/* メールアドレス */}
-                        <div className="space-y-2">
-                            <Label className="text-2xl font-bold text-black">メールアドレス</Label>
-                            <div className="h-[116px] space-y-2">
-                                <Input
-                                    type="email"
-                                    value={data.email}
-                                    onChange={e => setData('email', e.target.value)}
-                                    className="h-[60px] border border-black rounded-[4px] px-4 text-lg focus-visible:ring-0"
-                                />
-                                {errors.email && (
-                                    <p className="text-[#dc3545] text-base font-bold ml-1">
-                                        {errors.email}
-                                    </p>
-                                )}
-                            </div>
+                    {/* パスワード入力 */}
+                    <div className="form__group flex flex-col">
+                        <label
+                            htmlFor="password"
+                            className="mb-1 text-[24px] font-bold text-black"
+                        >
+                            パスワード
+                        </label>
+                        <div className="h-[116px]">
+                            <input
+                                id="password"
+                                type="password"
+                                name="password" // 必須: E2E テスト用
+                                value={data.password}
+                                onChange={(e) => setData('password', e.target.value)}
+                                className="h-[60px] w-full rounded-[4px] border border-black p-[10px] text-[20px] font-bold outline-none focus:ring-1 focus:ring-black"
+                            />
+                            {errors.password && (
+                                <p className="mt-1 text-[16px] font-bold text-red-600">
+                                    {errors.password}
+                                </p>
+                            )}
                         </div>
+                    </div>
 
-                        {/* パスワード */}
-                        <div className="space-y-2">
-                            <Label className="text-2xl font-bold text-black">パスワード</Label>
-                            <div className="h-[116px] space-y-2">
-                                <Input
-                                    type="password"
-                                    value={data.password}
-                                    onChange={e => setData('password', e.target.value)}
-                                    className="h-[60px] border border-black rounded-[4px] px-4 text-lg focus-visible:ring-0"
-                                />
-                                {errors.password && (
-                                    <p className="text-[#dc3545] text-base font-bold ml-1">
-                                        {errors.password}
-                                    </p>
-                                )}
-                            </div>
-                        </div>
-
-                        {/* ログインボタン */}
-                        <div className="pt-4">
-                            <Button
-                                type="submit"
-                                disabled={processing}
-                                className="w-full h-[60px] bg-black hover:bg-gray-800 text-[26px] font-bold text-white rounded-[5px] transition-opacity"
-                            >
-                                管理者ログインする
-                            </Button>
-                        </div>
-                    </form>
-                </div>
+                    {/* ログインボタン */}
+                    <div className="pt-[36px]">
+                        <button
+                            type="submit"
+                            disabled={processing}
+                            className="h-[60px] w-full rounded-[5px] bg-black text-[26px] font-bold text-white transition-opacity hover:opacity-70 disabled:opacity-50"
+                        >
+                            管理者ログインする
+                        </button>
+                    </div>
+                </form>
             </div>
-        </div>
+        </AttendanceLayout>
     );
 }
