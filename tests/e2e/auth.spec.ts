@@ -5,8 +5,9 @@ import { test, expect } from '@playwright/test';
  * バックエンドとフロントエンドが正しく結合されているかを検証する
  */
 test.describe('認証・初期表示', () => {
-    
-    test('一般ユーザーが正常にログインでき、打刻画面が表示される', async ({ page }) => {
+    test('一般ユーザーが正常にログインでき、打刻画面が表示される', async ({
+        page,
+    }) => {
         // 1. ログイン画面へアクセス
         await page.goto('/login');
 
@@ -26,7 +27,9 @@ test.describe('認証・初期表示', () => {
         await expect(page.locator('button:has-text("出勤")')).toBeVisible();
     });
 
-    test('未ログインで打刻画面にアクセスした場合、ログイン画面にリダイレクトされる', async ({ page }) => {
+    test('未ログインで打刻画面にアクセスした場合、ログイン画面にリダイレクトされる', async ({
+        page,
+    }) => {
         // 1. 直接 URL を叩く
         await page.goto('/attendance');
 
@@ -34,7 +37,9 @@ test.describe('認証・初期表示', () => {
         await expect(page).toHaveURL(/\/login/);
     });
 
-    test('管理者ユーザーが管理者ログインから正常にログインできる', async ({ page }) => {
+    test('管理者ユーザーが管理者ログインから正常にログインできる', async ({
+        page,
+    }) => {
         // 1. 管理者ログイン画面へアクセス
         await page.goto('/admin/login');
 
