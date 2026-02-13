@@ -25,8 +25,10 @@ class AttendanceCorrectionRequest extends FormRequest
         /** @var User $user */
         $user = Auth::user();
 
-        // 管理者、または自分の勤怠データであれば許可
-        return $user->is_admin || ($user->id === $attendance->user_id);
+        // 管理者、または自分の勤怠データであり、かつ修正可能な状態であれば許可
+        $isOwnerOrAdmin = $user->is_admin || ($user->id === $attendance->user_id);
+
+        return $isOwnerOrAdmin && $attendance->is_editable;
     }
 
     /**

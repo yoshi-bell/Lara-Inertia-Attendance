@@ -19,6 +19,7 @@ export interface Attendance {
     work_time?: string | null; // H:i
     start_time_hi?: string; // H:i
     end_time_hi?: string;   // H:i
+    is_editable: boolean;   // 修正可能フラグ
 
     // リレーション
     user?: User;

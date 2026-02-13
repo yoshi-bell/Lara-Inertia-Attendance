@@ -37,6 +37,16 @@ export default function Approve({ correction, flash }: Props) {
             <Head title="修正申請承認" />
 
             <div className="mx-auto max-w-[900px]">
+                {/* 
+                    当日修正制限の案内 
+                    基本的には承認待ちリストには当日分は並ばない想定だが、安全策として表示
+                */}
+                {!correction.attendance.is_editable && correction.status === 'pending' && (
+                    <p className="mt-[-40px] mb-8 text-xl font-bold text-[#FF0000] animate-in fade-in duration-500">
+                        ※当日の承認は退勤後に行えます
+                    </p>
+                )}
+
                 {/* 完了通知 */}
                 {flash.success && (
                     <div className="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded font-bold text-center animate-in fade-in duration-500">
@@ -62,8 +72,8 @@ export default function Approve({ correction, flash }: Props) {
                                     <form onSubmit={handleApprove}>
                                         <Button
                                             type="submit"
-                                            disabled={processing}
-                                            className="h-12 rounded bg-black text-lg font-bold text-white hover:bg-[#6c757d]"
+                                            disabled={processing || !correction.attendance.is_editable}
+                                            className="h-12 rounded bg-black text-lg font-bold text-white hover:bg-[#6c757d] disabled:opacity-50"
                                             style={{ width: '130px' }}
                                         >
                                             承認

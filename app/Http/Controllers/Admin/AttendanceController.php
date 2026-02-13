@@ -69,6 +69,11 @@ class AttendanceController extends Controller
      */
     public function update(AttendanceCorrectionRequest $request, Attendance $attendance): RedirectResponse
     {
+        // 業務時間中（当日）の不正更新を防止 (SSOTガード)
+        if (!$attendance->is_editable) {
+            abort(403, '当日の勤怠データは更新できません。');
+        }
+
         $data = $request->validated();
         $workDate = $attendance->work_date->format('Y-m-d');
 

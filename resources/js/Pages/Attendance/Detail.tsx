@@ -5,7 +5,7 @@ import { Attendance, AttendanceCorrection, Rest, RestCorrection } from '@/types/
 import { Button } from '@/Components/ui/button';
 import { Card, CardContent } from '@/Components/ui/card';
 import CorrectionForm from '@/Components/CorrectionForm';
-import { useCorrectionForm, CorrectionFormType } from '@/hooks/useCorrectionForm';
+import { useCorrectionForm } from '@/hooks/useCorrectionForm';
 import React from 'react';
 
 /**
@@ -41,6 +41,16 @@ export default function Detail({
             <Head title="勤怠詳細" />
 
             <div className="mx-auto max-w-[900px]">
+                {/* 
+                    当日修正制限の案内 (SSOT: is_editable を参照)
+                    承認待ちがない場合にのみ表示する (重複を避けるため)
+                */}
+                {!attendance.is_editable && !pendingCorrection && (
+                    <p className="mt-[-40px] mb-8 text-xl font-bold text-[#FF0000] animate-in fade-in duration-500">
+                        ※当日の修正は退勤後に行えます
+                    </p>
+                )}
+
                 <Card className="border-none bg-transparent shadow-none">
                     <CardContent className="p-0">
                         <form
@@ -67,8 +77,8 @@ export default function Detail({
                                 ) : (
                                     <Button
                                         type="submit"
-                                        disabled={processing}
-                                        className="h-12 rounded bg-black text-lg font-bold text-white hover:bg-[#6c757d]"
+                                        disabled={processing || !attendance.is_editable}
+                                        className="h-12 rounded bg-black text-lg font-bold text-white hover:bg-[#6c757d] disabled:opacity-50"
                                         style={{ width: '130px' }}
                                     >
                                         修正

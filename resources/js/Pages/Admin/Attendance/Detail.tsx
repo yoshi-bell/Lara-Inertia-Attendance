@@ -42,6 +42,13 @@ export default function Detail({
             <Head title="勤怠詳細" />
 
             <div className="mx-auto max-w-[900px]">
+                {/* 当日修正制限の案内 (管理者も同様のルールを適用) */}
+                {!attendance.is_editable && !pendingCorrection && (
+                    <p className="mt-[-40px] mb-8 text-xl font-bold text-[#FF0000] animate-in fade-in duration-500">
+                        ※当日の修正は退勤後に行えます
+                    </p>
+                )}
+
                 {/* 完了通知メッセージ (管理者用のみ表示) */}
                 {flash.success && (
                     <div className="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded font-bold text-center animate-in fade-in duration-500">
@@ -76,8 +83,8 @@ export default function Detail({
                                 ) : (
                                     <Button
                                         type="submit"
-                                        disabled={processing}
-                                        className="h-12 rounded bg-black text-lg font-bold text-white hover:bg-[#6c757d]"
+                                        disabled={processing || !attendance.is_editable}
+                                        className="h-12 rounded bg-black text-lg font-bold text-white hover:bg-[#6c757d] disabled:opacity-50"
                                         style={{ width: '130px' }}
                                     >
                                         修正
