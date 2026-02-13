@@ -23,8 +23,9 @@ export default defineConfig({
     use: {
         // テスト用サーバーの URL
         baseURL: 'http://127.0.0.1:8081',
-        // 失敗時にトレースを記録
+        // 失敗時にトレースとスクリーンショットを記録
         trace: 'on-first-retry',
+        screenshot: 'on',
     },
 
     projects: [
