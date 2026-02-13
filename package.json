@@ -7,7 +7,8 @@
         "build": "tsc && vite build",
         "format": "prettier --write \"resources/js/**/*.{ts,tsx}\"",
         "lint": "eslint \"resources/js/**/*.{ts,tsx}\"",
-        "test:e2e": "rm -f public/hot && npm run build && php artisan migrate:fresh --seed --env=testing && npx playwright test --reporter=list"
+        "test:e2e": "rm -f public/hot && npm run build && php artisan migrate:fresh --seed --env=testing && npx playwright test --reporter=list",
+        "test:e2e:fast": "php artisan migrate:fresh --seed --env=testing && npx playwright test --reporter=list"
     },
     "devDependencies": {
         "@eslint/js": "^9.39.2",
