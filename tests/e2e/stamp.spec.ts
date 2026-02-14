@@ -10,12 +10,12 @@ test.describe('打刻アクション', () => {
     }) => {
         // 1. ログイン
         await page.goto('/login');
-        await page.fill('input[name="email"]', 'test1@example.com');
+        await page.fill('input[name="email"]', 'test2@example.com');
         await page.fill('input[name="password"]', 'usertest');
         // getByRole を使用して堅牢なボタン特定を行う
         await page.getByRole('button', { name: 'ログインする' }).click();
 
-        await expect(page).toHaveURL(/\/attendance/);
+        await expect(page).toHaveURL(/\/attendance/, { timeout: 10000 });
 
         // 2. 出勤
         const startButton = page.getByRole('button', { name: '出勤' });

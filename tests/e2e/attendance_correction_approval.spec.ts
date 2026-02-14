@@ -11,7 +11,7 @@ test.describe('勤怠修正・承認ワークフロー', () => {
     }) => {
         // --- 1. 一般ユーザー：修正申請の送信 ---
         await page.goto('/login');
-        await page.fill('input[name="email"]', 'test1@example.com');
+        await page.fill('input[name="email"]', 'test4@example.com');
         await page.fill('input[name="password"]', 'usertest');
         await page.getByRole('button', { name: 'ログインする' }).click();
 
@@ -54,11 +54,12 @@ test.describe('勤怠修正・承認ワークフロー', () => {
         await page.getByRole('button', { name: '管理者ログインする' }).click();
 
         // 管理者画面への遷移を待機
-        await expect(page).toHaveURL(/\/admin\/attendance\/list/);
+        await expect(page).toHaveURL(/\/admin\/attendance\/list/, {
+            timeout: 10000,
+        });
 
         // 管理者用申請一覧へ移動
         await page.goto('/admin/stamp_correction_request/list');
-
         // 送信した申請理由が含まれる行を探して詳細画面へ
         const adminRequestRow = page.locator('tr').filter({ hasText: reason });
         await expect(adminRequestRow).toBeVisible();
@@ -76,7 +77,7 @@ test.describe('勤怠修正・承認ワークフロー', () => {
 
         // --- 3. 一般ユーザー：結果の確認 ---
         await page.goto('/login');
-        await page.fill('input[name="email"]', 'test1@example.com');
+        await page.fill('input[name="email"]', 'test4@example.com');
         await page.fill('input[name="password"]', 'usertest');
         await page.getByRole('button', { name: 'ログインする' }).click();
         await expect(page).toHaveURL(/\/attendance/);

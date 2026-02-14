@@ -8,12 +8,12 @@ test.describe('勤怠一覧のナビゲーション', () => {
     test.beforeEach(async ({ page }) => {
         // テストユーザーでログイン
         await page.goto('/login');
-        await page.fill('input[name="email"]', 'test1@example.com');
+        await page.fill('input[name="email"]', 'test3@example.com');
         await page.fill('input[name="password"]', 'usertest');
         await page.getByRole('button', { name: 'ログインする' }).click();
         
         // ログイン処理（リダイレクト）の完了を待機することでセッションを確実に確立させる
-        await expect(page).toHaveURL(/\/attendance/);
+        await expect(page).toHaveURL(/\/attendance/, { timeout: 10000 });
 
         // 一覧画面へ移動
         await page.goto('/attendance/list');

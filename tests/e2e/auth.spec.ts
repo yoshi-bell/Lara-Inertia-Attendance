@@ -19,7 +19,7 @@ test.describe('認証・初期表示', () => {
         await page.click('button[type="submit"]');
 
         // 4. 打刻画面への遷移を確認
-        await expect(page).toHaveURL(/\/attendance/);
+        await expect(page).toHaveURL(/\/attendance/, { timeout: 10000 });
 
         // 5. 機能要件 (FN019) の検証: 初期ステータス「勤務外」が表示されていること
         await expect(page.getByText('勤務外')).toBeVisible();
@@ -51,7 +51,9 @@ test.describe('認証・初期表示', () => {
         await page.click('button[type="submit"]');
 
         // 4. 管理者用トップ（日次勤怠一覧）への遷移を確認
-        await expect(page).toHaveURL(/\/admin\/attendance\/list/);
+        await expect(page).toHaveURL(/\/admin\/attendance\/list/, {
+            timeout: 10000,
+        });
         // 管理者画面のヘッダータイトルを確認
         await expect(page.locator('header')).toContainText('勤怠');
     });

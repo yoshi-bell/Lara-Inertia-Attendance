@@ -12,7 +12,7 @@ test.describe('勤怠修正の制限検証', () => {
 
         // 1. ログイン
         await page.goto('/login');
-        await page.fill('input[name="email"]', 'test1@example.com');
+        await page.fill('input[name="email"]', 'test5@example.com');
         await page.fill('input[name="password"]', 'usertest');
         await page.getByRole('button', { name: 'ログインする' }).click();
         await expect(page).toHaveURL(/\/attendance/);

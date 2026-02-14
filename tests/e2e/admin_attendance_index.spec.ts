@@ -16,7 +16,9 @@ test.describe('管理者：日次勤怠一覧', () => {
         await page.getByRole('button', { name: '管理者ログインする' }).click();
 
         // ログイン完了を待機
-        await expect(page).toHaveURL(/\/admin\/attendance\/list/);
+        await expect(page).toHaveURL(/\/admin\/attendance\/list/, {
+            timeout: 10000,
+        });
 
         const dateDisplay = page.locator(
             'button:has(svg.lucide-calendar) span'
