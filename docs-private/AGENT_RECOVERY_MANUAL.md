@@ -95,8 +95,8 @@
 ✅ マルチユーザー連携による修正・承認ワークフローの E2E テスト合格。
 ✅ Playwright による全 9 件の E2E テストシナリオ（打刻、承認、ナビゲーション等）の 100% 合格。
 ✅ ユーザー分散（隔離）戦略による、副作用のない安定した一括テスト実行環境の確立。
-✅ Vitest + Testing Library による単体テスト基盤の構築と DatePicker の健全性証明。
+✅ Vitest + Testing Library による単体テスト基盤の構築と DatePicker, MonthPicker, useCorrectionForm, CorrectionForm の健全性証明。
+✅ ブラウザ特有の振る舞い（showPicker）や動的フォームレンダリングの単体テストによる網羅的検証。
 
 未完了・次のタスク:
-🚀 Vitest による複雑なビジネスロジック（時間計算、UI条件分岐）の網羅。
 🚀 GitHub Actions による CI パイプラインの構築。

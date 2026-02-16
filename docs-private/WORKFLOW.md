@@ -81,7 +81,7 @@ Playwrightテストの「高速化」と「安定性」を両立するため、�
 
 **現在のフェーズ:** Phase 6: テストの実装と自動化 (Testing & Automation)
 **現在のアクティブタスク:** GitHub Actions による CI パイプラインの構築
-**ステータス:** 2026-02-16 セッション復旧完了。Vitest による主要なコンポーネント（DatePicker, MonthPicker）およびカスタムフック（useCorrectionForm）の単体テストがすべてパス。次は自動化フェーズへ移行。
+**ステータス:** 2026-02-16 セッション復旧完了。Vitest による主要なコンポーネント（DatePicker, MonthPicker, CorrectionForm）およびカスタムフック（useCorrectionForm）の単体テストがすべてパス。次は自動化フェーズへ移行。
 
 ---
 
