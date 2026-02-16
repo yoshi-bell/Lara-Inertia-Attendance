@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
-import { describe, it, expect, vi, afterEach } from 'vitest';
+import { describe, it, vi, afterEach } from 'vitest';
 import { useCorrectionForm } from './useCorrectionForm';
 import { Attendance, Rest } from '@/types/models';
 import React from 'react';

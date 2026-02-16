@@ -149,6 +149,7 @@ Playwrightテストの「高速化」と「安定性」を両立するため、�
     * [x] **MonthPicker 検証:** パースロジックと年次ナビゲーションのテスト。
     * [x] **useCorrectionForm 検証:** 初期値変換ロジックと isAdmin による送信先切り替えのテスト。
     * [x] **CorrectionForm UI検証:** モード（閲覧/編集）に応じた表示制御のテスト。
+    * [x] **AttendanceTable 検証:** ルート切り替えと動的リンク生成のテスト。
     * [x] 複雑なビジネスロジックや共通コンポーネントの網羅テスト。
 * [ ] **[Automation] GitHub Actions:** Lint, Featureテスト, E2Eテストの自動実行パイプライン構築。
 * [ ] **README整備:** プロジェクト概要とセットアップ手順の最終化。
