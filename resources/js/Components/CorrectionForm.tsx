@@ -1,6 +1,5 @@
 import { Attendance, AttendanceCorrection, Rest, RestCorrection } from '@/types/models';
 import { CorrectionFormType } from '@/hooks/useCorrectionForm';
-import React from 'react';
 
 /**
  * 共通フォームコンポーネントの Props

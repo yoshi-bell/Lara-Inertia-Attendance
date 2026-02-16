@@ -8,7 +8,8 @@
         "format": "prettier --write \"resources/js/**/*.{ts,tsx}\"",
         "lint": "eslint \"resources/js/**/*.{ts,tsx}\"",
         "test:e2e": "rm -f public/hot && npm run build && php artisan migrate:fresh --seed --env=testing && npx playwright test --reporter=list",
-        "test:e2e:fast": "rm -f public/hot && php artisan migrate:fresh --seed --env=testing && npx playwright test --reporter=list"
+        "test:e2e:fast": "rm -f public/hot && php artisan migrate:fresh --seed --env=testing && npx playwright test --reporter=list",
+        "test:unit": "vitest run"
     },
     "devDependencies": {
         "@eslint/js": "^9.39.2",

@@ -26,8 +26,10 @@ interface UseCorrectionFormProps {
 /**
  * 勤怠修正フォームの共通ロジックを管理するカスタムフック
  */
-export function useCorrectionForm({ attendance, isAdmin }: UseCorrectionFormProps) {
-    
+export function useCorrectionForm({
+    attendance,
+    isAdmin,
+}: UseCorrectionFormProps) {
     // 最新の attendance データから初期値を生成する関数
     const getInitialValues = (att: typeof attendance): CorrectionFormType => ({
         requested_start_time: att.start_time_hi || '',
@@ -62,13 +64,14 @@ export function useCorrectionForm({ attendance, isAdmin }: UseCorrectionFormProp
      */
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        
         const options = { preserveScroll: true };
-        
         if (isAdmin) {
             form.put(route('admin.attendance.update', attendance.id), options);
         } else {
-            form.post(route('attendances.correction.store', attendance.id), options);
+            form.post(
+                route('attendances.correction.store', attendance.id),
+                options
+            );
         }
     };
 
