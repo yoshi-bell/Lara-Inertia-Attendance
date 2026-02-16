@@ -1,5 +1,4 @@
 import '@testing-library/jest-dom/vitest';
-import 'vitest/globals';
 import { vi } from 'vitest';
 
 /**

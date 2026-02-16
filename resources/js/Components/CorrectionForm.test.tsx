@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import CorrectionForm from './CorrectionForm';
 import { Attendance, Rest, AttendanceCorrection, RestCorrection } from '@/types/models';
 import { CorrectionFormType } from '@/hooks/useCorrectionForm';
