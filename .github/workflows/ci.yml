@@ -71,6 +71,7 @@ jobs:
     - name: Run PHP Lint (Pint)
       run: ./vendor/bin/pint --test
 
+    # JS/TS Lint は既にローカルで修正済みだが、CI でも念のためチェック
     - name: Run JS/TS Lint (ESLint)
       run: npm run lint
 
@@ -87,6 +88,7 @@ jobs:
         DB_PORT: 3306
         DB_DATABASE: testing
         DB_USERNAME: root
+        DB_PASSWORD: ""
 
     # 1. Backend Tests
     - name: Execute Feature Tests (PHPUnit)
@@ -97,6 +99,7 @@ jobs:
         DB_PORT: 3306
         DB_DATABASE: testing
         DB_USERNAME: root
+        DB_PASSWORD: ""
 
     # 2. Frontend Unit Tests
     - name: Execute Frontend Unit Tests (Vitest)
@@ -115,4 +118,5 @@ jobs:
         DB_PORT: 3306
         DB_DATABASE: testing
         DB_USERNAME: root
+        DB_PASSWORD: ""
         APP_URL: http://127.0.0.1:8081
