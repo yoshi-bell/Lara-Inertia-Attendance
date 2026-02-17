@@ -570,3 +570,10 @@
     - **Feature (Integration):** 68 件（ビジネスロジック・認可・DB） - PASS
     - **Playwright (E2E):** 9 シナリオ（全ハッピーパス・ワークフロー） - PASS
 - **結論:** 全てのテスト層において 100% の合格率を達成し、GitHub Actions による CI 自動化パイプラインの構築に向けた完全な「グリーンの状態」を確立。
+
+---
+
+### 9. GitHub Actions の構築と PR 運用フローの導入
+- **CI構築:** `.github/workflows/ci.yml` を作成。PHP 8.4, MySQL 8.0, Node.js 20 環境を自動構成し、Pint, ESLint, PHPUnit, Vitest, Playwright の全 94 テストを自動実行するパイプラインを構築。
+- **PR運用フローの採用:** 個人開発の品質と客観性を高めるため、GitHub Flow（ブランチ運用）と Pull Request によるセルフレビュー・CI実行を公式フローとして定義。
+- **ドキュメント反映:** `03_WORKFLOW.md` および `01_AGENT_RECOVERY_MANUAL.md` に新ルールを明文化し、AI・人間共に遵守する体制を確立。
