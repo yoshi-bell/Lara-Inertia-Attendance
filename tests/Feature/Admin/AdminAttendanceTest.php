@@ -64,7 +64,7 @@ class AdminAttendanceTest extends TestCase
         $response->assertStatus(200);
 
         $response->assertInertia(
-            fn(Assert $page) => $page
+            fn (Assert $page) => $page
                 ->component('Admin/Attendance/Index')
                 ->has('attendances', 2)
                 ->where('attendances.0.user.name', 'ユーザー2')
@@ -114,7 +114,7 @@ class AdminAttendanceTest extends TestCase
         $response = $this->actingAs($admin)->get(route('admin.attendance.index', ['date' => '2026-02-11']));
 
         $response->assertInertia(
-            fn(Assert $page) => $page
+            fn (Assert $page) => $page
                 ->where('navigation.date', '2026-02-11')
                 ->where('navigation.prevDate', '2026-02-10')
                 ->where('navigation.nextDate', '2026-02-12')

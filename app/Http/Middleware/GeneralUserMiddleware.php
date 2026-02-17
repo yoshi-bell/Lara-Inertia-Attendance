@@ -19,11 +19,12 @@ class GeneralUserMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         // 未ログイン、または管理者である場合はアクセス拒否
-        if (!Auth::check() || Auth::user()->is_admin) {
+        if (! Auth::check() || Auth::user()->is_admin) {
             if (Auth::user()?->is_admin) {
                 // 管理者が迷い込んだ場合は管理者トップへ
                 return redirect()->route('admin.attendance.index');
             }
+
             // 未ログインならログイン画面へ
             return redirect()->route('login');
         }
