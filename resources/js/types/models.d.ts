@@ -1,6 +1,15 @@
-import { User as BaseUser } from './index';
+import { CorrectionStatus } from '@/constants';
 
-export type User = BaseUser;
+/**
+ * ユーザー (users table)
+ */
+export interface User {
+    id: number;
+    name: string;
+    email: string;
+    email_verified_at?: string;
+    is_admin: boolean;
+}
 
 /**
  * 勤怠記録 (attendances table)
@@ -47,12 +56,12 @@ export interface AttendanceCorrection {
     id: number;
     attendance_id: number;
     user_id: number;
-    requested_start_time: string; // 追加
-    requested_end_time: string;   // 追加
+    requested_start_time: string;
+    requested_end_time: string;
     requested_start_time_hi?: string;
     requested_end_time_hi?: string;
     reason: string;
-    status: 'pending' | 'approved' | 'rejected';
+    status: CorrectionStatus;
     reviewed_at: string | null;
     reviewer_id: number | null;
     created_at: string;
