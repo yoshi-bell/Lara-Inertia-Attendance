@@ -1,0 +1,73 @@
+# 🟢 メタ定義: このファイルの責務 (AIエージェント用)
+> **AIエージェントへの指示 (Prompt Repetition Strategy):** 
+> このファイルは「コードの書き方やスタイル」の正解を定義しています。
+> 実装、リファクタリング、コードレビューを行う際に必ず読み込み、スタイルの一貫性を維持してください。
+
+*   **役割:** 命名規則、ディレクトリ構造、コメント規則、スタイリング（Tailwind）の定義。
+*   **読むべきタイミング:** ファイル作成、コード記述、リファクタリング時。
+
+---
+
+# Lara-Inertia-Attendance コーディング規約 (Coding Rules)
+
+## 🎨 スタイリングと形式 (Style & Format)
+
+### フロントエンド (React / Tailwind CSS)
+*   **Inertia Links:** ページ遷移には必ず Inertia の `<Link>` コンポーネントを使用し、SPA 特有の滑らかな遷移を実現する（`<a>`タグの使用は原則禁止）。
+*   **自動整形:** `prettier-plugin-tailwindcss` を適用し、クラス名の並び順を統一する。
+*   **スタイリング:** モバイルファーストを徹底し、ユーティリティクラスに直接記述する。`@apply` は原則禁止。
+*   **Shadcn/ui 活用:** UI コンポーネントには Shadcn/ui を積極的に採用し、一貫性のあるデザインを構築する。
+
+### バックエンド設計思想 (Thin Controller)
+*   **役割分担の徹底:** コントローラーの責務を最小限に抑え、以下のコンポーネントに処理を委譲する。
+    *   バリデーション → `FormRequest`
+    *   ビジネスロジック・クエリ → `Service`
+    *   レスポンス整形 → `JsonResource`
+*   **命名規則:** クラス名は `PascalCase`、メソッド・変数は `camelCase`、DBカラムは `snake_case` を厳守。
+*   **use 文の積極使用と FQCN の排除:**
+    *   コード内でのフルパス指定（例: `\App\Models\User`）は原則禁止。
+    *   必ずファイルの冒頭で `use` 文を宣言し、クラス名のみで参照すること。
+    *   テストコードにおける `Inertia\Testing\AssertableInertia` は `use Inertia\Testing\AssertableInertia as Assert;` とエイリアスを定義して使用すること。
+
+### 🛠️ 共通ルール
+* **論理式の明示的なグルーピング:** 演算子の優先順位に依存せず、括弧 `()` を使用して判定の塊を明示する。
+    * **Good:** `return isAxiosError(e) && (e.response !== undefined);`
+
+---
+
+## 📂 ディレクトリ構造と責務 (Directory Structure)
+
+### フロントエンド (`resources/js`)
+「役割に応じて大文字・小文字を使い分ける」慣習に従う。
+*   **大文字開始 (PascalCase):** React コンポーネント（UI 部品）
+    *   `Pages/`: ページコンポーネント（`PageProps` を継承すること）
+    *   `Components/`: 再利用可能なパーツ（および `ui/` 配下の Shadcn 部品）
+    *   `Layouts/`: 共通レイアウト
+*   **小文字開始 (camelCase):** ロジック、型定義、ユーティリティ
+    *   `lib/`: 便利関数 (`utils.ts`)、外部ライブラリ設定
+    *   `types/`: TypeScript 型定義（`models.d.ts` 等）
+    *   `hooks/`: React カスタムフック
+
+### バックエンド (`app`)
+*   `Http/Controllers/`: リクエスト受付と `Inertia::render` によるビュー返却。
+*   `Http/Requests/`: FormRequest によるバリデーション。
+*   `Services/`: ビジネスロジック、複雑なクエリの集約。
+*   `Models/`: Eloquent モデル、リレーション、キャスト定義。
+
+---
+
+## 📝 コメント規則 (Commenting Rules)
+
+### 1. 意図を語る (Intent over Implementation)
+*   「なぜ」その処理が必要なのか、背景や目的を書く。
+
+### 2. 自己文書化コードの優先 (Refactor First)
+*   コメントを書く前に、コード自体を分かりやすくできないか検討する。
+*   **変数名・定数化:** `const d = 86400;` ではなく `const SECONDS_PER_DAY = 86400;` とする（マジックナンバーの排除）。
+*   **関数抽出:** 複雑な条件式は、意味のある名前の関数（例: `if (isValidUser(user))`）に抽出する。
+
+### 3. ドキュメンテーションコメント (DocBlocks)
+*   公開メソッド（Service, Controller, Hooks）には JSDoc / PHPDoc を記述し、`@param`, `@return` を明確にする。
+
+### 3. 特殊コメントタグ
+*   `TODO:`, `FIXME:`, `WARNING:`, `NOTE:` を適切に使用する。

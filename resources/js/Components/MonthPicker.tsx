@@ -18,8 +18,13 @@ interface MonthPickerProps {
  */
 export default function MonthPicker({ month, onChange }: MonthPickerProps) {
     // 表示用の文字列から日付オブジェクトを生成
-    const initialDate = parse(month, 'yyyy年MM月', new Date());
-    const [viewDate, setViewDate] = React.useState(initialDate);
+    const parseDate = (m: string) => parse(m, 'yyyy年MM月', new Date());
+    const [viewDate, setViewDate] = React.useState(() => parseDate(month));
+
+    // 【修正】親から month が変わったら、表示（viewDate）もそこにリセットする
+    React.useEffect(() => {
+        setViewDate(parseDate(month));
+    }, [month]);
 
     const months = [
         '1月',
@@ -64,6 +69,7 @@ export default function MonthPicker({ month, onChange }: MonthPickerProps) {
                         onClick={() =>
                             setViewDate(new Date(viewDate.getFullYear() - 1, 0))
                         }
+                        aria-label="前年"
                     >
                         <ChevronLeft className="h-4 w-4" />
                     </Button>
@@ -75,6 +81,7 @@ export default function MonthPicker({ month, onChange }: MonthPickerProps) {
                         onClick={() =>
                             setViewDate(new Date(viewDate.getFullYear() + 1, 0))
                         }
+                        aria-label="翌年"
                     >
                         <ChevronRight className="h-4 w-4" />
                     </Button>
@@ -87,8 +94,8 @@ export default function MonthPicker({ month, onChange }: MonthPickerProps) {
                             key={m}
                             variant={
                                 viewDate.getFullYear() ===
-                                    initialDate.getFullYear() &&
-                                index === initialDate.getMonth()
+                                    parseDate(month).getFullYear() &&
+                                index === parseDate(month).getMonth()
                                     ? 'default'
                                     : 'ghost'
                             }

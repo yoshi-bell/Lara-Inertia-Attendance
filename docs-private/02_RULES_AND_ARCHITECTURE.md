@@ -6,7 +6,7 @@
 *   **役割:** プロジェクトの「仕様」「設計方針」「不変の原則」の定義。
 *   **読むべきタイミング:** 新しい機能の実装、DB変更、または設計上の判断が必要な時。
 *   **思考の優先順位:** 設計と方針に関して最優先。ここにある原則に反するコードを書いてはならない。
-*   **詳細な実装ルール:** コーディング規約や設計パターンについては **`docs-private/IMPLEMENTATION_STANDARDS.md`** を参照すること。
+*   **詳細な実装ルール:** コーディング規約、設計パターン、テスト指針については、下部の **「ドキュメントナビゲーション」** に従い、`04_CODING_RULES.md`, `05_DESIGN_PATTERNS.md`, `06_TESTING_GUIDE.md` を参照すること。
 
 ---
 
@@ -62,9 +62,20 @@
 
 ---
 
+## 📚 ドキュメントナビゲーション
+AIエージェントは、現在のタスクに応じて以下のファイルを読み込むこと。
+
+1.  **コーディング中:** `04_CODING_RULES.md`（命名、スタイル、ディレクトリ構造）
+2.  **実装パターン検討中:** `05_DESIGN_PATTERNS.md`（設計、型ポリシー、バリデーション）
+3.  **テスト作成中:** `06_TESTING_GUIDE.md`（テスト戦略、モック、各テストフレームワーク）
+
+---
+
 ## 📂 ドキュメント構成 (Documentation Structure)
 
-*   **`WORKFLOW.md`:** 開発の手順書・ロードマップ（作業時はこれを常に見る）。
-*   **`IMPLEMENTATION_STANDARDS.md`:** コーディング規約・コメント規則・設計パターン。
-*   **`DEV_LOG.md`:** 開発ログ（新規作成）。
-*   **`AGENT_RECOVERY_MANUAL.md`:** エージェント復旧マニュアル。
+*   **`03_WORKFLOW.md`:** 開発の手順書・ロードマップ（作業時はこれを常に見る）。
+*   **`04_CODING_RULES.md`:** コーディング規約（旧 99_OLD_IMPLEMENTATION_STANDARDS.md の一部）。
+*   **`05_DESIGN_PATTERNS.md`:** 設計パターン（旧 99_OLD_IMPLEMENTATION_STANDARDS.md の一部）。
+*   **`06_TESTING_GUIDE.md`:** テスト指針（旧 99_OLD_IMPLEMENTATION_STANDARDS.md の一部）。
+*   **`07_DEV_LOG.md`:** 開発ログ。
+*   **`01_AGENT_RECOVERY_MANUAL.md`:** エージェント復旧マニュアル。

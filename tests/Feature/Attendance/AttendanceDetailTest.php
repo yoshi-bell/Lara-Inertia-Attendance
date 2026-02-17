@@ -4,8 +4,6 @@ namespace Tests\Feature\Attendance;
 
 use App\Models\Attendance;
 use App\Models\User;
-use App\Models\Rest;
-use App\Models\AttendanceCorrection;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;

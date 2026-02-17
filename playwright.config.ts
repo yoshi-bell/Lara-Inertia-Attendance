@@ -23,6 +23,8 @@ export default defineConfig({
     use: {
         // テスト用サーバーの URL
         baseURL: 'http://127.0.0.1:8081',
+        // タイムゾーンを日本時間に固定
+        timezoneId: 'Asia/Tokyo',
         // 失敗時にトレースとスクリーンショットを記録
         trace: 'on-first-retry',
         screenshot: 'on',

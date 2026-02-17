@@ -13,7 +13,7 @@ describe('DatePicker Component', () => {
 
     it('初期表示で指定した日付が正しいフォーマット（yyyy/MM/dd）で表示されていること', () => {
         render(<DatePicker date="2026-02-13" onChange={mockOnChange} />);
-        
+
         // ボタンのラベルを確認 (FN018 等の表示形式に準拠しているか)
         const button = screen.getByRole('button');
         expect(button).toHaveTextContent('2026/02/13');
@@ -22,7 +22,7 @@ describe('DatePicker Component', () => {
     it('カレンダーを展開し、日付を選択すると正しい値（YYYY-MM-DD）で onChange が呼ばれること', async () => {
         const user = userEvent.setup();
         render(<DatePicker date="2026-02-13" onChange={mockOnChange} />);
-        
+
         const button = screen.getByRole('button');
 
         // カレンダー（Popover）を展開
@@ -40,7 +40,7 @@ describe('DatePicker Component', () => {
     it('ナビゲーションボタンで月を切り替えた際、カレンダーのタイトルが連動して更新されること', async () => {
         const user = userEvent.setup();
         render(<DatePicker date="2026-02-13" onChange={mockOnChange} />);
-        
+
         await user.click(screen.getByRole('button'));
 
         // 初期表示月（2月）の確認
@@ -51,7 +51,7 @@ describe('DatePicker Component', () => {
         // クラス名 .rdp-button_previous は react-day-picker の標準
         const prevButton = document.querySelector('.rdp-button_previous');
         if (!prevButton) throw new Error('前月ボタンが DOM 上に見つかりません');
-        
+
         await user.click(prevButton);
 
         // 【ここが E2E での不具合疑い箇所】

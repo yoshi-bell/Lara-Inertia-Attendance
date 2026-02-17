@@ -1,6 +1,5 @@
 import AttendanceLayout from '@/Layouts/AttendanceLayout';
 import { Button } from '@/Components/ui/button';
-import { Card, CardContent } from '@/Components/ui/card';
 import { Head, router } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 

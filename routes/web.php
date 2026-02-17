@@ -1,11 +1,11 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\AttendanceController;
-use App\Http\Controllers\Admin\LoginController as AdminLoginController;
 use App\Http\Controllers\Admin\AttendanceController as AdminAttendanceController;
 use App\Http\Controllers\Admin\CorrectionRequestController as AdminCorrectionRequestController;
+use App\Http\Controllers\Admin\LoginController as AdminLoginController;
 use App\Http\Controllers\Admin\StaffController as AdminStaffController;
+use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 // ルートURL: 認証状態でリダイレクト先を振り分け
@@ -13,10 +13,12 @@ Route::get('/', function () {
     if (auth()->check()) {
         /** @var \App\Models\User $user */
         $user = auth()->user();
+
         return $user->is_admin
             ? redirect()->route('admin.attendance.index')
             : redirect()->route('attendance');
     }
+
     return redirect()->route('login');
 });
 
@@ -47,7 +49,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
 
 // 管理者用認証ルート
 Route::prefix('admin')->name('admin.')->group(function () {

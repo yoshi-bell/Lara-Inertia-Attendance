@@ -46,10 +46,10 @@ class AdminCorrectionApprovalTest extends TestCase
 
         // 勤怠データとそれに対する修正申請を作成
         $attendance = Attendance::factory()->create([
-            'user_id' => $user->id, 
-            'work_date' => '2026-02-10'
+            'user_id' => $user->id,
+            'work_date' => '2026-02-10',
         ]);
-        
+
         AttendanceCorrection::create([
             'attendance_id' => $attendance->id,
             'requester_id' => $user->id,
@@ -100,7 +100,7 @@ class AdminCorrectionApprovalTest extends TestCase
         $response = $this->actingAs($admin)->post(route('admin.corrections.approve', $correction->id));
 
         $response->assertRedirect();
-        
+
         // 検証1: 勤怠本体（attendance テーブル）が申請内容で更新されていること
         $this->assertDatabaseHas('attendances', [
             'id' => $attendance->id,
@@ -117,7 +117,7 @@ class AdminCorrectionApprovalTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->create(['is_admin' => false]);
-        
+
         // 誰かの申請データを用意
         $attendance = Attendance::factory()->create(['work_date' => '2026-02-10']);
         $correction = AttendanceCorrection::create([

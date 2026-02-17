@@ -2,12 +2,10 @@
 
 namespace Database\Factories;
 
-use App\Models\AttendanceCorrection;
 use App\Models\Attendance;
-use App\Models\User;
+use App\Models\AttendanceCorrection;
 use App\Models\RestCorrection;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Carbon\Carbon;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\AttendanceCorrection>
@@ -38,11 +36,11 @@ class AttendanceCorrectionFactory extends Factory
             if ($correction->attendance_id) {
                 $attendance = $correction->attendance;
                 $correction->requester_id ??= $attendance->user_id;
-                
+
                 // 元の勤怠時間から前後10分の範囲でランダムに「修正希望時間」を生成
                 $correction->requested_start_time ??= $attendance->start_time->copy()->addMinutes(rand(-10, 10));
                 $correction->requested_end_time ??= $attendance->end_time->copy()->addMinutes(rand(-10, 10));
-                
+
                 // 作成日は、勤怠の日付から「今日」までの間のランダムな日
                 $createdAt = $this->faker->dateTimeBetween($attendance->work_date, 'now');
                 $correction->created_at = $createdAt;
