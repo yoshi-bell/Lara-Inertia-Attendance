@@ -1,133 +1,123 @@
 name: CI - Test & Lint
 
 on:
-    push:
-        branches: ['main']
-    pull_request:
-        branches: ['main']
+  push:
+    branches: [ "main", "docs/update-readme" ] # テストのため作業ブランチも追加
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
-    laravel-tests:
-        runs-on: ubuntu-latest
+  laravel-tests:
+    runs-on: ubuntu-latest
 
-        services:
-            mysql:
-                image: mysql:8.0
-                env:
-                    MYSQL_ALLOW_EMPTY_PASSWORD: yes
-                    MYSQL_DATABASE: testing
-                ports:
-                    - 3306:3306
-                options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    # 全てのステップのデフォルトディレクトリをプロジェクトルートに設定
+    defaults:
+      run:
+        working-directory: Lara-Inertia-Attendance
 
-        steps:
-            - uses: actions/checkout@v4
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_DATABASE: testing
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
-            # PHP Setup
-            - name: Setup PHP
-              uses: shivammathur/setup-php@v2
-              with:
-                  php-version: '8.4'
-                  extensions: mbstring, xml, ctype, iconv, mysql, bcmath, zip
-                  coverage: none
+    steps:
+    - uses: actions/checkout@v4
 
-            # Node.js Setup
-            - name: Setup Node.js
-              uses: actions/setup-node@v4
-              with:
-                  node-version: '20'
-                  cache: 'npm'
-                  cache-path: Lara-Inertia-Attendance/package-lock.json
+    # PHP Setup
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.4'
+        extensions: mbstring, xml, ctype, iconv, mysql, bcmath, zip
+        coverage: none
 
-            - name: Get Composer Cache Directory
-              id: composer-cache
-              run: |
-                  echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-              working-directory: Lara-Inertia-Attendance
+    # Node.js Setup
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        cache-path: Lara-Inertia-Attendance/package-lock.json
 
-            - name: Cache Composer dependencies
-              uses: actions/cache@v4
-              with:
-                  path: ${{ steps.composer-cache.outputs.dir }}
-                  key: ${{ runner.os }}-composer-${{ hashFiles('Lara-Inertia-Attendance/composer.lock') }}
-                  restore-keys: |
-                      ${{ runner.os }}-composer-
+    - name: Get Composer Cache Directory
+      id: composer-cache
+      run: |
+        echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-            - name: Install PHP Dependencies
-              run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-              working-directory: Lara-Inertia-Attendance
+    - name: Cache Composer dependencies
+      uses: actions/cache@v4
+      with:
+        path: ${{ steps.composer-cache.outputs.dir }}
+        key: ${{ runner.os }}-composer-${{ hashFiles('Lara-Inertia-Attendance/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-composer-
 
-            - name: Install NPM Dependencies
-              run: npm ci
-              working-directory: Lara-Inertia-Attendance
+    - name: Install PHP Dependencies
+      run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-            - name: Copy .env
-              run: cp .env.example .env
-              working-directory: Lara-Inertia-Attendance
+    - name: Install NPM Dependencies
+      run: npm ci
 
-            - name: Generate key
-              run: php artisan key:generate
-              working-directory: Lara-Inertia-Attendance
+    - name: Copy .env
+      run: cp .env.example .env
 
-            - name: Directory Permissions
-              run: chmod -R 777 storage bootstrap/cache
-              working-directory: Lara-Inertia-Attendance
+    - name: Generate key
+      run: php artisan key:generate
 
-            # Lint Check
-            - name: Run PHP Lint (Pint)
-              run: ./vendor/bin/pint --test
-              working-directory: Lara-Inertia-Attendance
+    - name: Directory Permissions
+      run: chmod -R 777 storage bootstrap/cache
 
-            - name: Run JS/TS Lint (ESLint)
-              run: npm run lint
-              working-directory: Lara-Inertia-Attendance
+    # Lint Check
+    - name: Run PHP Lint (Pint)
+      run: ./vendor/bin/pint --test
 
-            # Frontend Build (Needed for E2E)
-            - name: Build Assets
-              run: npm run build
-              working-directory: Lara-Inertia-Attendance
+    - name: Run JS/TS Lint (ESLint)
+      run: npm run lint
 
-            # Database Setup
-            - name: Run Migrations
-              run: php artisan migrate --env=testing --force
-              working-directory: Lara-Inertia-Attendance
-              env:
-                  DB_CONNECTION: mysql
-                  DB_HOST: 127.0.0.1
-                  DB_PORT: 3306
-                  DB_DATABASE: testing
-                  DB_USERNAME: root
+    # Frontend Build (Needed for E2E)
+    - name: Build Assets
+      run: npm run build
 
-            # 1. Backend Tests
-            - name: Execute Feature Tests (PHPUnit)
-              run: php artisan test
-              working-directory: Lara-Inertia-Attendance
-              env:
-                  DB_CONNECTION: mysql
-                  DB_HOST: 127.0.0.1
-                  DB_PORT: 3306
-                  DB_DATABASE: testing
-                  DB_USERNAME: root
+    # Database Setup
+    - name: Run Migrations
+      run: php artisan migrate --env=testing --force
+      env:
+        DB_CONNECTION: mysql
+        DB_HOST: 127.0.0.1
+        DB_PORT: 3306
+        DB_DATABASE: testing
+        DB_USERNAME: root
 
-            # 2. Frontend Unit Tests
-            - name: Execute Frontend Unit Tests (Vitest)
-              run: npm run test:unit
-              working-directory: Lara-Inertia-Attendance
+    # 1. Backend Tests
+    - name: Execute Feature Tests (PHPUnit)
+      run: php artisan test
+      env:
+        DB_CONNECTION: mysql
+        DB_HOST: 127.0.0.1
+        DB_PORT: 3306
+        DB_DATABASE: testing
+        DB_USERNAME: root
 
-            # 3. E2E Tests (Playwright)
-            - name: Install Playwright Browsers
-              run: npx playwright install --with-deps chromium
-              working-directory: Lara-Inertia-Attendance
+    # 2. Frontend Unit Tests
+    - name: Execute Frontend Unit Tests (Vitest)
+      run: npm run test:unit
 
-            - name: Execute E2E Tests (Playwright)
-              run: |
-                  # E2Eテスト用のDBリセットとサーバー起動を npm script に任せる
-                  npm run test:e2e
-              working-directory: Lara-Inertia-Attendance
-              env:
-                  DB_CONNECTION: mysql
-                  DB_HOST: 127.0.0.1
-                  DB_PORT: 3306
-                  DB_DATABASE: testing
-                  DB_USERNAME: root
-                  APP_URL: http://127.0.0.1:8081
+    # 3. E2E Tests (Playwright)
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps chromium
+
+    - name: Execute E2E Tests (Playwright)
+      run: |
+        npm run test:e2e
+      env:
+        DB_CONNECTION: mysql
+        DB_HOST: 127.0.0.1
+        DB_PORT: 3306
+        DB_DATABASE: testing
+        DB_USERNAME: root
+        APP_URL: http://127.0.0.1:8081
