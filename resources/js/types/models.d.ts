@@ -1,4 +1,4 @@
-import { AttendanceStatus, CorrectionStatus } from '@/constants';
+import { CorrectionStatus } from '@/constants';
 
 /**
  * ユーザー (users table)
