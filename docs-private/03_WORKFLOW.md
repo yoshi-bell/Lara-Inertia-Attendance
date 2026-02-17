@@ -102,8 +102,8 @@ Playwrightテストの「高速化」と「安定性」を両立するため、�
 > AIエージェントは作業中、常にここを更新すること。
 
 **現在のフェーズ:** Phase 6: テストの実装と自動化 (Testing & Automation)
-**現在のアクティブタスク:** 08_REFACTORING_ROADMAP.md に基づくリファクタリングの実施
-**ステータス:** 2026-02-17 全 94 件のテストが GitHub Actions 上で完全合格。CI/CD パイプラインと PR 運用フローが確立。現在は 08_REFACTORING_ROADMAP.md のプランに沿って、Findy スコア向上と型安全性の強化を目的としたリファクタリング（Phase 1: 型定義の基盤強化）を推進中。
+**現在のアクティブタスク:** リファクタリング Phase 2 の検討
+**ステータス:** 2026-02-17 リファクタリング Phase 1（型定義の基盤強化）が 100% 完了。全 104 件のテストがパス。現在は Phase 2（サーバー駆動型 SSOT）に向けた spatie/laravel-data 導入の検討中。
 
 ---
 
@@ -189,7 +189,8 @@ Playwrightテストの「高速化」と「安定性」を両立するため、�
 * [x] **PageProps 厳密化:** 一般ユーザー側・管理者側の全ページにおけるジェネリクス化と共有データの明示。
 * [x] **utils.d.ts 新設:** `NonNullableFields<T>`, `PaginatedResponse<T>` 等の高度なユーティリティ型定義。
 * [x] **Type Guard の導入:** `isUser`, `isAttendance` などの型ガード関数による `unknown` の安全な絞り込み（Grade S 対応）。
-* [ ] **定数管理の徹底:** マジックナンバーを排除し、`as const` + Union Types へ移行。
+* [x] **定数管理の徹底:** マジックナンバーを排除し、`as const` + Union Types へ移行。
+
 
 ### Phase 2: サーバー駆動型 SSOT の確立
 * [ ] **`spatie/laravel-data` 導入:** バックエンドでの Data Object 定義。
