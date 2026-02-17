@@ -188,7 +188,7 @@ Playwrightテストの「高速化」と「安定性」を両立するため、�
 ### Phase 1: 型定義の基盤強化 (Quick Wins & Logic)
 * [x] **PageProps 厳密化:** `resources/js/types/index.d.ts` のジェネリクス化と共有データの明示。
 * [x] **`utils.d.ts` 新設:** `NonNullableFields<T>`, `PaginatedResponse<T>` 等の高度なユーティリティ型定義。
-* [ ] **Type Guard の導入:** `isUser`, `isAttendance` などの型ガード関数による `unknown` の安全な絞り込み。
+* [x] **Type Guard の導入:** `isUser`, `isAttendance` などの型ガード関数による `unknown` の安全な絞り込み（Grade S 対応）。
 * [ ] **定数管理の徹底:** マジックナンバーを排除し、`as const` + Union Types へ移行。
 
 ### Phase 2: サーバー駆動型 SSOT の確立
