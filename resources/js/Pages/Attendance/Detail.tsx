@@ -12,7 +12,7 @@ import React from 'react';
  * 勤怠詳細ページ Props (一般ユーザー用)
  * 全てのモデル定義を @/types/models からインポートし、一本化
  */
-export interface AttendanceDetailProps extends PageProps {
+export type AttendanceDetailProps = PageProps<{
     attendance: Attendance & {
         user: { name: string };
         rests: Rest[];
@@ -20,7 +20,7 @@ export interface AttendanceDetailProps extends PageProps {
     pendingCorrection: (AttendanceCorrection & {
         rest_corrections: RestCorrection[];
     }) | null;
-}
+}>;
 
 /**
  * 勤怠詳細ページ (一般ユーザー用)

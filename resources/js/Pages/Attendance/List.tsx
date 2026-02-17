@@ -7,14 +7,14 @@ import MonthNavigation from '@/Components/MonthNavigation';
 /**
  * 勤怠一覧ページの Props 定義
  */
-export interface AttendanceListProps extends PageProps {
+export type AttendanceListProps = PageProps<{
     calendarData: CalendarDay[];
     navigation: {
         currentMonth: string;
         prevMonth: string;
         nextMonth: string;
     };
-}
+}>;
 
 export default function List({
     calendarData,

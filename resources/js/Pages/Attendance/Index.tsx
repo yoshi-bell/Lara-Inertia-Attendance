@@ -1,18 +1,19 @@
 import AttendanceLayout from '@/Layouts/AttendanceLayout';
 import { Button } from '@/Components/ui/button';
 import { Head, router } from '@inertiajs/react';
+import { PageProps } from '@/types';
 import { useEffect, useState } from 'react';
 
-interface Props {
+type IndexProps = PageProps<{
     attendanceStatus: {
         statusText: string;
         isWorking: boolean;
         isOnBreak: boolean;
         hasFinishedWork: boolean;
     };
-}
+}>;
 
-export default function Index({ attendanceStatus }: Props) {
+export default function Index({ attendanceStatus }: IndexProps) {
     const [currentTime, setCurrentTime] = useState(new Date());
 
     // リアルタイム時計の更新

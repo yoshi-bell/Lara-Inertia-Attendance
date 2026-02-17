@@ -4,14 +4,16 @@ import { PageProps } from '@/types';
 import { AttendanceCorrection, Attendance } from '@/types/models';
 import CorrectionList from '@/Components/CorrectionList';
 
-interface Props extends PageProps {
+/* cspell:ignore inertiajs */
+
+type CorrectionListProps = PageProps<{
     corrections: (AttendanceCorrection & {
         attendance: Attendance;
     })[];
     status: 'pending' | 'approved';
-}
+}>;
 
-export default function CorrectionListPage({ corrections, status, auth }: Props) {
+export default function CorrectionListPage({ corrections, status, auth }: CorrectionListProps) {
     return (
         <AttendanceLayout title="申請一覧">
             <Head title="申請一覧" />
