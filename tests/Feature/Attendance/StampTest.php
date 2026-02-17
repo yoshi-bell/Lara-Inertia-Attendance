@@ -4,7 +4,6 @@ namespace Tests\Feature\Attendance;
 
 use App\Models\Attendance;
 use App\Models\User;
-use App\Models\Rest;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -34,7 +33,7 @@ class StampTest extends TestCase
         $user = User::factory()->create();
 
         $this->actingAs($user)->get(route('attendance'))->assertInertia(
-            fn(Assert $page) => $page
+            fn (Assert $page) => $page
                 ->component('Attendance/Index')
                 ->where('attendanceStatus.statusText', '勤務外')
                 ->where('attendanceStatus.isWorking', false)
@@ -61,7 +60,7 @@ class StampTest extends TestCase
         $response->assertRedirect(route('attendance'));
 
         $this->get(route('attendance'))->assertInertia(
-            fn(Assert $page) => $page
+            fn (Assert $page) => $page
                 ->where('attendanceStatus.statusText', '勤務中')
                 ->where('attendanceStatus.isWorking', true)
         );
@@ -90,7 +89,7 @@ class StampTest extends TestCase
         $response->assertRedirect(route('attendance'));
 
         $this->get(route('attendance'))->assertInertia(
-            fn(Assert $page) => $page
+            fn (Assert $page) => $page
                 ->where('attendanceStatus.statusText', '勤務終了')
                 ->where('attendanceStatus.hasFinishedWork', true)
         );
@@ -120,7 +119,7 @@ class StampTest extends TestCase
         $response->assertRedirect(route('attendance'));
 
         $this->get(route('attendance'))->assertInertia(
-            fn(Assert $page) => $page
+            fn (Assert $page) => $page
                 ->where('attendanceStatus.statusText', '休憩中')
                 ->where('attendanceStatus.isOnBreak', true)
         );
@@ -154,7 +153,7 @@ class StampTest extends TestCase
         $response->assertRedirect(route('attendance'));
 
         $this->get(route('attendance'))->assertInertia(
-            fn(Assert $page) => $page
+            fn (Assert $page) => $page
                 ->where('attendanceStatus.statusText', '勤務中')
                 ->where('attendanceStatus.isOnBreak', false)
         );
@@ -185,10 +184,10 @@ class StampTest extends TestCase
 
         // 修正: has() を用いて、配列内の特定の要素を安全かつ詳細に検証
         $response->assertInertia(
-            fn(Assert $page) => $page
+            fn (Assert $page) => $page
                 ->has(
                     'calendarData.11',
-                    fn(Assert $day) => $day // 12日はインデックス11
+                    fn (Assert $day) => $day // 12日はインデックス11
                         ->where('date', '02/12(木)')
                         ->where('attendance.start_time', '09:30')
                         ->where('attendance.end_time', '18:30')

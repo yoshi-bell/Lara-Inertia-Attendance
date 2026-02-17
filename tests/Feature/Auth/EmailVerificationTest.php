@@ -4,13 +4,13 @@ namespace Tests\Feature\Auth;
 
 use App\Models\User;
 use Illuminate\Auth\Events\Verified;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\URL;
-use Tests\TestCase;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Support\Facades\URL;
 use Inertia\Testing\AssertableInertia as Assert;
+use Tests\TestCase;
 
 class EmailVerificationTest extends TestCase
 {
@@ -27,7 +27,7 @@ class EmailVerificationTest extends TestCase
 
         // Inertia のコンポーネント名を確認することで、正しく表示されているか検証
         $response->assertInertia(
-            fn(Assert $page) => $page
+            fn (Assert $page) => $page
                 ->component('Auth/VerifyEmail')
         );
     }
@@ -67,7 +67,7 @@ class EmailVerificationTest extends TestCase
         $this->assertTrue($user->fresh()->hasVerifiedEmail());
 
         // リダイレクト先は一元管理設定に従う
-        $response->assertRedirect(route(config('project.home_route'), absolute: false) . '?verified=1');
+        $response->assertRedirect(route(config('project.home_route'), absolute: false).'?verified=1');
     }
 
     /** @test */
