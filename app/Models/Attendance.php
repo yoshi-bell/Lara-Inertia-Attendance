@@ -48,22 +48,22 @@ class Attendance extends Model
      */
     protected function isEditable(): Attribute
     {
-        return Attribute::get(function () {
-            // 1. 退勤済みなら無条件で修正可能
-            if (!is_null($this->end_time)) {
-                return true;
+        return Attribute::make(
+            get: function (mixed $value, array $attributes) {
+                // 1. 退勤済み (end_time がある) なら true
+                if (!empty($attributes['end_time'])) {
+                    return true;
+                }
+
+                // 2. 未退勤の場合、業務上の日付が過ぎているか判定
+                $workDate = Carbon::parse($attributes['work_date'])->startOfDay();
+                // 業務日付の境界: 現在時刻から5時間引いた日の0時
+                $currentBusinessDate = Carbon::now()->subHours(5)->startOfDay();
+
+                // 勤務日が過去なら true (退勤忘れ扱い)
+                return $workDate->lt($currentBusinessDate);
             }
-
-            // 2. 未退勤の場合、業務上の日付が過ぎているか判定
-            // 記録上の勤務日
-            $workDate = Carbon::parse($this->work_date)->startOfDay();
-
-            // 現在の業務日付 (例: 2/13 02:00 なら、業務上はまだ 2/12)
-            $currentBusinessDate = Carbon::now()->subHours(5)->startOfDay();
-
-            // 勤務日が現在の業務日付より過去であれば、修正を許可
-            return $workDate->lt($currentBusinessDate);
-        });
+        );
     }
 
     /**
