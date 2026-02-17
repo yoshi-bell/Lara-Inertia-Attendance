@@ -5,12 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\LoginRequest;
 use App\Models\User;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Http\RedirectResponse;
 
 /**
  * 管理者ログイン用コントローラー
@@ -41,7 +41,6 @@ class LoginController extends Controller
             // 管理者フラグのチェック
             if ($user && $user->is_admin) {
                 $request->session()->regenerate();
-
                 // 日次勤怠一覧（Phase 4 のメイン画面）へリダイレクト
                 return redirect()->intended(route('admin.attendance.index'));
             }

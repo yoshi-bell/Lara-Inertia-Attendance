@@ -7,9 +7,9 @@ use App\Models\User;
 use App\Services\CalendarService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Response as FacadesResponse;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Support\Facades\Response as FacadesResponse;
 
 /**
  * 管理者用スタッフ管理コントローラー
@@ -64,11 +64,11 @@ class StaffController extends Controller
         $currentDate = Carbon::parse($monthStr)->startOfMonth();
         $calendarData = $this->calendarService->generate($user, $currentDate);
 
-        $fileName = 'attendance_'.$user->name.'_'.$currentDate->format('Ym').'.csv';
+        $fileName = 'attendance_' . $user->name . '_' . $currentDate->format('Ym') . '.csv';
 
         $headers = [
             'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="'.$fileName.'"',
+            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
         ];
 
         $callback = function () use ($calendarData) {

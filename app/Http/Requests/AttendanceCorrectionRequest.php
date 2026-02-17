@@ -4,10 +4,10 @@ namespace App\Http\Requests;
 
 use App\Models\Attendance;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Validator;
+use Carbon\Carbon;
 
 /**
  * 勤怠修正申請のバリデーション
@@ -33,7 +33,7 @@ class AttendanceCorrectionRequest extends FormRequest
 
     /**
      * バリデーションルール
-     *
+     * 
      * @return array<string, array<int, string>>
      */
     public function rules(): array
@@ -46,25 +46,25 @@ class AttendanceCorrectionRequest extends FormRequest
 
             // 休憩関連 (配列要素の検証)
             'rests.*.start_time' => [
-                'nullable',
-                'required_with:rests.*.end_time',
-                'date_format:H:i',
-                'after:requested_start_time',
-                'before:requested_end_time',
+                'nullable', 
+                'required_with:rests.*.end_time', 
+                'date_format:H:i', 
+                'after:requested_start_time', 
+                'before:requested_end_time'
             ],
             'rests.*.end_time' => [
-                'nullable',
-                'required_with:rests.*.start_time',
-                'date_format:H:i',
-                'after:rests.*.start_time',
-                'before:requested_end_time',
+                'nullable', 
+                'required_with:rests.*.start_time', 
+                'date_format:H:i', 
+                'after:rests.*.start_time', 
+                'before:requested_end_time'
             ],
         ];
     }
 
     /**
      * エラーメッセージ
-     *
+     * 
      * @return array<string, string>
      */
     public function messages(): array
@@ -94,11 +94,11 @@ class AttendanceCorrectionRequest extends FormRequest
             $intervals = [];
 
             foreach ($rests as $key => $rest) {
-                if (! empty($rest['start_time']) && ! empty($rest['end_time'])) {
+                if (!empty($rest['start_time']) && !empty($rest['end_time'])) {
                     $intervals[] = [
                         'start' => Carbon::parse($rest['start_time']),
                         'end' => Carbon::parse($rest['end_time']),
-                        'key' => $key,
+                        'key' => $key
                     ];
                 }
             }

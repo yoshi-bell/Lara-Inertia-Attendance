@@ -3,6 +3,7 @@
 namespace Tests\Unit\Models;
 
 use App\Models\Attendance;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;

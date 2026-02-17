@@ -19,7 +19,7 @@ class LoginRequest extends FormRequest
 
     /**
      * バリデーションルール
-     *
+     * 
      * @return array<string, array<int, string>>
      */
     public function rules(): array
@@ -32,7 +32,7 @@ class LoginRequest extends FormRequest
 
     /**
      * エラーメッセージ (FN016 の文言を遵守)
-     *
+     * 
      * @return array<string, string>
      */
     public function messages(): array

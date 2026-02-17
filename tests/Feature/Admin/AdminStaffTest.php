@@ -49,7 +49,7 @@ class AdminStaffTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertInertia(
-            fn (Assert $page) => $page
+            fn(Assert $page) => $page
                 ->component('Admin/Staff/List')
                 ->has('staffs', 2)
                 ->where('staffs.0.name', 'テストスタッフ1') // ID昇順仕様の確認
@@ -89,12 +89,12 @@ class AdminStaffTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertInertia(
-            fn (Assert $page) => $page
+            fn(Assert $page) => $page
                 ->component('Admin/Staff/AttendanceList')
                 ->where('staff.name', '佐藤太郎')
                 ->has(
                     'calendarData.11',
-                    fn (Assert $day) => $day
+                    fn(Assert $day) => $day
                         ->where('date', '02/12(木)')
                         ->where('attendance.start_time', '09:00')
                         ->where('attendance.end_time', '18:00')
@@ -114,11 +114,11 @@ class AdminStaffTest extends TestCase
         // 1月のデータを取得
         $response = $this->actingAs($admin)->get(route('admin.staff.attendance.show', [
             'user' => $staff->id,
-            'month' => '2026-01',
+            'month' => '2026-01'
         ]));
 
         $response->assertInertia(
-            fn (Assert $page) => $page
+            fn(Assert $page) => $page
                 ->where('navigation.currentMonth', '2026年01月')
                 ->where('navigation.prevMonth', '2025-12')
                 ->where('navigation.nextMonth', '2026-02')

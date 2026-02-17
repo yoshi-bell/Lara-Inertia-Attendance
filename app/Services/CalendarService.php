@@ -10,7 +10,9 @@ class CalendarService
 {
     /**
      * 指定ユーザーの月次勤怠カレンダーデータを生成する
-     *
+     * 
+     * @param User $user
+     * @param Carbon $currentDate
      * @return array<int, array{
      *     date: string,
      *     attendance: array{

@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AttendanceCorrectionRequest;
 use App\Models\Attendance;
 use Carbon\Carbon;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\AttendanceCorrectionRequest;
+use Illuminate\Support\Facades\DB;
 
 /**
  * 管理者用勤怠管理コントローラー (US010, US011)
@@ -55,7 +55,7 @@ class AttendanceController extends Controller
             'rests',
             'corrections' => function ($query) {
                 $query->where('status', 'pending')->with('restCorrections')->latest();
-            },
+            }
         ]);
 
         return Inertia::render('Admin/Attendance/Detail', [
@@ -70,7 +70,7 @@ class AttendanceController extends Controller
     public function update(AttendanceCorrectionRequest $request, Attendance $attendance): RedirectResponse
     {
         // 業務時間中（当日）の不正更新を防止 (SSOTガード)
-        if (! $attendance->is_editable) {
+        if (!$attendance->is_editable) {
             abort(403, '当日の勤怠データは更新できません。');
         }
 
@@ -80,18 +80,18 @@ class AttendanceController extends Controller
         DB::transaction(function () use ($attendance, $data, $workDate) {
             // 勤怠本体の更新
             $attendance->update([
-                'start_time' => $workDate.' '.$data['requested_start_time'],
-                'end_time' => $workDate.' '.$data['requested_end_time'],
+                'start_time' => $workDate . ' ' . $data['requested_start_time'],
+                'end_time' => $workDate . ' ' . $data['requested_end_time'],
             ]);
 
             // 休憩データの再構築 (一度全て削除してから新規作成)
             $attendance->rests()->delete();
-            if (! empty($data['rests'])) {
+            if (!empty($data['rests'])) {
                 foreach ($data['rests'] as $restData) {
-                    if (! empty($restData['start_time']) && ! empty($restData['end_time'])) {
+                    if (!empty($restData['start_time']) && !empty($restData['end_time'])) {
                         $attendance->rests()->create([
-                            'start_time' => $workDate.' '.$restData['start_time'],
-                            'end_time' => $workDate.' '.$restData['end_time'],
+                            'start_time' => $workDate . ' ' . $restData['start_time'],
+                            'end_time' => $workDate . ' ' . $restData['end_time'],
                         ]);
                     }
                 }

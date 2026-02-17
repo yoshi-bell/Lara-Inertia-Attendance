@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\AttendanceCorrection;
 use App\Services\CorrectionService;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Http\RedirectResponse;
 
 /**
  * 管理者用修正申請管理コントローラー (US014, US015)
@@ -52,7 +52,7 @@ class CorrectionRequestController extends Controller
             'requester',
             'attendance.user',
             'attendance.rests',
-            'restCorrections',
+            'restCorrections'
         ]);
 
         return Inertia::render('Admin/CorrectionRequest/Approve', [

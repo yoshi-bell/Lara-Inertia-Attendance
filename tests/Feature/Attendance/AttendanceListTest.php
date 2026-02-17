@@ -4,6 +4,7 @@ namespace Tests\Feature\Attendance;
 
 use App\Models\Attendance;
 use App\Models\User;
+use App\Models\Rest;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -40,7 +41,7 @@ class AttendanceListTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->create();
-
+        
         // 自分の勤怠データを作成 (12日分として作成)
         Attendance::create([
             'user_id' => $user->id,
@@ -120,7 +121,7 @@ class AttendanceListTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->create();
-
+        
         $attendance = Attendance::create([
             'user_id' => $user->id,
             'work_date' => '2026-02-12',
@@ -143,7 +144,7 @@ class AttendanceListTest extends TestCase
         $user = User::factory()->create();
         /** @var User $otherUser */
         $otherUser = User::factory()->create();
-
+        
         $otherAttendance = Attendance::create([
             'user_id' => $otherUser->id,
             'work_date' => '2026-02-12',

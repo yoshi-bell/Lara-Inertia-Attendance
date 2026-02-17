@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Carbon\Carbon;
 
 /**
  * 勤怠記録モデル
@@ -51,7 +51,7 @@ class Attendance extends Model
         return Attribute::make(
             get: function (mixed $value, array $attributes) {
                 // 1. 退勤済み (end_time がある) なら true
-                if (! empty($attributes['end_time'])) {
+                if (!empty($attributes['end_time'])) {
                     return true;
                 }
 
@@ -126,12 +126,15 @@ class Attendance extends Model
 
     /**
      * 日付を日本語の曜日付きでフォーマットする静的ヘルパー
+     *
+     * @param Carbon $date
+     * @param string $format
+     * @return string
      */
     public static function getFormattedDateWithDay(Carbon $date, string $format = 'Y年m月d日'): string
     {
         $week = ['日', '月', '火', '水', '木', '金', '土'];
-
-        return $date->format($format).'('.$week[$date->dayOfWeek].')';
+        return $date->format($format) . '(' . $week[$date->dayOfWeek] . ')';
     }
 
     /**
@@ -156,7 +159,6 @@ class Attendance extends Model
                     $totalSeconds += $start->diffInSeconds($end);
                 }
             }
-
             return $this->formatSecondsToHi($totalSeconds);
         });
     }
@@ -167,7 +169,7 @@ class Attendance extends Model
     protected function workTime(): Attribute
     {
         return Attribute::get(function () {
-            if (! $this->start_time || ! $this->end_time) {
+            if (!$this->start_time || !$this->end_time) {
                 return null;
             }
 
@@ -206,6 +208,9 @@ class Attendance extends Model
 
     /**
      * 秒数を H:i 形式の文字列にフォーマットする内部ヘルパー
+     *
+     * @param int $seconds
+     * @return string
      */
     private function formatSecondsToHi(int $seconds): string
     {

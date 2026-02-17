@@ -19,9 +19,7 @@ use Inertia\Response;
 class AttendanceController extends Controller
 {
     private AttendanceService $attendanceService;
-
     private CalendarService $calendarService;
-
     private CorrectionService $correctionService;
 
     public function __construct(
@@ -84,7 +82,7 @@ class AttendanceController extends Controller
             'rests',
             'corrections' => function ($query) {
                 $query->where('status', 'pending')->with('restCorrections')->latest();
-            },
+            }
         ]);
 
         return Inertia::render('Attendance/Detail', [
@@ -101,7 +99,6 @@ class AttendanceController extends Controller
         /** @var User $user */
         $user = Auth::user();
         $this->attendanceService->startWork($user);
-
         return redirect()->route('attendance');
     }
 
@@ -113,7 +110,6 @@ class AttendanceController extends Controller
         /** @var User $user */
         $user = Auth::user();
         $this->attendanceService->endWork($user);
-
         return redirect()->route('attendance');
     }
 
@@ -125,7 +121,6 @@ class AttendanceController extends Controller
         /** @var User $user */
         $user = Auth::user();
         $this->attendanceService->startRest($user);
-
         return redirect()->route('attendance');
     }
 
@@ -137,7 +132,6 @@ class AttendanceController extends Controller
         /** @var User $user */
         $user = Auth::user();
         $this->attendanceService->endRest($user);
-
         return redirect()->route('attendance');
     }
 

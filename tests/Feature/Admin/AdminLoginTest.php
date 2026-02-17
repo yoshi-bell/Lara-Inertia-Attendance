@@ -43,7 +43,7 @@ class AdminLoginTest extends TestCase
         ]);
 
         $this->assertAuthenticatedAs($admin);
-
+        
         // 管理者用ホームページへリダイレクト
         $response->assertRedirect(route('admin.attendance.index'));
     }
