@@ -588,3 +588,19 @@
     - `git checkout HEAD -- docs-private/` により、最新のドキュメント類のみを現在の `HEAD` から合流。
     - 不備のあった `ci.yml` も、過去の成功地点（`16d5862`）からピンポイントで復元。
 - **成果:** 全てのテスト（94件）が GitHub Actions 上で正常にパスし、システム・歴史・ドキュメントの三者が「真の正解」で完全に同期された。
+
+---
+
+## 2026-02-17 (続き): リファクタリング Phase 1 の着手と型定義の基盤強化
+
+### 1. TypeScript 型定義の高度化と厳密化 (Findy スコア向上対策)
+- **`utils.d.ts` の新設:** プロジェクト固有のユーティリティ型（`NonNullableFields`）や、Laravel 特有のレスポンス型（`PaginatedResponse`）を定義。
+- **`PageProps` の強化:** `types/index.d.ts` において `PageProps` をジェネリクス化し、`auth` や `flash` の型を明示。ESLint の `no-empty-object-type` 警告を考慮し、デフォルト型引数に `Record<string, unknown>` を採用。
+- **実装と型定義の分離:** `.d.ts` ファイルにロジック（型ガード）を書かない原則を徹底し、実装は `lib/utils.ts`、型は `types/utils.d.ts` へ適切に配置。
+
+### 2. 型ガードの実装と品質保証
+- **Type Guard 導入:** `unknown` を安全に絞り込む `isObject` 関数を実装。
+- **回帰検証の徹底:** 
+    - **型チェック:** `npx tsc --noEmit` により、既存ページへの影響がないことを確認。
+    - **単体テスト:** `utils.test.ts` を新規作成し、型ガードの論理的正確性を Vitest で証明。
+- **技術的知見:** 「any を消す」から「unknown を論理的に絞り込む（Type Guard）」スタイルへの昇華を開始。

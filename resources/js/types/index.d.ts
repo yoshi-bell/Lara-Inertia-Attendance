@@ -1,3 +1,5 @@
+import { FlashMessage } from './utils';
+
 export interface User {
     id: number;
     name: string;
@@ -12,14 +14,13 @@ export interface User {
  */
 export type AttendanceStatusType = 'working' | 'break' | 'finished' | 'none';
 
-export type PageProps<
-    T extends Record<string, unknown> = Record<string, unknown>,
-> = T & {
+/**
+ * Inertia の共有 Props 型定義
+ * T は各ページ固有の Props 型
+ */
+export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
     auth: {
         user: User;
     };
-    flash: {
-        success: string | null;
-        error: string | null;
-    };
+    flash: FlashMessage;
 };

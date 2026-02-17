@@ -102,8 +102,8 @@ Playwrightテストの「高速化」と「安定性」を両立するため、�
 > AIエージェントは作業中、常にここを更新すること。
 
 **現在のフェーズ:** Phase 6: テストの実装と自動化 (Testing & Automation)
-**現在のアクティブタスク:** プロジェクト全体のリファクタリング検討
-**ステータス:** 2026-02-17 全 94 件のテストが GitHub Actions 上で完全合格。CI/CD パイプラインと PR 運用フローが確立され、極めて堅牢な品質管理体制が完成。次はリファクタリングによるコードの洗練を開始。
+**現在のアクティブタスク:** 08_REFACTORING_ROADMAP.md に基づくリファクタリングの実施
+**ステータス:** 2026-02-17 全 94 件のテストが GitHub Actions 上で完全合格。CI/CD パイプラインと PR 運用フローが確立。現在は 08_REFACTORING_ROADMAP.md のプランに沿って、Findy スコア向上と型安全性の強化を目的としたリファクタリング（Phase 1: 型定義の基盤強化）を推進中。
 
 ---
 
@@ -175,3 +175,31 @@ Playwrightテストの「高速化」と「安定性」を両立するため、�
     * [x] 複雑なビジネスロジックや共通コンポーネントの網羅テスト。
 * [x] **[Automation] GitHub Actions:** Lint, Featureテスト, E2Eテストの自動実行パイプライン構築。
 * [ ] **README整備:** プロジェクト概要とセットアップ手順の最終化。
+
+
+## 2. リファクタリング・ロードマップ (Score 60.0+ への挑戦)
+
+### 🛡️ リファクタリングの鉄則 (Guiding Principles)
+* **見た目を変えない:** リファクタリングの正解は「UIや挙動に変化がないこと」である。
+* **回帰テストの徹底:** 変更のたびに `npm run test:unit` および `npx playwright test` を実行し、既存機能のデグレードがないことを機械的に保証する。
+* **厳格な型チェック:** `npx tsc --noEmit` を実行し、TypeScript エラーが 0 であることを各タスクの完了条件とする。
+* **原子的なコミット:** 影響範囲を抑えるため、「ページ単位」「型定義単位」など、可能な限り細かく刻んでコミットし、トラブル時の切り分けを容易にする。
+
+### Phase 1: 型定義の基盤強化 (Quick Wins & Logic)
+* [x] **PageProps 厳密化:** `resources/js/types/index.d.ts` のジェネリクス化と共有データの明示。
+* [x] **`utils.d.ts` 新設:** `NonNullableFields<T>`, `PaginatedResponse<T>` 等の高度なユーティリティ型定義。
+* [ ] **Type Guard の導入:** `isUser`, `isAttendance` などの型ガード関数による `unknown` の安全な絞り込み。
+* [ ] **定数管理の徹底:** マジックナンバーを排除し、`as const` + Union Types へ移行。
+
+### Phase 2: サーバー駆動型 SSOT の確立
+* [ ] **`spatie/laravel-data` 導入:** バックエンドでの Data Object 定義。
+* [ ] **TypeScript 自動生成:** PHP モデル・Data Object から TS 型定義を自動出力する環境構築。
+* [ ] **型チェーンの完成:** Service → Data → Inertia → Props の一貫した型安全性の確保。
+
+### Phase 3: ランタイム安全性の確保 (Zod 統合)
+* [ ] **スキーマ駆動開発:** `CorrectionForm` 等への Zod 導入と `z.infer` による型生成。
+* [ ] **バリデーションの統合:** フロントエンド即時検証とバックエンド検証の役割分担。
+
+### Phase 4: 抽象化とアーキテクチャの洗練
+* [ ] **ジェネリクス・コンポーネント:** 汎用的なリスト部品やテーブルラッパーの抽出。
+* [ ] **Pragmatic Atomic Design:** `Components/ui` (Shadcn) とドメイン特定コンポーネントの分離。
