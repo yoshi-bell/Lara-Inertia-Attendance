@@ -20,7 +20,10 @@ type AdminAttendanceListItem = Attendance & {
     user: { name: string };
 };
 
-export interface AdminAttendanceIndexProps extends PageProps {
+/**
+ * 管理者：日次勤怠一覧ページの Props
+ */
+export type AdminAttendanceIndexProps = PageProps<{
     attendances: AdminAttendanceListItem[];
     navigation: {
         date: string;
@@ -29,7 +32,7 @@ export interface AdminAttendanceIndexProps extends PageProps {
         nextDate: string;
         today: string;
     };
-}
+}>;
 
 export default function Index({ attendances, navigation }: AdminAttendanceIndexProps) {
     const handleDateChange = (newDate: string) => {

@@ -1,5 +1,7 @@
 import AttendanceLayout from '@/Layouts/AttendanceLayout';
 import { Head } from '@inertiajs/react';
+
+/* cspell:ignore inertiajs */
 import { PageProps } from '@/types';
 import { Attendance, AttendanceCorrection, Rest, RestCorrection } from '@/types/models';
 import { Button } from '@/Components/ui/button';
@@ -12,7 +14,7 @@ import React from 'react';
  * 勤怠詳細ページ Props (管理者用)
  * 全てのモデル定義を @/types/models からインポートし、一本化
  */
-export interface AdminAttendanceDetailProps extends PageProps {
+export type AdminAttendanceDetailProps = PageProps<{
     attendance: Attendance & {
         user: { name: string };
         rests: Rest[];
@@ -20,7 +22,7 @@ export interface AdminAttendanceDetailProps extends PageProps {
     pendingCorrection: (AttendanceCorrection & {
         rest_corrections: RestCorrection[];
     }) | null;
-}
+}>;
 
 /**
  * 勤怠詳細ページ (管理者用)

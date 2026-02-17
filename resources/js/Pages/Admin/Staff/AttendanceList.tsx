@@ -5,7 +5,7 @@ import { User } from '@/types/models';
 import AttendanceTable, { CalendarDay } from '@/Components/AttendanceTable';
 import MonthNavigation from '@/Components/MonthNavigation';
 
-interface AdminStaffDetailProps extends PageProps {
+type AdminStaffDetailProps = PageProps<{
     staff: User;
     calendarData: CalendarDay[];
     navigation: {
@@ -13,7 +13,7 @@ interface AdminStaffDetailProps extends PageProps {
         prevMonth: string;
         nextMonth: string;
     };
-}
+}>;
 
 export default function AttendanceList({
     staff,

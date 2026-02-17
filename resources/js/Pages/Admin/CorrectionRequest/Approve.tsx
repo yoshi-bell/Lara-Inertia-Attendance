@@ -10,18 +10,18 @@ import React from 'react';
 /**
  * 管理者用承認画面の Props
  */
-interface Props extends PageProps {
+type ApproveProps = PageProps<{
     correction: AttendanceCorrection & {
         requester: { name: string };
         attendance: Attendance & { user: { name: string }; rests: Rest[] };
         rest_corrections: RestCorrection[];
     };
-}
+}>;
 
 /**
  * 管理者用修正申請承認画面 (US015)
  */
-export default function Approve({ correction, flash }: Props) {
+export default function Approve({ correction, flash }: ApproveProps) {
     // 承認処理のための最小限のフォーム機能 (データ保持は不要)
     const { post, processing } = useForm();
 

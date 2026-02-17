@@ -186,8 +186,8 @@ Playwrightテストの「高速化」と「安定性」を両立するため、�
 * **原子的なコミット:** 影響範囲を抑えるため、「ページ単位」「型定義単位」など、可能な限り細かく刻んでコミットし、トラブル時の切り分けを容易にする。
 
 ### Phase 1: 型定義の基盤強化 (Quick Wins & Logic)
-* [x] **PageProps 厳密化:** `resources/js/types/index.d.ts` のジェネリクス化と共有データの明示。
-* [x] **`utils.d.ts` 新設:** `NonNullableFields<T>`, `PaginatedResponse<T>` 等の高度なユーティリティ型定義。
+* [x] **PageProps 厳密化:** 一般ユーザー側・管理者側の全ページにおけるジェネリクス化と共有データの明示。
+* [x] **utils.d.ts 新設:** `NonNullableFields<T>`, `PaginatedResponse<T>` 等の高度なユーティリティ型定義。
 * [x] **Type Guard の導入:** `isUser`, `isAttendance` などの型ガード関数による `unknown` の安全な絞り込み（Grade S 対応）。
 * [ ] **定数管理の徹底:** マジックナンバーを排除し、`as const` + Union Types へ移行。
 

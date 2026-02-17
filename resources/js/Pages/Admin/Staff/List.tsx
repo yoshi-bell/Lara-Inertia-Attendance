@@ -11,9 +11,9 @@ import {
     TableRow,
 } from '@/Components/ui/table';
 
-interface AdminStaffListProps extends PageProps {
+type AdminStaffListProps = PageProps<{
     staffs: User[];
-}
+}>;
 
 export default function List({ staffs }: AdminStaffListProps) {
     return (

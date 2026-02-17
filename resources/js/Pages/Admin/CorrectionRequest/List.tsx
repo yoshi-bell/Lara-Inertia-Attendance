@@ -4,13 +4,13 @@ import { PageProps } from '@/types';
 import { AttendanceCorrection, Attendance } from '@/types/models';
 import CorrectionList from '@/Components/CorrectionList';
 
-interface ListProps extends PageProps {
+type ListProps = PageProps<{
     corrections: (AttendanceCorrection & {
         attendance: Attendance;
         requester: { name: string };
     })[];
     status: 'pending' | 'approved';
-}
+}>;
 
 /**
  * 管理者用修正申請一覧ページ (US014)
