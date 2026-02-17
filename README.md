@@ -12,7 +12,11 @@
 - **高度なビジネスロジック:** 
     - 24時間を超える勤務や、深夜0時を跨ぐ休憩時間も正確に算出する「深夜勤務対応ロジック」を搭載。
     - リダイレクト先などの重要設定を `config/project.php` に集約し、高いメンテナンス性を確保。
-- **コンポーネント指向:** 勤怠テーブルやナビゲーションを共通パーツ化し、DRY（Don't Repeat Yourself）原則を徹底。
+- **品質保証の徹底:** 
+    - **GitHub Actions (CI)** による継続的インテグレーション。
+    - **Playwright** によるブラウザ自動テスト。
+    - **Vitest** によるコンポーネント単体テスト。
+    - 合計 94 件のテストケースを 100% カバー。
 
 ---
 
@@ -20,9 +24,9 @@
 
 ### Backend
 - **Framework:** Laravel 12 (PHP 8.4)
-- **Authentication:** Laravel Breeze (Inertia版)
+- **Authentication:** Laravel Breeze (Inertia/React版)
 - **Database:** MySQL 8.0
-- **Dev Tool:** Laravel Sail (Docker), Laravel Pint
+- **Quality:** Laravel Pint, PHPUnit (Feature Test)
 
 ### Frontend
 - **Library:** React 19
@@ -30,6 +34,7 @@
 - **Bridge:** Inertia.js v2
 - **Styling:** Tailwind CSS, Shadcn/ui
 - **Icons:** Lucide React
+- **Quality:** ESLint, Prettier, Vitest (Unit Test), Playwright (E2E Test)
 
 ---
 
@@ -46,6 +51,30 @@
 - **スタッフ管理:** 全一般ユーザーの一覧表示と、スタッフ別の月次詳細閲覧。
 - **CSVエクスポート:** 各スタッフの月次勤怠データを Excel 対応形式 (CP932) で出力。
 - **申請承認フロー:** ユーザーからの修正申請を一括管理し、ワンクリックで承認・データ反映。
+
+---
+
+## 🧪 テストと品質管理
+
+堅牢なアプリケーションを維持するため、多層的な自動テストを導入しています。
+
+### テスト実行
+```bash
+# 全てのバックエンドテスト (Feature / Model)
+./vendor/bin/sail test
+
+# フロントエンド単体テスト (Vitest)
+./vendor/bin/sail npm run test:unit
+
+# E2E テスト (Playwright)
+./vendor/bin/sail npm run test:e2e
+```
+
+### GitHub Actions (CI)
+GitHub へプッシュ・PR作成を行うたびに、以下の工程が自動実行されます。
+1. **Lint:** PHP (Pint) / JS (ESLint) の整形・規約チェック
+2. **Build:** TypeScript のコンパイルおよび Vite ビルド
+3. **Tests:** PHPUnit / Vitest / Playwright の全 94 件のテスト実行
 
 ---
 
