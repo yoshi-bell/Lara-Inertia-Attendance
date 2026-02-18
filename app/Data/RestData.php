@@ -13,6 +13,5 @@ class RestData extends Data
         public int $attendance_id,
         public ?string $start_time_hi,
         public ?string $end_time_hi,
-    ) {
-    }
+    ) {}
 }

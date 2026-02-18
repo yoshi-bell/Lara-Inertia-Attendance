@@ -3,8 +3,8 @@
 namespace App\Data;
 
 use Spatie\LaravelData\Data;
-use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 use Spatie\LaravelData\DataCollection;
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
 class AttendanceData extends Data
@@ -22,6 +22,5 @@ class AttendanceData extends Data
         /** @var \Spatie\LaravelData\DataCollection<\App\Data\RestData> */
         public DataCollection $rests,
         public UserData $user,
-    ) {
-    }
+    ) {}
 }
