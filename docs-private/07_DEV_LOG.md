@@ -676,3 +676,11 @@
 - **依存関係の整理:** 未インストールパッケージ（`spatie/php-enum`）への依存によるトランスフォームエラーを解消。
 - **最初の SSOT 実装:** `app/Data/UserData.php` を作成し、`php artisan typescript:transform` コマンドにより PHP クラスから TypeScript 型定義が正しく生成されることを確認。
 - **成果:** バックエンドの Data オブジェクトを「唯一の正解」としてフロントエンドへ伝搬させるパイプラインが完成。
+
+---
+
+### 3. ドメインモデルの Data Object 化と型チェーンの構築
+- **Data Object の定義:** `RestData.php`, `AttendanceData.php` を作成。DB カラム（倉庫）とフロントエンド要求（契約）を分離し、必要なプロパティのみを明示的に定義。
+- **ネスト構造の同期:** `AttendanceData` 内に `DataCollection<RestData>` を含めることで、リレーション構造を維持したまま型生成することに成功。
+- **自動同期の証明:** `typescript:transform` により、PHP の Nullable 型やコレクション構造が `generated.d.ts` に正確に反映されることを確認。
+- **設計の知恵:** 手動定義（d.ts）の「二重管理リスク」を排除し、Data クラスを「唯一の正解（SSOT）」とするアーキテクチャ基盤を確立。
