@@ -116,6 +116,8 @@
 ✅ リファクタリング Phase 2 の開始。DTO 基盤 (spatie/laravel-data) および TypeScript 自動生成ツールの導入と初期設定の完了。
 ✅ PHP クラスから TypeScript 型定義 (generated.d.ts) を自動出力するパイプラインの確立。
 ✅ 主要ドメイン（User, Attendance, Rest）の Data Object 定義と、ネスト構造を含む型生成の成功。
+✅ 手動定義 (models.d.ts) の廃止と、自動生成型定義 (generated.d.ts) への完全移行 (真の SSOT 体制確立)。
+✅ 不要な初期ファイル（Profile, Dashboard 等）の一掃と、コードベースのミニマリズム化。
 
 未完了・次のタスク:
 🚀 リファクタリング Phase 2: サーバー駆動型 SSOT の確立。

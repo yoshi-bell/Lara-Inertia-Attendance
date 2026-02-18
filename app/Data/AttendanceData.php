@@ -18,9 +18,10 @@ class AttendanceData extends Data
         public ?string $total_rest_time,
         public ?string $work_time,
         public bool $is_editable,
-        /** @var DataCollection<RestData> */
-        public ?DataCollection $rests,
-        public ?UserData $user,
+        public string $updated_at,
+        /** @var \Spatie\LaravelData\DataCollection<\App\Data\RestData> */
+        public DataCollection $rests,
+        public UserData $user,
     ) {
     }
 }

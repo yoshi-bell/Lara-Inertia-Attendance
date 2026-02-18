@@ -8,8 +8,9 @@ declare namespace App.Data {
         total_rest_time: string | null;
         work_time: string | null;
         is_editable: boolean;
-        rests: Array<App.Data.RestData> | null;
-        user: App.Data.UserData | null;
+        updated_at: string;
+        rests: Array<App.Data.RestData>;
+        user: App.Data.UserData;
     };
     export type RestData = {
         id: number;
@@ -21,6 +22,7 @@ declare namespace App.Data {
         id: number;
         name: string;
         email: string;
+        email_verified_at: string | null;
         is_admin: boolean;
     };
 }

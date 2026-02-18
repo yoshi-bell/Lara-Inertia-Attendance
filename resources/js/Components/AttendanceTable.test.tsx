@@ -21,8 +21,8 @@ describe('AttendanceTable Component', () => {
             date: '2026/02/12（木）',
             attendance: {
                 id: 101,
-                start_time: '09:00',
-                end_time: '18:00',
+                start_time_hi: '09:00',
+                end_time_hi: '18:00',
                 total_rest_time: '01:00',
                 work_time: '08:00',
             },

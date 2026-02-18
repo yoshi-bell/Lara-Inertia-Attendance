@@ -91,8 +91,8 @@ export default function Index({ attendances, navigation }: AdminAttendanceIndexP
                                     }`}
                                 >
                                     <TableCell className="px-10 text-left">{attendance.user.name}</TableCell>
-                                    <TableCell>{attendance.start_time ? new Date(attendance.start_time).toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' }) : ''}</TableCell>
-                                    <TableCell>{attendance.end_time ? new Date(attendance.end_time).toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' }) : ''}</TableCell>
+                                    <TableCell>{attendance.start_time_hi || ''}</TableCell>
+                                    <TableCell>{attendance.end_time_hi || ''}</TableCell>
                                     <TableCell>{attendance.total_rest_time || '0:00'}</TableCell>
                                     <TableCell>{attendance.work_time || ''}</TableCell>
                                     <TableCell className="px-5 text-black">

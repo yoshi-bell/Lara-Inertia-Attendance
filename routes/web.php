@@ -5,7 +5,6 @@ use App\Http\Controllers\Admin\CorrectionRequestController as AdminCorrectionReq
 use App\Http\Controllers\Admin\LoginController as AdminLoginController;
 use App\Http\Controllers\Admin\StaffController as AdminStaffController;
 use App\Http\Controllers\AttendanceController;
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 // ルートURL: 認証状態でリダイレクト先を振り分け
@@ -40,13 +39,6 @@ Route::middleware(['auth', 'verified', 'general_user'])->group(function () {
     Route::post('/attendance/end', [AttendanceController::class, 'endWork'])->name('attendance.end');
     Route::post('/rest/start', [AttendanceController::class, 'startRest'])->name('rest.start');
     Route::post('/rest/end', [AttendanceController::class, 'endRest'])->name('rest.end');
-});
-
-// プロフィール関連
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 require __DIR__.'/auth.php';

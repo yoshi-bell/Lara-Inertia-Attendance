@@ -1,56 +1,28 @@
 import { CorrectionStatus } from '@/constants';
 
 /**
- * ユーザー (users table)
+ * サーバー駆動型 SSOT (Single Source of Truth)
+ * 自動生成された型定義 (generated.d.ts) をベースに、モデル型を再定義・統合
  */
-export interface User {
-    id: number;
-    name: string;
-    email: string;
-    email_verified_at?: string;
-    is_admin: boolean;
-}
 
 /**
- * 勤怠記録 (attendances table)
+ * ユーザー型 (自動生成版を優先)
  */
-export interface Attendance {
-    id: number;
-    user_id: number;
-    work_date: string; // YYYY-MM-DD
-    start_time: string | null;
-    end_time: string | null;
-    created_at: string;
-    updated_at: string;
-
-    // 計算済みのプロパティ (App\Models\Attendance のアクセサに対応)
-    total_rest_time?: string; // H:i
-    work_time?: string | null; // H:i
-    start_time_hi?: string; // H:i
-    end_time_hi?: string;   // H:i
-    is_editable: boolean;   // 修正可能フラグ
-
-    // リレーション
-    user?: User;
-    rests?: Rest[];
-}
+export type User = App.Data.UserData;
 
 /**
- * 休憩記録 (rests table)
+ * 勤怠記録型 (自動生成版を優先)
  */
-export interface Rest {
-    id: number;
-    attendance_id: number;
-    start_time: string;
-    end_time: string | null;
-    start_time_hi?: string;
-    end_time_hi?: string;
-    created_at: string;
-    updated_at: string;
-}
+export type Attendance = App.Data.AttendanceData;
+
+/**
+ * 休憩記録型 (自動生成版を優先)
+ */
+export type Rest = App.Data.RestData;
 
 /**
  * 勤怠修正申請 (attendance_corrections table)
+ * TODO: 次のフェーズで App.Data.AttendanceCorrectionData へ移行予定
  */
 export interface AttendanceCorrection {
     id: number;
@@ -66,6 +38,10 @@ export interface AttendanceCorrection {
     reviewer_id: number | null;
     created_at: string;
     updated_at: string;
+
+    // リレーション (手動定義版)
+    attendance: Attendance;
+    requester?: { name: string };
 }
 
 /**

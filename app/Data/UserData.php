@@ -12,6 +12,7 @@ class UserData extends Data
         public int $id,
         public string $name,
         public string $email,
+        public ?string $email_verified_at,
         public bool $is_admin,
     ) {
     }

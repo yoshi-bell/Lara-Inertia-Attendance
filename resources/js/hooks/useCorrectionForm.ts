@@ -1,6 +1,5 @@
 import { useForm } from '@inertiajs/react';
 import { useEffect } from 'react';
-import { Attendance, Rest } from '@/types/models';
 import { isAttendance } from '@/lib/utils';
 
 /**
@@ -20,7 +19,7 @@ export interface CorrectionFormType {
 }
 
 interface UseCorrectionFormProps {
-    attendance: Attendance & { rests: Rest[] };
+    attendance: App.Data.AttendanceData;
     isAdmin: boolean;
 }
 
