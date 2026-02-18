@@ -3,6 +3,7 @@ import { Button } from '@/Components/ui/button';
 import { Head, router } from '@inertiajs/react';
 import { PageProps } from '@/types';
 import { useEffect, useState } from 'react';
+import { DAYS_OF_WEEK } from '@/constants';
 
 type IndexProps = PageProps<{
     attendanceStatus: {
@@ -32,8 +33,7 @@ export default function Index({ attendanceStatus }: IndexProps) {
 
     // 日時フォーマット用ユーティリティ
     const formatDate = (date: Date) => {
-        const days = ['日', '月', '火', '水', '木', '金', '土'];
-        return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日(${days[date.getDay()]})`;
+        return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日(${DAYS_OF_WEEK[date.getDay()]})`;
     };
 
     const formatTime = (date: Date) => {

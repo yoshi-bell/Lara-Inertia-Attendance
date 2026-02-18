@@ -8,6 +8,7 @@ import {
     TableRow,
 } from '@/Components/ui/table';
 import { AttendanceCorrection, Attendance } from '@/types/models';
+import { CORRECTION_STATUS, CorrectionStatus } from '@/constants';
 
 /**
  * 修正申請リストの共通コンポーネント Props
@@ -18,7 +19,7 @@ export interface CorrectionListProps {
         // 管理者表示の際は申請者の名前が必要
         requester?: { name: string };
     })[];
-    status: 'pending' | 'approved';
+    status: CorrectionStatus;
     isAdmin?: boolean;
     currentUserName?: string;
 }
@@ -42,9 +43,9 @@ export default function CorrectionList({
             {/* タブメニュー */}
             <div className="flex border-b-2 border-gray-200">
                 <Link
-                    href={`${basePath}?status=pending`}
+                    href={`${basePath}?status=${CORRECTION_STATUS.PENDING}`}
                     className={`px-8 py-2 text-xl font-bold transition-colors ${
-                        status === 'pending'
+                        status === CORRECTION_STATUS.PENDING
                             ? 'border-b-4 border-black text-black'
                             : 'text-gray-400 hover:text-gray-600'
                     }`}
@@ -52,9 +53,9 @@ export default function CorrectionList({
                     承認待ち
                 </Link>
                 <Link
-                    href={`${basePath}?status=approved`}
+                    href={`${basePath}?status=${CORRECTION_STATUS.APPROVED}`}
                     className={`px-8 py-2 text-xl font-bold transition-colors ${
-                        status === 'approved'
+                        status === CORRECTION_STATUS.APPROVED
                             ? 'border-b-4 border-black text-black'
                             : 'text-gray-400 hover:text-gray-600'
                     }`}
@@ -81,7 +82,7 @@ export default function CorrectionList({
                             corrections.map((correction) => (
                                 <TableRow key={correction.id} className="h-[60px] border-b-2 border-[#E1E1E1] hover:bg-gray-50">
                                     <TableCell className="px-6">
-                                        {correction.status === 'pending' ? '承認待ち' : '承認済み'}
+                                        {correction.status === CORRECTION_STATUS.PENDING ? '承認待ち' : '承認済み'}
                                     </TableCell>
                                     <TableCell className="px-6">
                                         {isAdmin ? correction.requester?.name : currentUserName}

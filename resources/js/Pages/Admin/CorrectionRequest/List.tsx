@@ -3,13 +3,14 @@ import { Head } from '@inertiajs/react';
 import { PageProps } from '@/types';
 import { AttendanceCorrection, Attendance } from '@/types/models';
 import CorrectionList from '@/Components/CorrectionList';
+import { CorrectionStatus } from '@/constants';
 
 type ListProps = PageProps<{
     corrections: (AttendanceCorrection & {
         attendance: Attendance;
         requester: { name: string };
     })[];
-    status: 'pending' | 'approved';
+    status: CorrectionStatus;
 }>;
 
 /**

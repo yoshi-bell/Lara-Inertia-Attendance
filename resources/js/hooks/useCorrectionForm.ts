@@ -1,6 +1,7 @@
 import { useForm } from '@inertiajs/react';
 import { useEffect } from 'react';
 import { Attendance, Rest } from '@/types/models';
+import { isAttendance } from '@/lib/utils';
 
 /**
  * 修正申請フォームのデータ構造定義
@@ -30,6 +31,11 @@ export function useCorrectionForm({
     attendance,
     isAdmin,
 }: UseCorrectionFormProps) {
+    // 【型ガードの活用例】開発中の誤ったデータ注入を早期検知（コンソール警告）
+    if (import.meta.env.DEV && !isAttendance(attendance)) {
+        console.warn('Warning: useCorrectionForm received invalid attendance data.');
+    }
+
     // 最新の attendance データから初期値を生成する関数
     const getInitialValues = (att: typeof attendance): CorrectionFormType => ({
         requested_start_time: att.start_time_hi || '',
