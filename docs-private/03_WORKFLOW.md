@@ -194,7 +194,7 @@ Playwrightテストの「高速化」と「安定性」を両立するため、�
 
 ### Phase 2: サーバー駆動型 SSOT の確立
 * [x] **`spatie/laravel-data` 導入:** バックエンドでの DTO / Data Object 基盤の構築。
-* [ ] **TypeScript 自動生成:** PHP モデル・Data Object から TS 型定義を自動出力する環境構築。
+* [x] **TypeScript 自動生成:** PHP モデル・Data Object から TS 型定義を自動出力する環境構築。
 * [ ] **型チェーンの完成:** Service → Data → Inertia → Props の一貫した型安全性の確保。
 
 ### Phase 3: ランタイム安全性の確保 (Zod 統合)

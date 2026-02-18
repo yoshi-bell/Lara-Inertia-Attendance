@@ -29,7 +29,6 @@ return [
     'transformers' => [
         Spatie\LaravelTypeScriptTransformer\Transformers\SpatieStateTransformer::class,
         Spatie\TypeScriptTransformer\Transformers\EnumTransformer::class,
-        Spatie\TypeScriptTransformer\Transformers\SpatieEnumTransformer::class,
         Spatie\LaravelTypeScriptTransformer\Transformers\DtoTransformer::class,
     ],
 
@@ -51,7 +50,7 @@ return [
      * The package will write the generated TypeScript to this file.
      */
 
-    'output_file' => resource_path('types/generated.d.ts'),
+    'output_file' => resource_path('js/types/generated.d.ts'),
 
     /*
      * When the package is writing types to the output file, a writer is used to
@@ -67,7 +66,7 @@ return [
      * The generated TypeScript will not be formatted when no formatter was set.
      */
 
-    'formatter' => null,
+    'formatter' => Spatie\TypeScriptTransformer\Formatters\PrettierFormatter::class,
 
     /*
      * Enums can be transformed into types or native TypeScript enums, by default
