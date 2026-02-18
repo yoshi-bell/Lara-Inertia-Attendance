@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Data\AttendanceData;
 use App\Models\Attendance;
 use App\Models\User;
 use Carbon\Carbon;
@@ -24,8 +25,8 @@ class CalendarService
      */
     public function generate(User $user, Carbon $currentDate): array
     {
-        // その月の勤怠データを一括取得 (N+1問題回避のため休憩もEager Loading)
-        $attendances = Attendance::with('rests')
+        // その月の勤怠データを一括取得 (N+1問題回避のため休憩とユーザーもEager Loading)
+        $attendances = Attendance::with(['rests', 'user'])
             ->where('user_id', $user->id)
             ->whereYear('work_date', $currentDate->year)
             ->whereMonth('work_date', $currentDate->month)
@@ -41,14 +42,7 @@ class CalendarService
 
             $calendarData[] = [
                 'date' => Attendance::getFormattedDateWithDay($date, 'm/d'),
-                'attendance' => $attendance ? [
-                    'id' => $attendance->id,
-                    'user_id' => $attendance->user_id,
-                    'start_time' => $attendance->start_time_hi,
-                    'end_time' => $attendance->end_time_hi,
-                    'total_rest_time' => $attendance->total_rest_time,
-                    'work_time' => $attendance->work_time,
-                ] : null,
+                'attendance' => $attendance ? AttendanceData::from($attendance) : null,
             ];
         }
 
