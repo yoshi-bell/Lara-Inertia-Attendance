@@ -1,28 +1,22 @@
+/* cspell:ignore inertiajs */
 import { useForm } from '@inertiajs/react';
 import { useEffect } from 'react';
 import { Attendance } from '@/types/models';
 import { isAttendance } from '@/lib/utils';
-
-/**
- * 修正申請フォームのデータ構造定義
- */
-export interface CorrectionFormType {
-    requested_start_time: string;
-    requested_end_time: string;
-    rests: Record<
-        string | number,
-        {
-            start_time: string;
-            end_time: string;
-        }
-    >;
-    reason: string;
-}
+import { correctionSchema, type CorrectionFormType } from '@/schemas/correctionSchema';
 
 interface UseCorrectionFormProps {
     attendance: Attendance;
     isAdmin: boolean;
 }
+
+/**
+ * Attendance 型に reason プロパティを許容するための拡張型定義
+ * (SSOT の Data Object 側で定義されるのが理想だが、フロントエンドで一時的に扱うための定義)
+ */
+type AttendanceWithOptionalReason = Attendance & {
+    reason?: string | null;
+};
 
 /**
  * 勤怠修正フォームの共通ロジックを管理するカスタムフック
@@ -37,39 +31,65 @@ export function useCorrectionForm({
     }
 
     // 最新の attendance データから初期値を生成する関数
-    const getInitialValues = (att: typeof attendance): CorrectionFormType => ({
-        requested_start_time: att.start_time_hi || '',
-        requested_end_time: att.end_time_hi || '',
-        rests: att.rests.reduce(
-            (acc, rest) => ({
-                ...acc,
-                [rest.id]: {
-                    start_time: rest.start_time_hi || '',
-                    end_time: rest.end_time_hi || '',
-                },
-            }),
-            { new: { start_time: '', end_time: '' } }
-        ),
-        reason: '',
-    });
+    const getInitialValues = (att: Attendance): CorrectionFormType => {
+        const extendedAtt = att as AttendanceWithOptionalReason;
+
+        return {
+            requested_start_time: att.start_time_hi || '',
+            requested_end_time: att.end_time_hi || '',
+            rests: (att.rests || []).reduce(
+                (acc, rest) => ({
+                    ...acc,
+                    [rest.id]: {
+                        start_time: rest.start_time_hi || '',
+                        end_time: rest.end_time_hi || '',
+                    },
+                }),
+                { new: { start_time: '', end_time: '' } }
+            ),
+            // any を排除し、拡張した型定義経由で安全にアクセス
+            reason: extendedAtt.reason ?? '',
+        };
+    };
 
     const form = useForm<CorrectionFormType>(getInitialValues(attendance));
 
     /**
-     * 【修正】ステート同期ロジックの適正化
-     * reset() を呼ぶと古い初期値に戻ってしまうリスクがあるため、
-     * setData() だけを使って現在のフォーム値を強制的に最新化する。
+     * ステート同期ロジック
+     * 親コンポーネント側で attendance が更新された際、フォームの値を最新化する。
      */
     useEffect(() => {
-        const freshValues = getInitialValues(attendance);
-        form.setData(freshValues);
+        form.setData(getInitialValues(attendance));
+        form.clearErrors();
     }, [attendance.updated_at]);
+
+    /**
+     * フロントエンドバリデーションの実行
+     */
+    const validate = () => {
+        const result = correctionSchema.safeParse(form.data);
+        if (!result.success) {
+            result.error.issues.forEach((issue) => {
+                const path = issue.path.join('.');
+                // any ではなく keyof キャストを使用し、フォームのキーとしての意図を維持
+                form.setError(path as keyof CorrectionFormType, issue.message);
+            });
+            return false;
+        }
+        form.clearErrors();
+        return true;
+    };
 
     /**
      * 送信処理のラップ
      */
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        
+        // 送信前にフロントエンドバリデーションを実行
+        form.clearErrors();
+        if (!validate()) return;
+
         const options = { preserveScroll: true };
         if (isAdmin) {
             form.put(route('admin.attendance.update', attendance.id), options);
@@ -83,6 +103,7 @@ export function useCorrectionForm({
 
     return {
         ...form,
+        validate,
         handleSubmit,
     };
 }

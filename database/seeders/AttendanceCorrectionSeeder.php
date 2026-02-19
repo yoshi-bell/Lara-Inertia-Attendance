@@ -24,6 +24,11 @@ class AttendanceCorrectionSeeder extends Seeder
                 ->get();
 
             foreach ($attendances as $attendance) {
+                // test4 ユーザーの昨日のデータは E2Eテスト用にクリーンに保つ
+                if ($user->email === 'test4@example.com' && $attendance->work_date->isYesterday()) {
+                    continue;
+                }
+
                 // 約10%の確率で修正申請を生成
                 if (rand(0, 9) === 0) {
                     AttendanceCorrection::factory()

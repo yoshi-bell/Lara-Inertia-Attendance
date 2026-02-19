@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import CorrectionForm from './CorrectionForm';
 import { Attendance, AttendanceCorrection, Rest, RestCorrection, User } from '@/types/models';
-import { CorrectionFormType } from '@/hooks/useCorrectionForm';
+import { CorrectionFormType } from '@/schemas/correctionSchema';
 
 /**
  * CorrectionForm コンポーネントの UI 網羅テスト

@@ -23,9 +23,14 @@ class AttendancesTableSeeder extends Seeder
             for ($i = 1; $i <= 60; $i++) {
                 $date = $today->copy()->subDays($i);
 
-                // 旧プロジェクト継承: 7日間のうちランダムで2日休み
-                if (rand(1, 7) <= 2) {
-                    continue;
+                // test4 ユーザーの昨日 (i=1) だけは、テストのために確実に生成する
+                if ($user->email === 'test4@example.com' && $i === 1) {
+                    // skip nothing
+                } else {
+                    // 旧プロジェクト継承: 7日間のうちランダムで2日休み
+                    if (rand(1, 7) <= 2) {
+                        continue;
+                    }
                 }
 
                 // 旧プロジェクトのロジックを完全再現

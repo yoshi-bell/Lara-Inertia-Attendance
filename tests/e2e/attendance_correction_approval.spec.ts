@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { formatInTimeZone } from 'date-fns-tz';
 
 /**
  * 勤怠修正・承認ワークフローの E2E テスト
@@ -21,17 +22,18 @@ test.describe('勤怠修正・承認ワークフロー', () => {
         // 勤怠一覧画面へ移動
         await page.goto('/attendance/list');
 
-        /**
-         * 【月初・当日対策】
-         * 「前月」に移動することで、実行日（月初1日など）に左右されず、
-         * 確実に修正可能な（退勤済みの）過去データが並ぶ画面を確保する。
-         */
-        await page.getByRole('link', { name: '前月' }).click();
+        // 日本時間の「昨日」の日付を取得
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayMonthDay = formatInTimeZone(yesterday, 'Asia/Tokyo', 'MM/dd');
 
-        // 前月リストの中から最初に見つかった「詳細」リンクをクリック
-        const pastDetailLink = page.getByRole('link', { name: '詳細' }).first();
-        await expect(pastDetailLink).toBeVisible();
-        await pastDetailLink.click();
+        /**
+         * 【舞台装置の活用】
+         * シーダーで確実に作成された「test4 の昨日（申請なし）」のデータを狙い撃ちする。
+         */
+        const targetRow = page.locator('tr').filter({ hasText: yesterdayMonthDay });
+        await expect(targetRow).toBeVisible();
+        await targetRow.getByRole('link', { name: '詳細' }).click();
 
         // 修正理由を入力して送信 (ユニークな理由を生成)
         const reason = `E2E承認リレーテスト: ${Date.now()}`;

@@ -1,3 +1,4 @@
+/* cspell:ignore usertest */
 import { test, expect } from '@playwright/test';
 import { formatInTimeZone } from 'date-fns-tz';
 
@@ -7,6 +8,10 @@ import { formatInTimeZone } from 'date-fns-tz';
  */
 test.describe('勤怠修正の制限検証', () => {
     
+    test.beforeEach(async () => {
+        // 各テスト開始前の準備 (現在は引数不要)
+    });
+
     test('勤務中は修正不可だが、退勤すると修正可能になる（UI連動テスト）', async ({ page }) => {
         const todayMonthDay = formatInTimeZone(new Date(), 'Asia/Tokyo', 'MM/dd');
         console.log(`Searching for today's row with text: "${todayMonthDay}"`);
