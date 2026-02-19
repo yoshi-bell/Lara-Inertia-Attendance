@@ -1,4 +1,5 @@
 import { Link } from '@inertiajs/react';
+/* cspell:ignore inertiajs */
 import {
     Table,
     TableBody,
@@ -7,18 +8,14 @@ import {
     TableHeader,
     TableRow,
 } from '@/Components/ui/table';
-import { AttendanceCorrection, Attendance } from '@/types/models';
+import { AttendanceCorrection } from '@/types/models';
 import { CORRECTION_STATUS, CorrectionStatus } from '@/constants';
 
 /**
  * 修正申請リストの共通コンポーネント Props
  */
 export interface CorrectionListProps {
-    corrections: (AttendanceCorrection & {
-        attendance: Attendance;
-        // 管理者表示の際は申請者の名前が必要
-        requester?: { name: string };
-    })[];
+    corrections: AttendanceCorrection[];
     status: CorrectionStatus;
     isAdmin?: boolean;
     currentUserName?: string;
@@ -88,7 +85,7 @@ export default function CorrectionList({
                                         {isAdmin ? correction.requester?.name : currentUserName}
                                     </TableCell>
                                     <TableCell className="px-6">
-                                        {formatDay(correction.attendance.work_date)}
+                                        {correction.attendance?.work_date ? formatDay(correction.attendance.work_date) : ''}
                                     </TableCell>
                                     <TableCell className="px-6 max-w-[200px] truncate">
                                         {correction.reason}

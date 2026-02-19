@@ -1,4 +1,22 @@
 declare namespace App.Data {
+    export type AttendanceCorrectionData = {
+        id: number;
+        attendance_id: number;
+        user_id: number;
+        requested_start_time: string;
+        requested_end_time: string;
+        requested_start_time_hi: string | null;
+        requested_end_time_hi: string | null;
+        reason: string;
+        status: string;
+        reviewed_at: string | null;
+        reviewer_id: number | null;
+        created_at: string;
+        updated_at: string;
+        attendance: App.Data.AttendanceData | null;
+        rest_corrections: Array<App.Data.RestCorrectionData> | null;
+        requester: App.Data.UserData | null;
+    };
     export type AttendanceData = {
         id: number;
         user_id: number;
@@ -11,6 +29,17 @@ declare namespace App.Data {
         updated_at: string;
         rests: Array<App.Data.RestData>;
         user: App.Data.UserData;
+    };
+    export type RestCorrectionData = {
+        id: number;
+        attendance_correction_id: number;
+        rest_id: number | null;
+        requested_start_time: string;
+        requested_end_time: string | null;
+        requested_start_time_hi: string | null;
+        requested_end_time_hi: string | null;
+        created_at: string;
+        updated_at: string;
     };
     export type RestData = {
         id: number;
