@@ -1,6 +1,7 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { useCorrectionForm } from './useCorrectionForm';
+import { Attendance } from '@/types/models';
 import React from 'react';
 
 /* cspell:ignore inertiajs */
@@ -54,7 +55,7 @@ describe('useCorrectionForm Hook', () => {
         rests: [
             { id: 10, attendance_id: 1, start_time_hi: '12:00', end_time_hi: '13:00' }
         ]
-    } as unknown as App.Data.AttendanceData;
+    } as unknown as Attendance;
 
     it('初期値が正しくフラットな構造に変換されること', () => {
         const { result } = renderHook(() => useCorrectionForm({

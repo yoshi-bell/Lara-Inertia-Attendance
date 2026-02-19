@@ -1,7 +1,7 @@
 import AttendanceLayout from '@/Layouts/AttendanceLayout';
 import { Head, useForm } from '@inertiajs/react';
 import { PageProps } from '@/types';
-import { AttendanceCorrection, RestCorrection } from '@/types/models';
+import { Attendance, AttendanceCorrection, RestCorrection } from '@/types/models';
 import { Button } from '@/Components/ui/button';
 import { Card, CardContent } from '@/Components/ui/card';
 import CorrectionForm from '@/Components/CorrectionForm';
@@ -13,7 +13,7 @@ import React from 'react';
 type ApproveProps = PageProps<{
     correction: AttendanceCorrection & {
         requester: { name: string };
-        attendance: App.Data.AttendanceData;
+        attendance: Attendance;
         rest_corrections: RestCorrection[];
     };
 }>;

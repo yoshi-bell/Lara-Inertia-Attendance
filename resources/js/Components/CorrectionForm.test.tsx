@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import CorrectionForm from './CorrectionForm';
-import { AttendanceCorrection, RestCorrection } from '@/types/models';
+import { Attendance, AttendanceCorrection, Rest, RestCorrection, User } from '@/types/models';
 import { CorrectionFormType } from '@/hooks/useCorrectionForm';
 
 /**
@@ -20,9 +20,9 @@ describe('CorrectionForm Component', () => {
         work_time: '09:00',
         is_editable: true,
         updated_at: '2026-02-12T00:00:00Z',
-        rests: [] as App.Data.RestData[],
-        user: { id: 1, name: 'テスト太郎', email: 'test@example.com', is_admin: false }
-    } as unknown as App.Data.AttendanceData;
+        rests: [] as Rest[],
+        user: { id: 1, name: 'テスト太郎', email: 'test@example.com', is_admin: false } as User
+    } as unknown as Attendance;
 
     // showPicker のモック化（jsdom 未実装対応）
     const showPickerMock = vi.fn();
@@ -133,8 +133,8 @@ describe('CorrectionForm Component', () => {
             rests: [
                 { id: 10, attendance_id: 1, start_time_hi: '12:00', end_time_hi: '12:30' },
                 { id: 11, attendance_id: 1, start_time_hi: '15:00', end_time_hi: '15:15' }
-            ] as App.Data.RestData[]
-        } as unknown as App.Data.AttendanceData;
+            ] as Rest[]
+        } as unknown as Attendance;
 
         render(
             <CorrectionForm

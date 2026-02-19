@@ -1,7 +1,7 @@
 import AttendanceLayout from '@/Layouts/AttendanceLayout';
 import { Head } from '@inertiajs/react';
 import { PageProps } from '@/types';
-import { AttendanceCorrection, RestCorrection } from '@/types/models';
+import { Attendance, AttendanceCorrection, RestCorrection } from '@/types/models';
 import { Button } from '@/Components/ui/button';
 import { Card, CardContent } from '@/Components/ui/card';
 import CorrectionForm from '@/Components/CorrectionForm';
@@ -12,7 +12,7 @@ import React from 'react';
  * 勤怠詳細ページ Props (一般ユーザー用)
  */
 export type AttendanceDetailProps = PageProps<{
-    attendance: App.Data.AttendanceData;
+    attendance: Attendance;
     pendingCorrection: (AttendanceCorrection & {
         rest_corrections: RestCorrection[];
     }) | null;

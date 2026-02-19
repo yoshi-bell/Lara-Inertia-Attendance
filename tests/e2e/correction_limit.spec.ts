@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { format } from 'date-fns';
+import { formatInTimeZone } from 'date-fns-tz';
 
 /**
  * 勤怠修正制限の E2E テスト
@@ -8,7 +8,8 @@ import { format } from 'date-fns';
 test.describe('勤怠修正の制限検証', () => {
     
     test('勤務中は修正不可だが、退勤すると修正可能になる（UI連動テスト）', async ({ page }) => {
-        const todayMonthDay = format(new Date(), 'MM/dd');
+        const todayMonthDay = formatInTimeZone(new Date(), 'Asia/Tokyo', 'MM/dd');
+        console.log(`Searching for today's row with text: "${todayMonthDay}"`);
 
         // 1. ログイン
         await page.goto('/login');
