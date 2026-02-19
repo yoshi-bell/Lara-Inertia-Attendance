@@ -189,8 +189,8 @@ class StampTest extends TestCase
                     'calendarData.11',
                     fn (Assert $day) => $day // 12日はインデックス11
                         ->where('date', '02/12(木)')
-                        ->where('attendance.start_time', '09:30')
-                        ->where('attendance.end_time', '18:30')
+                        ->where('attendance.start_time_hi', '09:30')
+                        ->where('attendance.end_time_hi', '18:30')
                         ->where('attendance.total_rest_time', '1:00')
                         ->where('attendance.work_time', '8:00')
                         ->etc()

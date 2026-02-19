@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import CorrectionForm from './CorrectionForm';
-import { Attendance, Rest, AttendanceCorrection, RestCorrection } from '@/types/models';
+import { Attendance, AttendanceCorrection, Rest, RestCorrection, User } from '@/types/models';
 import { CorrectionFormType } from '@/hooks/useCorrectionForm';
 
 /**
@@ -12,12 +12,17 @@ describe('CorrectionForm Component', () => {
     // 共通のモックデータ
     const mockAttendance = {
         id: 1,
+        user_id: 1,
         work_date: '2026-02-12',
         start_time_hi: '09:00',
         end_time_hi: '18:00',
+        total_rest_time: '00:00',
+        work_time: '09:00',
+        is_editable: true,
+        updated_at: '2026-02-12T00:00:00Z',
         rests: [] as Rest[],
-        user: { name: 'テスト太郎' }
-    } as unknown as Attendance & { user: { name: string }; rests: Rest[] };
+        user: { id: 1, name: 'テスト太郎', email: 'test@example.com', is_admin: false } as User
+    } as unknown as Attendance;
 
     // showPicker のモック化（jsdom 未実装対応）
     const showPickerMock = vi.fn();
@@ -126,10 +131,10 @@ describe('CorrectionForm Component', () => {
         const dynamicAttendance = {
             ...mockAttendance,
             rests: [
-                { id: 10, start_time_hi: '12:00', end_time_hi: '12:30' },
-                { id: 11, start_time_hi: '15:00', end_time_hi: '15:15' }
+                { id: 10, attendance_id: 1, start_time_hi: '12:00', end_time_hi: '12:30' },
+                { id: 11, attendance_id: 1, start_time_hi: '15:00', end_time_hi: '15:15' }
             ] as Rest[]
-        };
+        } as unknown as Attendance;
 
         render(
             <CorrectionForm

@@ -14,7 +14,7 @@ import { Attendance } from '@/types/models';
  */
 type AttendanceListItem = Pick<
     Attendance,
-    'id' | 'start_time' | 'end_time' | 'total_rest_time' | 'work_time'
+    'id' | 'start_time_hi' | 'end_time_hi' | 'total_rest_time' | 'work_time'
 >;
 
 export interface CalendarDay {
@@ -73,10 +73,10 @@ export default function AttendanceTable({
                                 {day.date}
                             </TableCell>
                             <TableCell>
-                                {day.attendance?.start_time || ''}
+                                {day.attendance?.start_time_hi || ''}
                             </TableCell>
                             <TableCell>
-                                {day.attendance?.end_time || ''}
+                                {day.attendance?.end_time_hi || ''}
                             </TableCell>
                             <TableCell>
                                 {day.attendance

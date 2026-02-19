@@ -96,8 +96,8 @@ class AdminStaffTest extends TestCase
                     'calendarData.11',
                     fn (Assert $day) => $day
                         ->where('date', '02/12(木)')
-                        ->where('attendance.start_time', '09:00')
-                        ->where('attendance.end_time', '18:00')
+                        ->where('attendance.start_time_hi', '09:00')
+                        ->where('attendance.end_time_hi', '18:00')
                         ->etc()
                 )
         );

@@ -1,8 +1,10 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { useCorrectionForm } from './useCorrectionForm';
-import { Attendance, Rest } from '@/types/models';
+import { Attendance } from '@/types/models';
 import React from 'react';
+
+/* cspell:ignore inertiajs */
 
 /**
  * useCorrectionForm カスタムフックの単体テスト
@@ -38,16 +40,22 @@ describe('useCorrectionForm Hook', () => {
         vi.clearAllMocks();
     });
 
-    // モックデータを型安全に定義 (as unknown as ... を使用して最小限のプロパティで定義)
+    // モックデータを型安全に定義 (新しい AttendanceData 規格に適合)
     const mockAttendance = {
         id: 1,
+        user_id: 1,
+        work_date: '2026-02-13',
         start_time_hi: '09:00',
         end_time_hi: '18:00',
+        total_rest_time: '01:00',
+        work_time: '08:00',
+        is_editable: true,
         updated_at: '2026-02-13T00:00:00Z',
+        user: { id: 1, name: 'テストユーザー', email: 'test@example.com', is_admin: false },
         rests: [
-            { id: 10, start_time_hi: '12:00', end_time_hi: '13:00' }
+            { id: 10, attendance_id: 1, start_time_hi: '12:00', end_time_hi: '13:00' }
         ]
-    } as unknown as Attendance & { rests: Rest[] };
+    } as unknown as Attendance;
 
     it('初期値が正しくフラットな構造に変換されること', () => {
         const { result } = renderHook(() => useCorrectionForm({

@@ -1,4 +1,4 @@
-import { Attendance, AttendanceCorrection, Rest, RestCorrection } from '@/types/models';
+import { Attendance, AttendanceCorrection, RestCorrection } from '@/types/models';
 import { CorrectionFormType } from '@/hooks/useCorrectionForm';
 
 /**
@@ -6,10 +6,7 @@ import { CorrectionFormType } from '@/hooks/useCorrectionForm';
  * data, setData, errors をオプショナルにし、閲覧専用モードにも対応
  */
 interface CorrectionFormProps {
-    attendance: Attendance & {
-        user: { name: string };
-        rests: Rest[];
-    };
+    attendance: Attendance;
     pendingCorrection?: (AttendanceCorrection & {
         rest_corrections: RestCorrection[];
     }) | null;

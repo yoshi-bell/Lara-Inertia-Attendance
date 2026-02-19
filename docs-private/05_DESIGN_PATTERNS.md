@@ -37,5 +37,14 @@
 
 ---
 
-## 🔒 サーバー駆動の型安全
-*   バックエンドのモデルや DTO の変更が、TypeScript の型定義に自動反映される（または手動で同期される）仕組みを重視する。
+## 🔒 サーバー駆動の型安全 (Server-Driven Type Safety)
+バックエンドの Data Object を唯一の正解（SSOT）とし、フロントエンドへの型伝搬を自動化する。
+
+### 1. インフラ構成
+*   **DTO基盤:** `spatie/laravel-data` を使用し、情報の「公開範囲（契約）」を明示的に定義する。
+*   **自動同期:** `spatie/laravel-typescript-transformer` を使用し、`php artisan typescript:transform` コマンドで `generated.d.ts` を出力する。
+
+### 2. 開発時の標準フロー (物流ライン)
+1.  **設計:** フロントエンドに渡す必要がある項目を精査し、`app/Data/` 配下に Data クラスを作成する（`#[TypeScript]` 属性を付与）。
+2.  **生成:** コマンドを実行し、TypeScript 型定義を自動更新する。
+3.  **利用:** React コンポーネント側で、手動定義ではなく `App.Data.XxxData` 型をインポートして使用する。

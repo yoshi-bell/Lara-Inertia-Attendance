@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\AttendanceData;
 use App\Http\Requests\AttendanceCorrectionRequest;
 use App\Models\Attendance;
 use App\Models\AttendanceCorrection;
@@ -69,9 +70,6 @@ class AttendanceController extends Controller
         ]);
     }
 
-    /**
-     * 勤怠詳細ページを表示する
-     */
     public function show(Attendance $attendance): Response
     {
         // 認可チェック: 自分のデータでない場合は 403 を返す
@@ -80,7 +78,7 @@ class AttendanceController extends Controller
         }
 
         $attendance->load([
-            'user:id,name',
+            'user',
             'rests',
             'corrections' => function ($query) {
                 $query->where('status', 'pending')->with('restCorrections')->latest();
@@ -88,7 +86,7 @@ class AttendanceController extends Controller
         ]);
 
         return Inertia::render('Attendance/Detail', [
-            'attendance' => $attendance,
+            'attendance' => AttendanceData::from($attendance),
             'pendingCorrection' => $attendance->corrections->first(),
         ]);
     }
