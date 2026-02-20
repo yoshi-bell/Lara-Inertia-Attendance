@@ -8,7 +8,13 @@ import {
 
 /**
  * 会員登録画面 (US001 対応)
- * 旧プロジェクト auth/register.blade.php のデザインを忠実に再現
+ *
+ * 【設計意図】
+ * 1. デザイン: 旧プロジェクト auth/register.blade.php のトンマナを Tailwind CSS で忠実に再現。
+ * 2. 堅牢性: Zod (registerSchema) を用いたクライアントサイド検証を統合し、送信前の即時フィードバックを実現。
+ * 3. SSOT: バリデーションメッセージは validation_messages.json から一元的に取得し、バックエンドと同期。
+ *
+ * @returns {JSX.Element} 会員登録コンポーネント
  */
 export default function Register() {
     const {
@@ -28,25 +34,32 @@ export default function Register() {
     });
 
     /**
-     * Zod によるフロントエンドバリデーション
+     * Zod によるフロントエンドバリデーションの実行
+     *
+     * 【Why: メッセージ優先順位の同期】
+     * Zod は全フィールドのエラーを一度に返すが、ユーザー体験を Laravel (バックエンド) の
+     * 標準的な挙動（必須チェック優先等）に合わせるため、各フィールドの「最初の一個目」
+     * のエラーのみを抽出してセットする。
+     *
+     * @returns {boolean} バリデーションを通過した場合は true
      */
     const validate = (): boolean => {
         clearErrors();
         const result = registerSchema.safeParse(data);
 
         if (!result.success) {
-            // 各フィールドの「最初の」エラーメッセージのみをセットする
             const fieldErrors: Partial<Record<keyof RegisterFormType, string>> =
                 {};
 
             result.error.issues.forEach((issue) => {
                 const path = issue.path[0] as keyof RegisterFormType;
+                // 既にエラーが記録されているフィールドはスキップ（先勝ち = 優先度高）
                 if (!fieldErrors[path]) {
                     fieldErrors[path] = issue.message;
                 }
             });
 
-            // まとめて setError を実行
+            // Inertia の errors ステートに Zod のエラーを同期
             Object.entries(fieldErrors).forEach(([path, message]) => {
                 setError(path as keyof RegisterFormType, message);
             });
@@ -56,6 +69,10 @@ export default function Register() {
         return true;
     };
 
+    /**
+     * フォーム送信処理
+     * フロントエンドでの検証通過後、バックエンドへ POST リクエストを行う。
+     */
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 

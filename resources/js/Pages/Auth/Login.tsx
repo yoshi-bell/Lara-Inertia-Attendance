@@ -1,20 +1,73 @@
 import AttendanceLayout from '@/Layouts/AttendanceLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
+import { loginSchema, type LoginFormType } from '@/schemas/authSchema';
 
 /**
  * ログイン画面 (US002, US004 対応)
- * 旧プロジェクト auth/login.blade.php のデザインを忠実に再現
+ *
+ * 【設計意図】
+ * 1. デザイン: 旧プロジェクト auth/login.blade.php のトンマナを Tailwind CSS で忠実に再現。
+ * 2. 堅牢性: Zod (loginSchema) によるフロントエンド検証を統合。
+ * 3. 汎用性: 一般ユーザーと管理者のログイン画面で共通のバリデーションメッセージ基盤 (JSON) を使用。
+ *
+ * @returns {JSX.Element} ログインコンポーネント
  */
 export default function Login() {
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const {
+        data,
+        setData,
+        post,
+        processing,
+        errors,
+        reset,
+        setError,
+        clearErrors,
+    } = useForm<LoginFormType & { remember: boolean }>({
         email: '',
         password: '',
         remember: false,
     });
 
+    /**
+     * Zod によるフロントエンドバリデーション
+     *
+     * 【Why: 一貫した UX】
+     * Register.tsx と同様、バックエンドの挙動に合わせて各フィールドの「最初のエラー」のみを表示する。
+     *
+     * @returns {boolean} 検証通過時に true
+     */
+    const validate = (): boolean => {
+        clearErrors();
+        const result = loginSchema.safeParse(data);
+
+        if (!result.success) {
+            const fieldErrors: Partial<Record<keyof LoginFormType, string>> = {};
+
+            result.error.issues.forEach((issue) => {
+                const path = issue.path[0] as keyof LoginFormType;
+                if (!fieldErrors[path]) {
+                    fieldErrors[path] = issue.message;
+                }
+            });
+
+            Object.entries(fieldErrors).forEach(([path, message]) => {
+                setError(path as keyof LoginFormType, message);
+            });
+
+            return false;
+        }
+        return true;
+    };
+
+    /**
+     * フォーム送信処理
+     */
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
+
+        // 送信前にフロント側で検証
+        if (!validate()) return;
 
         post(route('login'), {
             onFinish: () => reset('password'),

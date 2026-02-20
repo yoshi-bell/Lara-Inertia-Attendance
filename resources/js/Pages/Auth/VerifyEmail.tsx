@@ -4,11 +4,21 @@ import { FormEventHandler } from 'react';
 
 /**
  * メール認証待ち画面 (FN011, FN012 対応)
- * 旧プロジェクト auth/verify-email.blade.php のデザインを忠実に再現
+ *
+ * 【設計意図】
+ * 1. デザイン: 旧プロジェクト auth/verify-email.blade.php のフォントサイズ(24px)等を忠実に再現。
+ * 2. 開発効率: 開発環境において、メールボックス (Mailpit) へ直接遷移できるボタンを設置。
+ *
+ * @param {Object} props
+ * @param {string} [props.status] 再送ステータス
+ * @returns {JSX.Element} メール認証案内コンポーネント
  */
 export default function VerifyEmail({ status }: { status?: string }) {
     const { post, processing } = useForm({});
 
+    /**
+     * 認証メールの再送リクエスト
+     */
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
         post(route('verification.send'));
@@ -35,7 +45,11 @@ export default function VerifyEmail({ status }: { status?: string }) {
                     </div>
                 )}
 
-                {/* 開発環境用：Mailpitへの認証リンクボタン */}
+                {/* 
+                  【Why: 開発効率の極大化】
+                  ローカル開発環境 (Sail) において、認証メールを確認するために 
+                  Mailpit (localhost:8025) へ即座にアクセスできるよう専用ボタンを設置。
+                */}
                 <div className="form__button mb-[62px]">
                     <a
                         href="http://localhost:8025"
