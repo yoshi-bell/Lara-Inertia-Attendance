@@ -3,7 +3,11 @@ import { useForm } from '@inertiajs/react';
 import { useEffect } from 'react';
 import { Attendance } from '@/types/models';
 import { isAttendance } from '@/lib/utils';
-import { correctionSchema, type CorrectionFormType } from '@/schemas/correctionSchema';
+import { performZodValidation } from '@/lib/validation';
+import {
+    correctionSchema,
+    type CorrectionFormType,
+} from '@/schemas/correctionSchema';
 
 interface UseCorrectionFormProps {
     attendance: Attendance;
@@ -27,7 +31,9 @@ export function useCorrectionForm({
 }: UseCorrectionFormProps) {
     // 【型ガードの活用例】開発中の誤ったデータ注入を早期検知（コンソール警告）
     if (import.meta.env.DEV && !isAttendance(attendance)) {
-        console.warn('Warning: useCorrectionForm received invalid attendance data.');
+        console.warn(
+            'Warning: useCorrectionForm received invalid attendance data.'
+        );
     }
 
     // 最新の attendance データから初期値を生成する関数
@@ -47,7 +53,7 @@ export function useCorrectionForm({
                 }),
                 { new: { start_time: '', end_time: '' } }
             ),
-            // any を排除し、拡張した型定義経由で安全にアクセス
+            // 拡張した型定義経由で安全にアクセス
             reason: extendedAtt.reason ?? '',
         };
     };
@@ -67,17 +73,16 @@ export function useCorrectionForm({
      * フロントエンドバリデーションの実行
      */
     const validate = () => {
-        const result = correctionSchema.safeParse(form.data);
-        if (!result.success) {
-            result.error.issues.forEach((issue) => {
-                const path = issue.path.join('.');
-                // any ではなく keyof キャストを使用し、フォームのキーとしての意図を維持
-                form.setError(path as keyof CorrectionFormType, issue.message);
-            });
-            return false;
-        }
         form.clearErrors();
-        return true;
+        const result = correctionSchema.safeParse(form.data);
+
+        // 共通ユーティリティを使用。
+        // 勤怠修正は複数の不備（重複と範囲外など）を同時に知らせる必要があるため、全メッセージを結合表示する。
+        return performZodValidation(
+            result,
+            form.setError as (path: string, message: string) => void,
+            { joinMessages: true }
+        );
     };
 
     /**
@@ -85,9 +90,8 @@ export function useCorrectionForm({
      */
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         // 送信前にフロントエンドバリデーションを実行
-        form.clearErrors();
         if (!validate()) return;
 
         const options = { preserveScroll: true };

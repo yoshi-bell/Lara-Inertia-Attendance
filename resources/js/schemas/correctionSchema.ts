@@ -79,12 +79,46 @@ export const correctionSchema = z
                 if (isTimeAfter(rEnd, end)) {
                     ctx.addIssue({
                         code: z.ZodIssueCode.custom,
-                        message: messages.INVALID_ATTENDANCE_TIME, // 出勤/退勤の整合性エラーを再利用
+                        message: messages.INVALID_ATTENDANCE_TIME,
                         path: ['rests', id, 'end_time'],
                     });
                 }
             }
         });
+
+        // 3. 休憩時間同士の重複チェック
+        const intervals: { start: string; end: string; id: string }[] = [];
+        Object.entries(data.rests).forEach(([id, rest]) => {
+            if (rest.start_time && rest.end_time) {
+                intervals.push({
+                    start: rest.start_time,
+                    end: rest.end_time,
+                    id,
+                });
+            }
+        });
+
+        if (intervals.length >= 2) {
+            // 開始時間でソート
+            intervals.sort((a, b) => (a.start > b.start ? 1 : -1));
+
+            // 隣接する時間帯が重なっていないかチェック
+            for (let i = 0; i < intervals.length - 1; i++) {
+                if (isTimeAfter(intervals[i].end, intervals[i + 1].start)) {
+                    // 重複している両方のフィールドにエラーを出す
+                    ctx.addIssue({
+                        code: z.ZodIssueCode.custom,
+                        message: messages.REST_TIME_OVERLAP,
+                        path: ['rests', intervals[i].id, 'end_time'],
+                    });
+                    ctx.addIssue({
+                        code: z.ZodIssueCode.custom,
+                        message: messages.REST_TIME_OVERLAP,
+                        path: ['rests', intervals[i + 1].id, 'start_time'],
+                    });
+                }
+            }
+        }
     });
 
 /**
