@@ -23,7 +23,7 @@ interface ValidationOptions {
  * @returns バリデーションを通過した場合は true
  */
 export function performZodValidation<T extends Record<string, unknown>>(
-    result: z.SafeParseReturnType<unknown, T>,
+    result: z.ZodSafeParseSuccess<T> | z.ZodSafeParseError<T>,
     setError: (path: string, message: string) => void,
     options: ValidationOptions = { joinMessages: false }
 ): boolean {
@@ -33,7 +33,7 @@ export function performZodValidation<T extends Record<string, unknown>>(
 
     const fieldErrors: Record<string, string[]> = {};
 
-    result.error.issues.forEach((issue) => {
+    result.error.issues.forEach((issue: z.ZodIssue) => {
         // ネストされたパスをドット記法（rests.0.start_time）に変換
         const path = issue.path.map(String).join('.');
         
