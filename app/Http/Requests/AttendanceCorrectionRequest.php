@@ -70,17 +70,17 @@ class AttendanceCorrectionRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'requested_start_time.required' => '出勤時間を入力してください',
-            'requested_end_time.required' => '退勤時間を入力してください',
-            'requested_end_time.after' => '出勤時間もしくは退勤時間が不適切な値です',
-            'reason.required' => '備考を記入してください',
+            'requested_start_time.required' => \App\Constants\ValidationMessages::ATTENDANCE_START_REQUIRED(),
+            'requested_end_time.required' => \App\Constants\ValidationMessages::ATTENDANCE_END_REQUIRED(),
+            'requested_end_time.after' => \App\Constants\ValidationMessages::INVALID_ATTENDANCE_TIME(),
+            'reason.required' => \App\Constants\ValidationMessages::CORRECTION_REASON_REQUIRED(),
 
-            'rests.*.start_time.required_with' => '休憩の開始時間を入力してください',
-            'rests.*.end_time.required_with' => '休憩の終了時間を入力してください',
-            'rests.*.end_time.after' => '休憩の終了時間は、開始時間より後に設定してください',
-            'rests.*.start_time.after' => '休憩時間が不適切な値です',
-            'rests.*.start_time.before' => '休憩時間が不適切な値です',
-            'rests.*.end_time.before' => '休憩時間もしくは退勤時間が不適切な値です',
+            'rests.*.start_time.required_with' => \App\Constants\ValidationMessages::REST_START_REQUIRED(),
+            'rests.*.end_time.required_with' => \App\Constants\ValidationMessages::REST_END_REQUIRED(),
+            'rests.*.end_time.after' => \App\Constants\ValidationMessages::REST_END_AFTER_START(),
+            'rests.*.start_time.after' => \App\Constants\ValidationMessages::INVALID_REST_TIME(),
+            'rests.*.start_time.before' => \App\Constants\ValidationMessages::INVALID_REST_TIME(),
+            'rests.*.end_time.before' => \App\Constants\ValidationMessages::INVALID_ATTENDANCE_TIME(),
         ];
     }
 
@@ -115,8 +115,8 @@ class AttendanceCorrectionRequest extends FormRequest
                 if ($intervals[$i]['end']->gt($intervals[$i + 1]['start'])) {
                     $key1 = $intervals[$i]['key'];
                     $key2 = $intervals[$i + 1]['key'];
-                    $validator->errors()->add("rests.{$key1}.end_time", '休憩時間が重複しています。');
-                    $validator->errors()->add("rests.{$key2}.start_time", '休憩時間が重複しています。');
+                    $validator->errors()->add("rests.{$key1}.end_time", \App\Constants\ValidationMessages::REST_TIME_OVERLAP());
+                    $validator->errors()->add("rests.{$key2}.start_time", \App\Constants\ValidationMessages::REST_TIME_OVERLAP());
                     break;
                 }
             }

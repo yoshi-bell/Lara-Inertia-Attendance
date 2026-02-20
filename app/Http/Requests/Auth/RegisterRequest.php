@@ -37,11 +37,11 @@ class RegisterRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'お名前を入力してください',
-            'email.required' => 'メールアドレスを入力してください',
-            'password.required' => 'パスワードを入力してください',
-            'password.min' => 'パスワードは8文字以上で入力してください',
-            'password.confirmed' => 'パスワードと一致しません',
+            'name.required' => \App\Constants\ValidationMessages::NAME_REQUIRED(),
+            'email.required' => \App\Constants\ValidationMessages::EMAIL_REQUIRED(),
+            'password.required' => \App\Constants\ValidationMessages::PASSWORD_REQUIRED(),
+            'password.min' => \App\Constants\ValidationMessages::PASSWORD_MIN(),
+            'password.confirmed' => \App\Constants\ValidationMessages::PASSWORD_CONFIRMED(),
         ];
     }
 }

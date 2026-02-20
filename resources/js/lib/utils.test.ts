@@ -5,6 +5,7 @@ import {
     isAttendance,
     isTimeAfter,
     isTimeBeforeOrEqual,
+    formatMessage,
 } from './utils';
 
 describe('isObject utility', () => {
@@ -110,6 +111,24 @@ describe('Time Comparison Utilities', () => {
 
         it('引数が空の場合は false を返すこと', () => {
             expect(isTimeBeforeOrEqual('', '09:00')).toBe(false);
+        });
+    });
+
+    describe('formatMessage', () => {
+        it(':min, :max 等のプレースホルダーを正しく置換すること', () => {
+            const msg = 'パスワードは:min文字以上で入力してください';
+            expect(formatMessage(msg, { min: 8 })).toBe('パスワードは8文字以上で入力してください');
+        });
+
+        it('複数のプレースホルダーを置換できること', () => {
+            const msg = ':fieldは:minから:maxの範囲で入力してください';
+            expect(formatMessage(msg, { field: '年齢', min: 18, max: 99 }))
+                .toBe('年齢は18から99の範囲で入力してください');
+        });
+
+        it('該当するキーがない場合はそのままの文字列を返すこと', () => {
+            const msg = 'テストメッセージ';
+            expect(formatMessage(msg, { unknown: 'value' })).toBe('テストメッセージ');
         });
     });
 });

@@ -1,0 +1,21 @@
+{
+    "REQUIRED": "を入力してください",
+    "EMAIL_FORMAT": "正しいメールアドレスの形式で入力してください",
+    "NAME_REQUIRED": "お名前を入力してください",
+    "EMAIL_REQUIRED": "メールアドレスを入力してください",
+    "PASSWORD_REQUIRED": "パスワードを入力してください",
+    "PASSWORD_MIN": "パスワードは:min文字以上で入力してください",
+    "PASSWORD_CONFIRMED": "パスワードと一致しません",
+    "PASSWORD_CONFIRM_REQUIRED": "確認用パスワードを入力してください",
+    "MAX_LENGTH": "は:max文字以内で入力してください",
+    "ATTENDANCE_START_REQUIRED": "出勤時間を入力してください",
+    "ATTENDANCE_END_REQUIRED": "退勤時間を入力してください",
+    "CORRECTION_REASON_REQUIRED": "備考を記入してください",
+    "CORRECTION_REASON_MAX": "備考は:max文字以内で入力してください",
+    "REST_START_REQUIRED": "休憩の開始時間を入力してください",
+    "REST_END_REQUIRED": "休憩の終了時間を入力してください",
+    "INVALID_ATTENDANCE_TIME": "出勤時間もしくは退勤時間が不適切な値です",
+    "INVALID_REST_TIME": "休憩時間が不適切な値です",
+    "REST_END_AFTER_START": "休憩の終了時間は、開始時間より後に設定してください",
+    "REST_TIME_OVERLAP": "休憩時間が重複しています。"
+}

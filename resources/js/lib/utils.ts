@@ -62,3 +62,19 @@ export function isTimeBeforeOrEqual(time1: string, time2: string): boolean {
     if (!time1 || !time2) return false;
     return time1 <= time2;
 }
+
+/**
+ * Laravel 形式のバリデーションメッセージ内のプレースホルダー (:min, :max 等) を置換する
+ * @param message プレースホルダーを含むメッセージ
+ * @param replacements 置換するキーと値のオブジェクト
+ */
+export function formatMessage(
+    message: string,
+    replacements: Record<string, string | number>
+): string {
+    let formatted = message;
+    Object.entries(replacements).forEach(([key, value]) => {
+        formatted = formatted.replace(`:${key}`, String(value));
+    });
+    return formatted;
+}

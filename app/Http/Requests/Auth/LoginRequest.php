@@ -38,8 +38,8 @@ class LoginRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'email.required' => 'メールアドレスを入力してください',
-            'password.required' => 'パスワードを入力してください',
+            'email.required' => \App\Constants\ValidationMessages::EMAIL_REQUIRED(),
+            'password.required' => \App\Constants\ValidationMessages::PASSWORD_REQUIRED(),
         ];
     }
 
