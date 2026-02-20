@@ -1,56 +1,121 @@
-import InputError from '@/Components/InputError';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
 import AttendanceLayout from '@/Layouts/AttendanceLayout';
 import { Head, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
+import {
+    forgotPasswordSchema,
+    type ForgotPasswordFormType,
+} from '@/schemas/authSchema';
 
+/**
+ * パスワード再設定メール送信画面
+ *
+ * 【設計意図】
+ * 1. デザイン: 他の認証画面と統一した「Atte」ブランドのトンマナを適用。
+ * 2. 堅牢性: Zod (forgotPasswordSchema) によるフロントエンド検証を統合。
+ * 3. ユーザー体験: 送信ボタン押下時に即座にバリデーション結果を表示。
+ *
+ * @param {Object} props
+ * @param {string} [props.status] メール送信後のステータスメッセージ
+ * @returns {JSX.Element} パスワード忘れ画面コンポーネント
+ */
 export default function ForgotPassword({ status }: { status?: string }) {
-    const { data, setData, post, processing, errors } = useForm({
-        email: '',
-    });
+    const { data, setData, post, processing, errors, setError, clearErrors } =
+        useForm<ForgotPasswordFormType>({
+            email: '',
+        });
+
+    /**
+     * Zod によるフロントエンドバリデーション
+     */
+    const validate = (): boolean => {
+        clearErrors();
+        const result = forgotPasswordSchema.safeParse(data);
+
+        if (!result.success) {
+            // 各フィールドの最初のエラーをセット
+            const fieldErrors: Partial<Record<keyof ForgotPasswordFormType, string>> = {};
+            result.error.issues.forEach((issue) => {
+                const path = issue.path[0] as keyof ForgotPasswordFormType;
+                if (!fieldErrors[path]) {
+                    fieldErrors[path] = issue.message;
+                }
+            });
+
+            Object.entries(fieldErrors).forEach(([path, message]) => {
+                setError(path as keyof ForgotPasswordFormType, message);
+            });
+            return false;
+        }
+        return true;
+    };
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
+
+        if (!validate()) return;
 
         post(route('password.email'));
     };
 
     return (
-        <AttendanceLayout>
-            <Head title="Forgot Password" />
+        <AttendanceLayout backgroundColor="#FFFFFF">
+            <Head title="パスワード再設定" />
 
-            <div className="mb-4 text-sm text-gray-600">
-                Forgot your password? No problem. Just let us know your email
-                address and we will email you a password reset link that will
-                allow you to choose a new one.
+            <div className="mx-auto mt-[60px] max-w-[680px] px-4 sm:px-0">
+                <div className="mb-[40px] text-center">
+                    <h1 className="text-[36px] font-bold text-black">
+                        パスワード再設定
+                    </h1>
+                </div>
+
+                <div className="mb-6 text-[18px] font-bold text-gray-600">
+                    パスワードをお忘れですか？
+                    <br />
+                    ご登録のメールアドレスを入力していただければ、新しいパスワードを選択できる再設定用リンクをメールでお送りします。
+                </div>
+
+                {status && (
+                    <div className="mb-6 text-[18px] font-bold text-green-600">
+                        {status}
+                    </div>
+                )}
+
+                <form onSubmit={submit} noValidate className="space-y-[14px]">
+                    <div className="form__group flex flex-col">
+                        <label
+                            htmlFor="email"
+                            className="mb-1 text-[24px] font-bold text-black"
+                        >
+                            メールアドレス
+                        </label>
+                        <div className="h-[116px]">
+                            <input
+                                id="email"
+                                type="email"
+                                name="email"
+                                value={data.email}
+                                onChange={(e) => setData('email', e.target.value)}
+                                className="h-[60px] w-full rounded-[4px] border border-black p-[10px] text-[20px] font-bold outline-none focus:ring-1 focus:ring-black"
+                            />
+                            {errors.email && (
+                                <p className="mt-1 text-[16px] font-bold text-red-600">
+                                    {errors.email}
+                                </p>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="pt-[36px]">
+                        <button
+                            type="submit"
+                            disabled={processing}
+                            className="h-[60px] w-full rounded-[5px] bg-black text-[22px] font-bold text-white transition-opacity hover:opacity-70 disabled:opacity-50"
+                        >
+                            再設定用リンクを送信
+                        </button>
+                    </div>
+                </form>
             </div>
-
-            {status && (
-                <div className="mb-4 text-sm font-medium text-green-600">
-                    {status}
-                </div>
-            )}
-
-            <form onSubmit={submit}>
-                <TextInput
-                    id="email"
-                    type="email"
-                    name="email"
-                    value={data.email}
-                    className="mt-1 block w-full"
-                    isFocused={true}
-                    onChange={(e) => setData('email', e.target.value)}
-                />
-
-                <InputError message={errors.email} className="mt-2" />
-
-                <div className="mt-4 flex items-center justify-end">
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Email Password Reset Link
-                    </PrimaryButton>
-                </div>
-            </form>
         </AttendanceLayout>
     );
 }

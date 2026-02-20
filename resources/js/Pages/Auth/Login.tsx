@@ -151,14 +151,24 @@ export default function Login() {
                     </div>
                 </form>
 
-                {/* 会員登録へのリンク */}
-                <div className="mt-[30px] text-center">
-                    <Link
-                        href={route('register')}
-                        className="text-[20px] text-[#0073CC] transition-opacity hover:opacity-70"
-                    >
-                        会員登録はこちら
-                    </Link>
+                {/* 各種リンク */}
+                <div className="mt-[30px] space-y-2 text-center">
+                    <div>
+                        <Link
+                            href={route('password.request')}
+                            className="text-[18px] text-[#0073CC] transition-opacity hover:opacity-70"
+                        >
+                            パスワードをお忘れの方はこちら
+                        </Link>
+                    </div>
+                    <div>
+                        <Link
+                            href={route('register')}
+                            className="text-[20px] text-[#0073CC] transition-opacity hover:opacity-70"
+                        >
+                            会員登録はこちら
+                        </Link>
+                    </div>
                 </div>
             </div>
         </AttendanceLayout>

@@ -1,19 +1,77 @@
 import AttendanceLayout from '@/Layouts/AttendanceLayout';
 import { Head, useForm } from '@inertiajs/react';
 import React from 'react';
+import { loginSchema, type LoginFormType } from '@/schemas/authSchema';
 
 /**
  * 管理者ログイン画面 (US004 対応)
+ *
+ * 【設計意図】
+ * 1. デザイン: 一般ユーザー用ログイン画面と統一した「Atte」ブランドのトンマナを採用。
+ * 2. 堅牢性: Zod (loginSchema) によるフロントエンド検証を統合。
+ * 3. 共通化: 一般ログインと共通のバリデーションスキーマ・メッセージ基盤 (JSON) を活用。
+ *
+ * @returns {JSX.Element} 管理者ログインコンポーネント
  */
 export default function Login() {
-    const { data, setData, post, processing, errors } = useForm({
+    const {
+        data,
+        setData,
+        post,
+        processing,
+        errors,
+        reset,
+        setError,
+        clearErrors,
+    } = useForm<LoginFormType>({
         email: '',
         password: '',
     });
 
+    /**
+     * Zod によるフロントエンドバリデーションの実行
+     *
+     * 【Why: ユーザー体験の統一】
+     * 複数のエラーがある場合でも、混乱を避けるため Laravel と同じ「各フィールド最初の一個目」
+     * のエラーのみを画面にフィードバックする。
+     *
+     * @returns {boolean} バリデーション通過時に true
+     */
+    const validate = (): boolean => {
+        clearErrors();
+        const result = loginSchema.safeParse(data);
+
+        if (!result.success) {
+            const fieldErrors: Partial<Record<keyof LoginFormType, string>> = {};
+
+            result.error.issues.forEach((issue) => {
+                const path = issue.path[0] as keyof LoginFormType;
+                if (!fieldErrors[path]) {
+                    fieldErrors[path] = issue.message;
+                }
+            });
+
+            Object.entries(fieldErrors).forEach(([path, message]) => {
+                setError(path as keyof LoginFormType, message);
+            });
+
+            return false;
+        }
+        return true;
+    };
+
+    /**
+     * フォーム送信処理
+     */
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(route('admin.login'));
+
+        // 送信前にフロント側で検証
+        if (!validate()) return;
+
+        post(route('admin.login'), {
+            onFinish: () => reset('password'),
+        });
     };
 
     return (
