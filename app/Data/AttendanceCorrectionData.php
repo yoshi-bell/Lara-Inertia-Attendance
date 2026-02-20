@@ -3,9 +3,8 @@
 namespace App\Data;
 
 use Spatie\LaravelData\Data;
-use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 use Spatie\LaravelData\DataCollection;
-use App\Constants\CorrectionStatus;
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
 class AttendanceCorrectionData extends Data
@@ -30,6 +29,5 @@ class AttendanceCorrectionData extends Data
         /** @var \Spatie\LaravelData\DataCollection<\App\Data\RestCorrectionData> */
         public ?DataCollection $rest_corrections,
         public ?UserData $requester,
-    ) {
-    }
+    ) {}
 }

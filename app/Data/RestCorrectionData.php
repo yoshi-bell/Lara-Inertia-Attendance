@@ -18,6 +18,5 @@ class RestCorrectionData extends Data
         public ?string $requested_end_time_hi,
         public string $created_at,
         public string $updated_at,
-    ) {
-    }
+    ) {}
 }
