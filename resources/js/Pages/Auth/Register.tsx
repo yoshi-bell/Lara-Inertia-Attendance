@@ -1,21 +1,66 @@
 import AttendanceLayout from '@/Layouts/AttendanceLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
+import {
+    registerSchema,
+    type RegisterFormType,
+} from '@/schemas/authSchema';
 
 /**
  * 会員登録画面 (US001 対応)
  * 旧プロジェクト auth/register.blade.php のデザインを忠実に再現
  */
 export default function Register() {
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const {
+        data,
+        setData,
+        post,
+        processing,
+        errors,
+        reset,
+        setError,
+        clearErrors,
+    } = useForm<RegisterFormType>({
         name: '',
         email: '',
         password: '',
         password_confirmation: '',
     });
 
+    /**
+     * Zod によるフロントエンドバリデーション
+     */
+    const validate = (): boolean => {
+        clearErrors();
+        const result = registerSchema.safeParse(data);
+
+        if (!result.success) {
+            // 各フィールドの「最初の」エラーメッセージのみをセットする
+            const fieldErrors: Partial<Record<keyof RegisterFormType, string>> =
+                {};
+
+            result.error.issues.forEach((issue) => {
+                const path = issue.path[0] as keyof RegisterFormType;
+                if (!fieldErrors[path]) {
+                    fieldErrors[path] = issue.message;
+                }
+            });
+
+            // まとめて setError を実行
+            Object.entries(fieldErrors).forEach(([path, message]) => {
+                setError(path as keyof RegisterFormType, message);
+            });
+
+            return false;
+        }
+        return true;
+    };
+
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
+
+        // 送信前にフロント側で検証
+        if (!validate()) return;
 
         post(route('register'), {
             onFinish: () => reset('password', 'password_confirmation'),
@@ -133,6 +178,11 @@ export default function Register() {
                                 }
                                 className="h-[45px] w-full rounded-[4px] border border-black p-[10px] text-[20px] font-bold outline-none focus:ring-1 focus:ring-black"
                             />
+                            {errors.password_confirmation && (
+                                <p className="mt-1 text-[16px] font-bold text-red-600">
+                                    {errors.password_confirmation}
+                                </p>
+                            )}
                         </div>
                     </div>
 
