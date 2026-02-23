@@ -69,15 +69,15 @@
 ✅ 最新の Laravel 12 プロジェクトの初期生成。
 ✅ Inertia.js (React + TypeScript) および Laravel Breeze 認証基盤の導入。
 ✅ 全てモデル型（User, Attendance, Rest, Correction関連）の SSOT 化完遂。
-✅ リファクタリング Phase 3: 認証全画面 (Login, Register, Admin/Login, ForgotPassword, ResetPassword, ConfirmPassword) の刷新と Zod 統合。
+✅ リファクタリング Phase 3: 認証全画面の刷新と Zod 統合。
 ✅ バリデーション・ロジックの共通化ユーティリティ (`performZodValidation`) の開発。
 ✅ 勤怠修正時の休憩重複チェック (Zod) の実装と単体テスト完遂。
-✅ コンポーネントの UI/ドメイン分離 (Components/domain/ への整理) 完了。
-✅ 汎用データテーブル (`AppDataTable`) の開発と `CorrectionList` への適用完了。
-✅ コーディング規約への「Clear Code」原則（説明変数の明示、型エイリアス活用）の追加と実適用。
+✅ コンポーネントの UI/ドメイン分離完了。
+✅ 汎用データテーブル (`AppDataTable`) の開発と `CorrectionList` および `AttendanceTable` への適用完了。
+✅ コーディング規約への「Clear Code」原則（説明変数、型エイリアス活用）の追加と実適用。
 ✅ 全てのテスト層（計 139 件）における 100% 合格の継続的達成。
 
 未完了・次のタスク:
-🚀 勤怠一覧テーブル (`AttendanceTable`) の `AppDataTable` への移行。
+🚀 管理者用スタッフ一覧 (`Admin/Staff/List.tsx`) の `AppDataTable` への移行。
 🚀 一般・管理者のログイン・登録画面への共通バリデーションユーティリティの適用。
 🚀 Phase 4: アーキテクチャのさらなる洗練。

@@ -1,27 +1,27 @@
+import React from 'react';
 import { Link } from '@inertiajs/react';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/Components/ui/table';
 import { Attendance } from '@/types/models';
+import AppDataTable, { AppDataTableColumn } from '@/Components/ui/AppDataTable';
 
 /**
- * 勤怠一覧テーブルの1行分のデータ型
+ * 勤怠一覧テーブルの1行分のデータ型 (DTO)
  */
 type AttendanceListItem = Pick<
     Attendance,
     'id' | 'start_time_hi' | 'end_time_hi' | 'total_rest_time' | 'work_time'
 >;
 
+/**
+ * カレンダー表示用の1日分のデータ構造
+ */
 export interface CalendarDay {
     date: string;
     attendance: AttendanceListItem | null;
 }
 
+/**
+ * AttendanceTable の Props 定義
+ */
 export interface AttendanceTableProps {
     calendarData: CalendarDay[];
     detailRouteName: string; // 'attendance.detail' または 'admin.attendance.show'
@@ -29,82 +29,69 @@ export interface AttendanceTableProps {
 
 /**
  * 勤怠一覧を表示する共通テーブルコンポーネント
+ * 
+ * 【設計意図】
+ * 1. 抽象化: 汎用テーブル AppDataTable を基盤とし、勤怠固有の表示ロジックを分離。
+ * 2. 視認性: 出勤/退勤/休憩/合計の各項目を中央揃えで配置し、文字間隔を調整。
  */
 export default function AttendanceTable({
     calendarData,
     detailRouteName,
 }: AttendanceTableProps) {
+    /**
+     * 【Clear Code: 列定義の抽出】
+     * 勤怠データの有無に応じた表示制御を、renderProp 内で完結させる。
+     */
+    const columns: AppDataTableColumn<CalendarDay>[] = [
+        {
+            header: '日付',
+            key: 'date',
+            className: 'w-[20%] px-10 text-left',
+        },
+        {
+            header: '出勤',
+            key: 'start_time',
+            render: (day) => day.attendance?.start_time_hi || '',
+        },
+        {
+            header: '退勤',
+            key: 'end_time',
+            render: (day) => day.attendance?.end_time_hi || '',
+        },
+        {
+            header: '休憩',
+            key: 'total_rest_time',
+            render: (day) => day.attendance?.total_rest_time || '',
+        },
+        {
+            header: '合計',
+            key: 'work_time',
+            render: (day) => day.attendance?.work_time || '',
+        },
+        {
+            header: '詳細',
+            key: 'actions',
+            className: 'px-5 text-black',
+            render: (day) =>
+                day.attendance ? (
+                    <Link
+                        href={route(detailRouteName, day.attendance.id)}
+                        className="hover:underline"
+                    >
+                        詳細
+                    </Link>
+                ) : (
+                    '詳細'
+                ),
+        },
+    ];
+
     return (
-        <div className="overflow-hidden rounded-[10px] bg-white shadow-sm">
-            <Table className="text-center font-bold tracking-[3px] text-[#737373]">
-                <TableHeader className="border-b-[3px] border-[#E1E1E1]">
-                    <TableRow className="h-[45px] hover:bg-transparent">
-                        <TableHead className="w-[20%] px-10 text-left font-bold text-[#737373]">
-                            日付
-                        </TableHead>
-                        <TableHead className="text-center font-bold text-[#737373]">
-                            出勤
-                        </TableHead>
-                        <TableHead className="text-center font-bold text-[#737373]">
-                            退勤
-                        </TableHead>
-                        <TableHead className="text-center font-bold text-[#737373]">
-                            休憩
-                        </TableHead>
-                        <TableHead className="text-center font-bold text-[#737373]">
-                            合計
-                        </TableHead>
-                        <TableHead className="px-5 text-center font-bold text-[#737373]">
-                            詳細
-                        </TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {calendarData.map((day, index) => (
-                        <TableRow
-                            key={index}
-                            className={`h-[45px] border-[#E1E1E1] hover:bg-gray-50 ${
-                                index !== calendarData.length - 1
-                                    ? 'border-b-2'
-                                    : 'border-b-0'
-                            }`}
-                        >
-                            <TableCell className="px-10 text-left">
-                                {day.date}
-                            </TableCell>
-                            <TableCell>
-                                {day.attendance?.start_time_hi || ''}
-                            </TableCell>
-                            <TableCell>
-                                {day.attendance?.end_time_hi || ''}
-                            </TableCell>
-                            <TableCell>
-                                {day.attendance
-                                    ? day.attendance.total_rest_time
-                                    : ''}
-                            </TableCell>
-                            <TableCell>
-                                {day.attendance?.work_time || ''}
-                            </TableCell>
-                            <TableCell className="px-5 text-black">
-                                {day.attendance ? (
-                                    <Link
-                                        href={route(
-                                            detailRouteName,
-                                            day.attendance.id
-                                        )}
-                                        className="hover:underline"
-                                    >
-                                        詳細
-                                    </Link>
-                                ) : (
-                                    '詳細'
-                                )}
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </div>
+        <AppDataTable
+            data={calendarData}
+            columns={columns}
+            rowKey="date" // 日付はユニークであるためキーとして使用
+            tableClassName="tracking-[3px]" // 旧プロジェクトの文字間隔を継承
+        />
     );
 }
