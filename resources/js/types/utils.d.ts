@@ -1,6 +1,8 @@
 /**
  * プロジェクト共有ユーティリティ型定義
- * Findy スコア向上と型安全性の最大化を目的とする
+ * 
+ * 目的: エンジニアとしての成長
+ * 目標: 型安全性の最大化および Findy スコアの向上を指標とする
  */
 
 /**
@@ -9,6 +11,17 @@
 export type NonNullableFields<T> = {
     [P in keyof T]: NonNullable<T[P]>;
 };
+
+/**
+ * 【型ユーティリティ: Clear Code 対応】
+ * 指定したユニオン型（T）のエディタ補完を維持しつつ、任意の文字列（string）も許容するための型。
+ * 
+ * 【Why: 型ハックの隠蔽】
+ * 通常 T | string と書くと補完が消えてただの string になりますが、
+ * (string & {}) という交差型を使うことでコンパイラの Widening を防ぎ、
+ * サジェストを維持したまま自由入力を許可できます。
+ */
+export type LooseStringAutocomplete<T> = T | (string & {});
 
 /**
  * Laravel のページネーションレスポンス型
