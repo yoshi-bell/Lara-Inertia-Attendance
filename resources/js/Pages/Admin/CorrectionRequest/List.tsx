@@ -2,7 +2,7 @@ import AttendanceLayout from '@/Layouts/AttendanceLayout';
 import { Head } from '@inertiajs/react';
 import { PageProps } from '@/types';
 import { AttendanceCorrection, Attendance } from '@/types/models';
-import CorrectionList from '@/Components/CorrectionList';
+import CorrectionList from '@/Components/domain/CorrectionList';
 import { CorrectionStatus } from '@/constants';
 
 type ListProps = PageProps<{

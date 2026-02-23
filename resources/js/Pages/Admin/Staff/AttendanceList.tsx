@@ -2,8 +2,8 @@ import AttendanceLayout from '@/Layouts/AttendanceLayout';
 import { Head } from '@inertiajs/react';
 import { PageProps } from '@/types';
 import { User } from '@/types/models';
-import AttendanceTable, { CalendarDay } from '@/Components/AttendanceTable';
-import MonthNavigation from '@/Components/MonthNavigation';
+import AttendanceTable, { CalendarDay } from '@/Components/domain/AttendanceTable';
+import MonthNavigation from '@/Components/domain/MonthNavigation';
 
 type AdminStaffDetailProps = PageProps<{
     staff: User;

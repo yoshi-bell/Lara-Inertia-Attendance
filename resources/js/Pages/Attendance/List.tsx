@@ -1,8 +1,8 @@
 import AttendanceLayout from '@/Layouts/AttendanceLayout';
 import { Head } from '@inertiajs/react';
 import { PageProps } from '@/types';
-import AttendanceTable, { CalendarDay } from '@/Components/AttendanceTable';
-import MonthNavigation from '@/Components/MonthNavigation';
+import AttendanceTable, { CalendarDay } from '@/Components/domain/AttendanceTable';
+import MonthNavigation from '@/Components/domain/MonthNavigation';
 
 /**
  * 勤怠一覧ページの Props 定義

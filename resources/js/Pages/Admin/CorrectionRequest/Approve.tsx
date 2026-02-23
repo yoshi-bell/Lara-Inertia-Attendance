@@ -4,7 +4,7 @@ import { PageProps } from '@/types';
 import { Attendance, AttendanceCorrection, RestCorrection } from '@/types/models';
 import { Button } from '@/Components/ui/button';
 import { Card, CardContent } from '@/Components/ui/card';
-import CorrectionForm from '@/Components/CorrectionForm';
+import CorrectionForm from '@/Components/domain/CorrectionForm';
 import React from 'react';
 
 /**

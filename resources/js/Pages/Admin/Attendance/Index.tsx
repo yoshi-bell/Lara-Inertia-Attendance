@@ -11,7 +11,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/Components/ui/table';
-import DatePicker from '@/Components/DatePicker';
+import DatePicker from '@/Components/domain/DatePicker';
 
 /**
  * 管理者用勤怠一覧テーブルの1行分のデータ型

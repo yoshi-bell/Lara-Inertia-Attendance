@@ -1,5 +1,5 @@
 import { PropsWithChildren, ReactNode } from 'react';
-import Header from '@/Components/Header';
+import Header from '@/Components/domain/Header';
 
 interface Props {
     title?: string;
