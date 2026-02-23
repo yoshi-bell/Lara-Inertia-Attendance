@@ -1,6 +1,7 @@
 import AttendanceLayout from '@/Layouts/AttendanceLayout';
 import { Head, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
+import { performZodValidation } from '@/lib/validation';
 import {
     resetPasswordSchema,
     type ResetPasswordFormType,
@@ -44,26 +45,20 @@ export default function ResetPassword({
 
     /**
      * Zod によるフロントエンドバリデーション
+     * 
+     * 【Why: 共通ユーティリティの活用】
+     * 複雑な相関チェック（パスワード一致）を含む検証を、ユーティリティで簡潔に記述。
+     *
+     * @returns {boolean} バリデーション通過時に true
      */
     const validate = (): boolean => {
         clearErrors();
         const result = resetPasswordSchema.safeParse(data);
 
-        if (!result.success) {
-            const fieldErrors: Partial<Record<keyof ResetPasswordFormType, string>> = {};
-            result.error.issues.forEach((issue) => {
-                const path = issue.path[0] as keyof ResetPasswordFormType;
-                if (!fieldErrors[path]) {
-                    fieldErrors[path] = issue.message;
-                }
-            });
-
-            Object.entries(fieldErrors).forEach(([path, message]) => {
-                setError(path as keyof ResetPasswordFormType, message);
-            });
-            return false;
-        }
-        return true;
+        return performZodValidation(
+            result,
+            setError as (path: string, message: string) => void
+        );
     };
 
     const submit: FormEventHandler = (e) => {

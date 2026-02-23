@@ -2,6 +2,7 @@ import AttendanceLayout from '@/Layouts/AttendanceLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
 import { loginSchema, type LoginFormType } from '@/schemas/authSchema';
+import { performZodValidation } from '@/lib/validation';
 
 /**
  * ログイン画面 (US002, US004 対応)
@@ -9,7 +10,7 @@ import { loginSchema, type LoginFormType } from '@/schemas/authSchema';
  * 【設計意図】
  * 1. デザイン: 旧プロジェクト auth/login.blade.php のトンマナを Tailwind CSS で忠実に再現。
  * 2. 堅牢性: Zod (loginSchema) によるフロントエンド検証を統合。
- * 3. 汎用性: 一般ユーザーと管理者のログイン画面で共通のバリデーションメッセージ基盤 (JSON) を使用。
+ * 3. 汎用性: 一般ユーザーと管理者のログイン画面で共通のバリデーションメッセージ基盤 (JSON) を使用. 
  *
  * @returns {JSX.Element} ログインコンポーネント
  */
@@ -33,7 +34,8 @@ export default function Login() {
      * Zod によるフロントエンドバリデーション
      *
      * 【Why: 一貫した UX】
-     * Register.tsx と同様、バックエンドの挙動に合わせて各フィールドの「最初のエラー」のみを表示する。
+     * 共通ユーティリティを使用して、各フィールドの「最初の一個目」
+     * のエラーのみをセットし、ユーザーの混乱を防ぐ。
      *
      * @returns {boolean} 検証通過時に true
      */
@@ -41,23 +43,10 @@ export default function Login() {
         clearErrors();
         const result = loginSchema.safeParse(data);
 
-        if (!result.success) {
-            const fieldErrors: Partial<Record<keyof LoginFormType, string>> = {};
-
-            result.error.issues.forEach((issue) => {
-                const path = issue.path[0] as keyof LoginFormType;
-                if (!fieldErrors[path]) {
-                    fieldErrors[path] = issue.message;
-                }
-            });
-
-            Object.entries(fieldErrors).forEach(([path, message]) => {
-                setError(path as keyof LoginFormType, message);
-            });
-
-            return false;
-        }
-        return true;
+        return performZodValidation(
+            result,
+            setError as (path: string, message: string) => void
+        );
     };
 
     /**

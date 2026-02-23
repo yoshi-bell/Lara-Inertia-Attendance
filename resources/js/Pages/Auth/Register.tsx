@@ -1,10 +1,8 @@
 import AttendanceLayout from '@/Layouts/AttendanceLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
-import {
-    registerSchema,
-    type RegisterFormType,
-} from '@/schemas/authSchema';
+import { performZodValidation } from '@/lib/validation';
+import { registerSchema, type RegisterFormType } from '@/schemas/authSchema';
 
 /**
  * 会員登録画面 (US001 対応)
@@ -37,9 +35,8 @@ export default function Register() {
      * Zod によるフロントエンドバリデーションの実行
      *
      * 【Why: メッセージ優先順位の同期】
-     * Zod は全フィールドのエラーを一度に返すが、ユーザー体験を Laravel (バックエンド) の
-     * 標準的な挙動（必須チェック優先等）に合わせるため、各フィールドの「最初の一個目」
-     * のエラーのみを抽出してセットする。
+     * 共通ユーティリティを使用して、各フィールドの「最初の一個目」
+     * のエラーのみをセットし、ユーザーの混乱を防ぐ。
      *
      * @returns {boolean} バリデーションを通過した場合は true
      */
@@ -47,26 +44,10 @@ export default function Register() {
         clearErrors();
         const result = registerSchema.safeParse(data);
 
-        if (!result.success) {
-            const fieldErrors: Partial<Record<keyof RegisterFormType, string>> =
-                {};
-
-            result.error.issues.forEach((issue) => {
-                const path = issue.path[0] as keyof RegisterFormType;
-                // 既にエラーが記録されているフィールドはスキップ（先勝ち = 優先度高）
-                if (!fieldErrors[path]) {
-                    fieldErrors[path] = issue.message;
-                }
-            });
-
-            // Inertia の errors ステートに Zod のエラーを同期
-            Object.entries(fieldErrors).forEach(([path, message]) => {
-                setError(path as keyof RegisterFormType, message);
-            });
-
-            return false;
-        }
-        return true;
+        return performZodValidation(
+            result,
+            setError as (path: string, message: string) => void
+        );
     };
 
     /**

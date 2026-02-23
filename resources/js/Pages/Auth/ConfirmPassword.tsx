@@ -1,6 +1,7 @@
 import AttendanceLayout from '@/Layouts/AttendanceLayout';
 import { Head, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
+import { performZodValidation } from '@/lib/validation';
 import {
     confirmPasswordSchema,
     type ConfirmPasswordFormType,
@@ -32,26 +33,20 @@ export default function ConfirmPassword() {
 
     /**
      * Zod によるフロントエンドバリデーション
+     *
+     * 【Why: 共通ユーティリティの活用】
+     * 短い必須チェックもユーティリティ化することで、プロジェクト全体での検証挙動を一貫させる。
+     *
+     * @returns {boolean} バリデーション通過時に true
      */
     const validate = (): boolean => {
         clearErrors();
         const result = confirmPasswordSchema.safeParse(data);
 
-        if (!result.success) {
-            const fieldErrors: Partial<Record<keyof ConfirmPasswordFormType, string>> = {};
-            result.error.issues.forEach((issue) => {
-                const path = issue.path[0] as keyof ConfirmPasswordFormType;
-                if (!fieldErrors[path]) {
-                    fieldErrors[path] = issue.message;
-                }
-            });
-
-            Object.entries(fieldErrors).forEach(([path, message]) => {
-                setError(path as keyof ConfirmPasswordFormType, message);
-            });
-            return false;
-        }
-        return true;
+        return performZodValidation(
+            result,
+            setError as (path: string, message: string) => void
+        );
     };
 
     const submit: FormEventHandler = (e) => {
@@ -95,7 +90,9 @@ export default function ConfirmPassword() {
                                 type="password"
                                 name="password"
                                 value={data.password}
-                                onChange={(e) => setData('password', e.target.value)}
+                                onChange={(e) =>
+                                    setData('password', e.target.value)
+                                }
                                 className="h-[60px] w-full rounded-[4px] border border-black p-[10px] text-[20px] font-bold outline-none focus:ring-1 focus:ring-black"
                                 autoFocus
                             />

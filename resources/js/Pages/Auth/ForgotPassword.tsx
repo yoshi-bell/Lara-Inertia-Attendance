@@ -1,6 +1,7 @@
 import AttendanceLayout from '@/Layouts/AttendanceLayout';
 import { Head, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
+import { performZodValidation } from '@/lib/validation';
 import {
     forgotPasswordSchema,
     type ForgotPasswordFormType,
@@ -26,27 +27,20 @@ export default function ForgotPassword({ status }: { status?: string }) {
 
     /**
      * Zod によるフロントエンドバリデーション
+     *
+     * 【Why: 共通ユーティリティの活用】
+     * フォーム管理のボイラープレートを削減し、一貫したエラー表示を実現。
+     *
+     * @returns {boolean} バリデーション通過時に true
      */
     const validate = (): boolean => {
         clearErrors();
         const result = forgotPasswordSchema.safeParse(data);
 
-        if (!result.success) {
-            // 各フィールドの最初のエラーをセット
-            const fieldErrors: Partial<Record<keyof ForgotPasswordFormType, string>> = {};
-            result.error.issues.forEach((issue) => {
-                const path = issue.path[0] as keyof ForgotPasswordFormType;
-                if (!fieldErrors[path]) {
-                    fieldErrors[path] = issue.message;
-                }
-            });
-
-            Object.entries(fieldErrors).forEach(([path, message]) => {
-                setError(path as keyof ForgotPasswordFormType, message);
-            });
-            return false;
-        }
-        return true;
+        return performZodValidation(
+            result,
+            setError as (path: string, message: string) => void
+        );
     };
 
     const submit: FormEventHandler = (e) => {
@@ -94,7 +88,9 @@ export default function ForgotPassword({ status }: { status?: string }) {
                                 type="email"
                                 name="email"
                                 value={data.email}
-                                onChange={(e) => setData('email', e.target.value)}
+                                onChange={(e) =>
+                                    setData('email', e.target.value)
+                                }
                                 className="h-[60px] w-full rounded-[4px] border border-black p-[10px] text-[20px] font-bold outline-none focus:ring-1 focus:ring-black"
                             />
                             {errors.email && (

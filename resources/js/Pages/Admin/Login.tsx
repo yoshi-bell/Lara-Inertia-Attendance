@@ -2,6 +2,7 @@ import AttendanceLayout from '@/Layouts/AttendanceLayout';
 import { Head, useForm } from '@inertiajs/react';
 import React from 'react';
 import { loginSchema, type LoginFormType } from '@/schemas/authSchema';
+import { performZodValidation } from '@/lib/validation';
 
 /**
  * 管理者ログイン画面 (US004 対応)
@@ -32,8 +33,8 @@ export default function Login() {
      * Zod によるフロントエンドバリデーションの実行
      *
      * 【Why: ユーザー体験の統一】
-     * 複数のエラーがある場合でも、混乱を避けるため Laravel と同じ「各フィールド最初の一個目」
-     * のエラーのみを画面にフィードバックする。
+     * 共通ユーティリティを使用して、各フィールドの「最初の一個目」
+     * のエラーのみを表示し、UX を一貫させる。
      *
      * @returns {boolean} バリデーション通過時に true
      */
@@ -41,23 +42,10 @@ export default function Login() {
         clearErrors();
         const result = loginSchema.safeParse(data);
 
-        if (!result.success) {
-            const fieldErrors: Partial<Record<keyof LoginFormType, string>> = {};
-
-            result.error.issues.forEach((issue) => {
-                const path = issue.path[0] as keyof LoginFormType;
-                if (!fieldErrors[path]) {
-                    fieldErrors[path] = issue.message;
-                }
-            });
-
-            Object.entries(fieldErrors).forEach(([path, message]) => {
-                setError(path as keyof LoginFormType, message);
-            });
-
-            return false;
-        }
-        return true;
+        return performZodValidation(
+            result,
+            setError as (path: string, message: string) => void
+        );
     };
 
     /**
@@ -86,7 +74,11 @@ export default function Login() {
                     </h1>
                 </div>
 
-                <form onSubmit={handleSubmit} noValidate className="space-y-[14px]">
+                <form
+                    onSubmit={handleSubmit}
+                    noValidate
+                    className="space-y-[14px]"
+                >
                     {/* メールアドレス入力 */}
                     <div className="form__group flex flex-col">
                         <label
@@ -99,7 +91,7 @@ export default function Login() {
                             <input
                                 id="email"
                                 type="email"
-                                name="email" // 必須: E2E テスト用および標準的なフォーム挙動用
+                                name="email"
                                 value={data.email}
                                 onChange={(e) => setData('email', e.target.value)}
                                 className="h-[60px] w-full rounded-[4px] border border-black p-[10px] text-[20px] font-bold outline-none focus:ring-1 focus:ring-black"
@@ -124,9 +116,11 @@ export default function Login() {
                             <input
                                 id="password"
                                 type="password"
-                                name="password" // 必須: E2E テスト用
+                                name="password"
                                 value={data.password}
-                                onChange={(e) => setData('password', e.target.value)}
+                                onChange={(e) =>
+                                    setData('password', e.target.value)
+                                }
                                 className="h-[60px] w-full rounded-[4px] border border-black p-[10px] text-[20px] font-bold outline-none focus:ring-1 focus:ring-black"
                             />
                             {errors.password && (
