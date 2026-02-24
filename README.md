@@ -3,20 +3,25 @@
 旧勤怠管理アプリ（Blade版）を、最新の技術スタック（Laravel 12 / Inertia.js / React / TypeScript）でフルリファクタリングしたモダンモノリス・アプリケーションです。
 
 ## 🚀 リファクタリングによる進化ポイント
-
-本プロジェクトは、単なる機能の移植にとどまらず、保守性とユーザー体験を極限まで高めるためのリファクタリングを実施しています。
+本プロジェクトは、単なる機能の移植にとどめず、保守性とユーザー体験を高めるためのリファクタリングを実施しました。
 
 - **モダンモノリス構成:** Inertia.js を採用し、API 分離の手間を省きつつ SPA (Single Page Application) のような高速な操作感を実現。
-- **型安全性の追求:** フロントエンド・バックエンド共に TypeScript と厳格な型定義を導入し、ランタイムエラーを未然に防ぐ堅牢なコードベースを構築。
-- **UI/UX のアップグレード:** Shadcn UI を導入。ネイティブ入力を排除し、直感的な日付・月選択ピッカー（DatePicker / MonthPicker）を自作。
+- **サーバー駆動型 SSOT:** `spatie/laravel-data` を導入。バックエンドの Data Object を一次情報とし、TypeScript 型定義を自動生成するパイプラインを確立。
+- **型安全性とランタイム検証:** 
+    - フロントエンド・バックエンド共に TypeScript と厳格な型定義を導入。
+    - **Zod 統合:** 静的型定義に加え、実行時バリデーションを認証・勤怠修正の全フォームに導入。
+    - **メッセージ一元管理:** 独自の JSON 基盤により、フロント・バック両層のエラーメッセージを完全に同期。
+- **UI/UX のアップグレード:** 
+    - Shadcn UI を導入し、直感的な日付・月選択ピッカー（DatePicker / MonthPicker）を独自実装。
+    - **抽象化された表示基盤:** 汎用データテーブル (`AppDataTable`) を開発し、プロジェクト内の全一覧表示を一元管理。
 - **高度なビジネスロジック:** 
     - 24時間を超える勤務や、深夜0時を跨ぐ休憩時間も正確に算出する「深夜勤務対応ロジック」を搭載。
-    - リダイレクト先などの重要設定を `config/project.php` に集約し、高いメンテナンス性を確保。
+    - リダイレクト先などの重要設定を `config/project.php` に集約し、メンテナンス性を確保。
 - **品質保証の徹底:** 
     - **GitHub Actions (CI)** による継続的インテグレーション。
-    - **Playwright** によるブラウザ自動テスト。
-    - **Vitest** によるコンポーネント単体テスト。
-    - 合計 94 件のテストケースを 100% カバー。
+    - **Playwright** によるブラウザ自動テスト (E2E)。
+    - **Vitest** による「生きたモック」を活用したコンポーネント単体テスト。
+    - 合計 **135 件** のテストケースを 100% カバー。
 
 ---
 
@@ -24,6 +29,7 @@
 
 ### Backend
 - **Framework:** Laravel 12 (PHP 8.4)
+- **Data Layer:** `spatie/laravel-data` (DTO)
 - **Authentication:** Laravel Breeze (Inertia/React版)
 - **Database:** MySQL 8.0
 - **Quality:** Laravel Pint, PHPUnit (Feature Test)
@@ -31,9 +37,9 @@
 ### Frontend
 - **Library:** React 19
 - **Language:** TypeScript (Strict Mode)
+- **Validation:** Zod
 - **Bridge:** Inertia.js v2
 - **Styling:** Tailwind CSS, Shadcn/ui
-- **Icons:** Lucide React
 - **Quality:** ESLint, Prettier, Vitest (Unit Test), Playwright (E2E Test)
 
 ---
@@ -74,7 +80,7 @@
 GitHub へプッシュ・PR作成を行うたびに、以下の工程が自動実行されます。
 1. **Lint:** PHP (Pint) / JS (ESLint) の整形・規約チェック
 2. **Build:** TypeScript のコンパイルおよび Vite ビルド
-3. **Tests:** PHPUnit / Vitest / Playwright の全 94 件のテスト実行
+3. **Tests:** PHPUnit / Vitest / Playwright の全 **135 件** のテスト実行
 
 ---
 
@@ -113,7 +119,7 @@ cp .env.example .env
 
 # フロントエンドのビルド
 ./vendor/bin/sail npm install
-./vendor/bin/sail npm run dev
+./vendor/bin/sail npm run build
 ```
 
 ### 2. 各ツールへのアクセス
