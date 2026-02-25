@@ -16,7 +16,7 @@
     - **抽象化された表示基盤:** 汎用データテーブル (`AppDataTable`) を開発し、プロジェクト内の全一覧表示を一元管理。
 - **高度なビジネスロジック:** 
     - 24時間を超える勤務や、深夜0時を跨ぐ休憩時間も正確に算出する「深夜勤務対応ロジック」を搭載。
-    - リダイレクト先などの重要設定を `config/project.php` に集約し、メンテナンス性を確保。
+    - リダイレクト先などの重要設定を `config/project.php` に集約し、保守性を確保。
 - **品質保証の徹底:** 
     - **GitHub Actions (CI)** による継続的インテグレーション。
     - **Playwright** によるブラウザ自動テスト (E2E)。
@@ -60,30 +60,6 @@
 
 ---
 
-## 🧪 テストと品質管理
-
-堅牢なアプリケーションを維持するため、多層的な自動テストを導入しています。
-
-### テスト実行
-```bash
-# 全てのバックエンドテスト (Feature / Model)
-./vendor/bin/sail test
-
-# フロントエンド単体テスト (Vitest)
-./vendor/bin/sail npm run test:unit
-
-# E2E テスト (Playwright)
-./vendor/bin/sail npm run test:e2e
-```
-
-### GitHub Actions (CI)
-GitHub へプッシュ・PR作成を行うたびに、以下の工程が自動実行されます。
-1. **Lint:** PHP (Pint) / JS (ESLint) の整形・規約チェック
-2. **Build:** TypeScript のコンパイルおよび Vite ビルド
-3. **Tests:** PHPUnit / Vitest / Playwright の全 **135 件** のテスト実行
-
----
-
 ## 📦 環境構築
 
 ### 前提条件
@@ -120,12 +96,39 @@ cp .env.example .env
 # フロントエンドのビルド
 ./vendor/bin/sail npm install
 ./vendor/bin/sail npm run build
+
+# E2E テスト用のブラウザをインストール (初回のみ)
+./vendor/bin/sail npx playwright install
 ```
 
 ### 2. 各ツールへのアクセス
 - **アプリケーション:** [http://localhost](http://localhost)
 - **Mailpit (メール確認):** [http://localhost:8025](http://localhost:8025)
 - **phpMyAdmin:** [http://localhost:8080](http://localhost:8080)
+
+---
+
+## 🧪 テストと品質管理
+
+堅牢なアプリケーションを維持するため、多層的な自動テストを導入しています。
+
+### テスト実行
+```bash
+# 全てのバックエンドテスト (Feature / Model)
+./vendor/bin/sail test
+
+# フロントエンド単体テスト (Vitest)
+./vendor/bin/sail npm run test:unit
+
+# E2E テスト (Playwright)
+./vendor/bin/sail npm run test:e2e
+```
+
+### GitHub Actions (CI)
+GitHub へプッシュ・PR作成を行うたびに、以下の工程が自動実行されます。
+1. **Lint:** PHP (Pint) / JS (ESLint) の整形・規約チェック
+2. **Build:** TypeScript のコンパイルおよび Vite ビルド
+3. **Tests:** PHPUnit / Vitest / Playwright の全 **135 件** のテスト実行
 
 ---
 
